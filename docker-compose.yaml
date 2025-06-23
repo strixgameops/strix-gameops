@@ -1,0 +1,363 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: strix
+      MONGO_INITDB_ROOT_PASSWORD: YOUR_MONGO_PASSWORD
+      MONGO_INITDB_DATABASE: strix_production
+    volumes:
+      - mongo-data:/data/db
+      - ./seed/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: strix
+      POSTGRES_PASSWORD: YOUR_POSTGRES_PASSWORD
+      POSTGRES_DB: strix_production_db
+    volumes:
+      - timescale-data:/var/lib/postgresql/data
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strix -d strix_production_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7
+    container_name: redis
+    command: ["redis-server", "--requirepass", "YOUR_REDIS_PASSWORD"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data/db
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+        reservations:
+          memory: 256m
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:YOUR_REDIS_PASSWORD
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+        reservations:
+          memory: 256m
+
+  pulsar:
+    image: apachepulsar/pulsar:4.0.5
+    container_name: pulsar
+    environment:
+      # Standalone mode configuration
+      - PULSAR_MEM=-Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g
+      - PULSAR_GC=-XX:+UseG1GC -XX:MaxGCPauseMillis=10
+      - PULSAR_STANDALONE_USE_ZOOKEEPER=false
+      # Memory and performance settings
+      - PULSAR_MEM=-Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g
+      - PULSAR_GC=-XX:+UseG1GC -XX:MaxGCPauseMillis=10
+      # Reduce resource usage for standalone mode
+      - PULSAR_PREFIX_managedLedgerDefaultEnsembleSize=1
+      - PULSAR_PREFIX_managedLedgerDefaultWriteQuorum=1
+      - PULSAR_PREFIX_managedLedgerDefaultAckQuorum=1
+      - PULSAR_PREFIX_numIOThreads=4
+      - PULSAR_PREFIX_numOrderedExecutorThreads=4
+      - PULSAR_PREFIX_numCacheExecutorThreads=2
+    command: >
+      bash -c "
+        echo 'Starting Pulsar in standalone mode...' &&
+        
+        # Start Pulsar standalone
+        bin/pulsar standalone --no-functions-worker --no-stream-storage &
+        PULSAR_PID=\$! &&
+        
+        echo 'Waiting for Pulsar to be ready...' &&
+        while ! curl -f http://localhost:8080/admin/v2/clusters/standalone >/dev/null 2>&1; do
+          echo 'Waiting for Pulsar API...'
+          sleep 5
+        done &&
+        
+        echo 'Pulsar is ready!' &&
+        
+        # Run initialization script if present
+        if [ -f /tmp/pulsar-init.sh ]; then
+          echo 'Running initialization script...' &&
+          bash /tmp/pulsar-init.sh || echo 'Initialization script completed with warnings (non-fatal)'
+        fi &&
+        
+        echo 'Pulsar service initialization complete' &&
+        
+        # Keep container running
+        wait \$PULSAR_PID
+      "
+    ports:
+      - "6650:6650"
+      - "8082:8080"
+    volumes:
+      - pulsar-data:/pulsar/data
+      - ./conf/pulsar-standalone.conf:/pulsar/conf/standalone.conf:ro
+      - ./seed/pulsar-init/pulsar-init.sh:/tmp/pulsar-init.sh:ro
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 6g
+        reservations:
+          memory: 2g
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/clusters/standalone"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  game-backend-analytics:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-analytics
+    env_file: ./env/.env-strix-game-backend-analytics
+    ports:
+      - "3005:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  game-backend-deployment:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-deployment
+    env_file: ./env/.env-strix-game-backend-deployment
+    ports:
+      - "3006:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  game-backend-geocoder:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-geocoder
+    env_file: ./env/.env-strix-game-backend-geocoder
+    ports:
+      - "3007:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  game-backend-ingester:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-ingester
+    env_file: ./env/.env-strix-game-backend-ingester
+    ports:
+      - "3008:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  game-backend-liveservices:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-liveservices
+    env_file: ./env/.env-strix-game-backend-liveservices
+    ports:
+      - "3009:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  game-backend-cacher:
+    build:
+      context: ./strix/strix-game-backend
+      dockerfile: Dockerfile
+    container_name: game-backend-cacher
+    env_file: ./env/.env-strix-game-backend-cacher
+    ports:
+      - "3010:3005"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 256m
+
+  web-backend:
+    build:
+      context: ./strix/strix-backend
+      dockerfile: Dockerfile
+    container_name: web-backend
+    env_file: ./env/.env-strix-web-backend
+    ports:
+      - "3001:3001"
+      - "3011:3010"
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  strix-web:
+    build:
+      context: ./strix/strix-web/app
+      dockerfile: Dockerfile-community
+    container_name: strix-web
+    env_file: ./env/.env-strix-web
+    ports:
+      - "8080:80"
+      - "3000:3000"
+    depends_on:
+      - web-backend
+    networks:
+      - internal
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+volumes:
+  mongo-data:
+  redis-data:
+  timescale-data:
+  pulsar-data:
+
+networks:
+  internal:
+    driver: bridge

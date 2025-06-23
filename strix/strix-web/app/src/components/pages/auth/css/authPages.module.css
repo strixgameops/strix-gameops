@@ -1,0 +1,187 @@
+.authPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-color1);
+  position: relative;
+}
+.animatedBackground {
+  width: 100%;
+  height: 100%;
+  background: url("strix-logo-full-filled-bright.png");
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: auto 30%;
+  z-index: 0;
+  opacity: 0.1;
+  position: absolute;
+}
+[data-theme="light"] {
+  .animatedBackground {
+    background: url("strix-logo-full-filled-dark.png");
+    opacity: 0.5;
+  }
+}
+
+.section {
+  width: 100%;
+  max-width: 420px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 2rem;
+  background-color: rgba(24, 26, 39, 0.6);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 29px 0px;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+}
+[data-theme="light"] {
+  .section {
+    background-color: rgba(197, 200, 224, 0.705);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+a,
+a:visited {
+  color: #a54f4f;
+}
+
+.inputPassword,
+.inputEmail,
+.button,
+.textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.label,
+.button {
+  margin-top: 1rem;
+  color: #fff;
+}
+
+.button {
+  padding: 0.5rem;
+}
+
+.h1 {
+  color: #fff;
+}
+.p {
+  color: #fff;
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #3d374b;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.errmsg {
+  background-color: lightpink;
+  color: #c74c4c;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+  display: inline-block;
+}
+
+/* This is a single-line comment */
+/*     */
+.buttonsign {
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #3490dc, rgb(148, 52, 213));
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/*     */
+.buttonsign::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(
+    circle,
+    transparent 25%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 75%
+  );
+  background-position: center;
+  background-size: 150% 150%;
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.buttonsign:hover::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.inputPassword,
+.inputEmail {
+  color: #1e2031;
+  border: #1e2031;
+}

@@ -1,0 +1,79 @@
+.onboardingContainer {
+    position: absolute;
+    left: -100%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--bg-color3);
+    z-index: 10000;
+
+    animation: onboardingWindow 1.0s; 
+    animation-timing-function: cubic-bezier(0.4, 0, 0.4, 1);
+    animation-fill-mode: forwards;
+
+    padding: 5rem;
+}
+
+@keyframes onboardingWindow {
+    0% {
+        opacity: 0.5;
+        left: -100%;
+    }
+    100% {
+        opacity: 1;
+        left: 0%;
+    }
+}
+
+
+/* Initial setup */
+.stepperBox {
+    width: 1000px;
+}
+.iconUploadButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+}
+.entityIconContainer {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.uploadedIconOverlay {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    background-color: #18182e7e;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+    transition: all 0.2s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.uploadedIconOverlay:hover {
+    opacity: 1;
+}
+.basicConfigEntityIcon {
+    width: 100%;
+    max-height: 150px;
+    margin-right: 15px;
+    margin: 0px;
+}

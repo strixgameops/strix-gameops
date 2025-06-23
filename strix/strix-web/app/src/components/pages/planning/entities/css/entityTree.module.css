@@ -1,0 +1,77 @@
+.rootNode {
+  fill: var(--entities-tree-color1);
+  stroke: rgb(0, 225, 255);
+  stroke-width: 0.5px;
+  shape-rendering: geometricPrecision;
+
+  transition: all 0.1s;
+}
+.rootNodeLabel {
+  fill: rgba(39, 218, 250, 0.808);
+  user-select: none;
+  pointer-events: none;
+}
+[data-theme="light"] {
+  .rootNodeLabel {
+    fill: rgba(0, 54, 64, 0.81);
+  }
+}
+.rootNode:hover {
+  fill: var(--entities-tree-color1);
+  stroke-width: 0.8px;
+}
+.entityNode {
+  fill: var(--entities-tree-color2);
+  stroke: rgb(14, 153, 172);
+  stroke-width: 0.5px;
+  shape-rendering: geometricPrecision;
+
+  transition: all 0.1s;
+  cursor: pointer;
+}
+.entityCategoryNode {
+  fill: var(--entities-tree-color2);
+  stroke: rgb(15, 171, 192);
+  stroke-width: 0.5px;
+  shape-rendering: geometricPrecision;
+
+  transition: all 0.1s;
+  cursor: pointer;
+}
+/* Regular hover */
+.entityNode:hover {
+  /* fill: #0e6578; */
+  filter: brightness(1.1);
+  stroke-width: 0.8px;
+}
+.entityCategoryNode:hover {
+  /* fill: #0e6578; */
+  filter: brightness(1.1);
+  stroke-width: 0.8px;
+}
+
+/* When dragging new node */
+.entityNodeHover {
+  transition: all 0.1s;
+}
+.entityNodeHover:hover {
+  fill: rgba(16, 176, 204, 0.774);
+  /* stroke: rgb(41, 125, 136); */
+}
+.nodeNameLabel {
+  fill: var(--text-primary-color);
+  user-select: none;
+  pointer-events: none;
+  font-size: 13px;
+}
+.nodeCountLabel {
+  user-select: none;
+  pointer-events: none;
+  fill: rgb(176, 233, 243);
+}
+.entityLink {
+  stroke-width: 25px;
+}
+.entityCategoryIcon {
+  pointer-events: none;
+}

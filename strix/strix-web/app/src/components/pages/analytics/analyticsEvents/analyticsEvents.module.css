@@ -1,0 +1,127 @@
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.entities {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  padding: 20px;
+  padding-top: 20px;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+}
+
+.node {
+  border: 1px solid #474c9c;
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 5px;
+
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  background-color: var(--navbar-bg-color);
+}
+.iconContainer {
+  padding-top: 10px;
+  padding-left: 5px;
+}
+.node .icon {
+  width: 90px;
+}
+
+.nameAndList {
+  margin: 1rem;
+  margin-top: 5px;
+  margin-left: 2rem;
+  width: 100%;
+}
+
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 100%;
+  gap: 15px;
+  padding-bottom: 50px;
+}
+.event {
+  border: 1px solid #3a41a5;
+  border-radius: 2rem;
+  width: 100%;
+  min-height: 60px;
+
+  background-color: var(--regular-card-bg-color);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  position: relative;
+}
+.event.eventError {
+  border: 1px solid #a53a3a;
+  border-radius: 2px;
+}
+.basicSettings {
+  display: flex;
+  padding: 10px;
+  padding-top: 20px;
+  margin-bottom: 10px;
+  width: 100%;
+  align-items: end;
+}
+.tags {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-left: 1rem;
+  align-items: center;
+}
+.values {
+  display: flex;
+  padding: 10px;
+  padding-top: 0px;
+  height: 100%;
+  width: 100%;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.valueContainer {
+  /* height: 100%; */
+  display: flex;
+  align-items: center;
+  padding-top: 0px;
+}
+.removeEvent {
+  position: absolute;
+  top: 1rem;
+  right: 0.5rem;
+}
+.eventValue {
+  display: flex;
+  width: fit-content;
+  height: 65%;
+  padding: 15px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+
+  align-items: center;
+  justify-content: start;
+  background-color: var(--regular-card-bg-color2);
+  border-radius: 2rem;
+
+  transition: width 0.25s ease-in-out;
+  overflow: hidden;
+}

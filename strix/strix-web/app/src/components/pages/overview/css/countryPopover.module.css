@@ -1,0 +1,51 @@
+.popoverPaper {
+  background: var(--regular-card-bg-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.popoverContent {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.header {
+  padding: 16px 20px 12px 20px;
+  background: linear-gradient(135deg, rgba(98, 95, 244, 0.1) 0%, rgba(78, 75, 218, 0.1) 100%);
+  border-bottom: 1px solid rgba(98, 95, 244, 0.2);
+}
+
+.countryName {
+  color: var(--text-primary-color) !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+}
+
+.content {
+  padding: 16px 20px 20px 20px;
+}
+
+.placeholder {
+  color: rgba(231, 231, 231, 0.7) !important;
+  font-style: italic;
+  margin-bottom: 12px !important;
+}
+
+.statsPreview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statChip {
+  background-color: rgba(98, 95, 244, 0.2) !important;
+  color: var(--text-primary-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+  font-size: 0.75rem !important;
+}

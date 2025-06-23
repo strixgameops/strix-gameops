@@ -1,0 +1,34 @@
+.context-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+.disabled {
+    background-color: #c9c9c9;
+}
+  
+  .context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .context-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .context-menu .disabled {
+    padding: 8px 12px;
+    cursor: default;
+  }
+  
+  .context-menu li:hover {
+    background-color: #f0f0f0;
+  }
+  .context-menu .disabled:hover {
+    background-color: #c9c9c9;
+  }

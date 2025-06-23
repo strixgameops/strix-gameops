@@ -1,0 +1,12 @@
+.tableContainer {
+  flex: "1 1 auto";
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  background-color: var(--bg-color2);
+  max-height: 450px;
+  border: 1px solid #25205e;
+  border-radius: 2rem;
+  overflow: hidden;
+  overflow-x: scroll;
+}

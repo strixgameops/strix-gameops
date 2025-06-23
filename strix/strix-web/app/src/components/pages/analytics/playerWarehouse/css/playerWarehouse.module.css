@@ -1,0 +1,259 @@
+.PWpage {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pwRow {
+  display: flex;
+  height: 100%;
+  /* min-height: calc(100lvh - 50px);
+  max-height: calc(100lvh - 50px); */
+}
+.navbarContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-bottom: 1px solid #615ff449;
+  background-color: var(--upperbar-bg-color);
+}
+.containersColumn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5rem;
+  /* margin-bottom: 5rem; */
+
+  scrollbar-color: var(--scrollbar-color);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.sidebarLeft {
+  color: #fff;
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  left: 0%;
+  z-index: 150;
+}
+.sidebarRight {
+  height: 100%;
+  width: 500px;
+  background-color: var(--navbar-bg-color);
+  border-left: 1px solid #272654;
+}
+
+.containers {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+.upperbar {
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  background-color: var(--navbar-bg-color);
+  border-bottom: 1px solid #615ff449;
+}
+.branchContainer {
+  margin-left: 50px;
+}
+
+.dataElementContainers {
+  padding: 20px;
+  height: 100%;
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.clientTitleContainer {
+  padding: 15px;
+  padding-top: 25px;
+  font-size: 25px;
+  color: #cecece;
+  display: flex;
+}
+.clientName {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.leaderboardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.lbNavbar {
+  margin-left: 50px;
+  gap: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.leaderboardsList {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  gap: 25px;
+}
+
+.lbBody {
+  width: 100%;
+  /* height: 30px; */
+  padding: 1rem;
+  border: 1px solid #3a41a5;
+  background-color: var(--regular-card-bg-color);
+  display: flex;
+  border-radius: 2rem;
+}
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+.comment {
+  padding: 15px;
+  padding-left: 25px;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+
+  font-family: "Inter";
+  border-radius: 2rem;
+
+  color: var(--text-primary-color);
+
+  background-color: var(--bg-color3);
+  transition: all 0.3s;
+}
+.lbOptions {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.lbOptionsUpper {
+  display: flex;
+  width: 100%;
+  align-items: end;
+}
+.removeLb {
+  margin-left: auto;
+}
+.lbOptionsBottom {
+  width: 100%;
+  padding-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.lbTimeframesBody {
+  display: flex;
+  flex-direction: column;
+}
+.lbTimeframesList {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 400px;
+  background-color: var(--leaderboards-subitems-list-bg-color);
+  padding: 8px;
+  gap: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  border-radius: 1rem;
+}
+.tfItem {
+  height: 35px;
+  border: 1px solid #2a2964;
+  background-color: var(--leaderboards-timeframe-bg-color);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  gap: 15px;
+  /* padding-top: 8px;
+    padding-bottom: 8px; */
+}
+.lbMainOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.lbMainOptionItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.topData {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  height: 90%;
+}
+
+.inventoryItems {
+  display: flex;
+  gap: 15px;
+}
+
+.inventoryItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.inventoryItem img {
+  border-radius: 2rem;
+  overflow: hidden;
+  width: 100px;
+}
+
+.inventoryItem .amountLabel {
+  position: absolute;
+  top: 60%;
+  width: 100%;
+
+  text-align: center;
+  pointer-events: none;
+}
+.inventoryItem .amountLabel {
+  color: rgb(255, 255, 255);
+  text-shadow:
+    2px 2px 0 #000000,
+    2px -2px 0 #000000,
+    -2px 2px 0 #000000,
+    -2px -2px 0 #000000,
+    2px 0px 0 #000000,
+    0px 2px 0 #000000,
+    -2px 0px 0 #000000,
+    0px -2px 0 #000000,
+    1px 1px 0px rgba(0, 0, 0, 0);
+}
+.inventoryItem .slotLabel {
+  position: absolute;
+  top: -2%;
+  /* width: 100%; */
+
+  text-align: center;
+  pointer-events: none;
+}
+.inventoryItem .slotLabel {
+  color: rgb(255, 255, 255);
+  text-shadow:
+    2px 2px 0 #000000,
+    2px -2px 0 #000000,
+    -2px 2px 0 #000000,
+    -2px -2px 0 #000000,
+    2px 0px 0 #000000,
+    0px 2px 0 #000000,
+    -2px 0px 0 #000000,
+    0px -2px 0 #000000,
+    1px 1px 0px rgba(0, 0, 0, 0);
+}

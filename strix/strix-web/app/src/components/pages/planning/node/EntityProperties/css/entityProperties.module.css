@@ -1,0 +1,67 @@
+.mainContainer {
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+    background-color: #17191a;
+}
+.mainContainer h1 {
+    color: white;
+    margin-top: 5px;
+}
+.inputContainer {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    line-height: 30px;
+    /* justify-content: center; */
+}
+.disabledState {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+.inputInappCheck {
+    color: white;
+    display: flex;
+}
+
+.inputId {
+    display: flex;
+    margin-bottom: 10px;
+}
+.inputId p {
+    margin-right: 10px;
+}
+.inputId .inputIdError {
+    color: red;
+    margin-left: 15px;
+    padding-top: 15px;
+}
+
+
+.realValueContainer {
+    display: flex;
+    max-height: 35px;
+}
+.realValuContainer .inputValueError {
+    color: red;
+    margin-left: 15px;
+}
+
+
+.customPropertiesContainer {
+    margin-top: 50px;
+}
+
+.customPropertiesContainer .customPropertyItem {
+
+}
+
+.saveContainer {
+    position: relative;
+    left: 95%;
+    width: 20px;
+    height: 20px;
+}

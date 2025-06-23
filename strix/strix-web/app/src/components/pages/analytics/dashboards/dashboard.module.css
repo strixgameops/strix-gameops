@@ -1,0 +1,49 @@
+.dashboard {
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-color2);
+  display: flex;
+  flex-direction: column;
+}
+.dashboardUpperbar {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  background-color: var(--upperbar-bg-color);
+  border-bottom: 1px solid #615ff449;
+}
+.horizontalBody {
+  display: flex;
+}
+.dashboardContainer {
+  width: 100%;
+  max-height: calc(100dvh - 100px);
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: var(--scrollbar-color);
+}
+.dashboardContainer.horizontal {
+  display: flex;
+  width: 50%;
+}
+.dashboardContent {
+  width: 100%;
+  max-width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+
+  padding-bottom: 15px;
+  background-color: var(--bg-color2);
+}
+.headerWidget {
+  display: flex;
+  width: 90%;
+}
+
+.userMetrics {
+  display: flex;
+  width: 100%;
+}

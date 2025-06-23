@@ -1,0 +1,340 @@
+.editorContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: start;
+
+  opacity: 1;
+}
+.editorContainer .navigation {
+  width: 100%;
+  height: 40px;
+  background-color: rgb(24, 24, 24);
+  display: flex;
+}
+.editorContainer .navigation button {
+  flex-grow: 1;
+}
+.editZone {
+  width: 100%;
+  height: 100%;
+  /* max-height: 100vh; */
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-color: var(--scrollbar-color);
+  display: flex;
+  justify-content: center;
+}
+.editorShellWrapper {
+  width: 100%;
+  background-color: #161718;
+}
+
+.editorTabWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  overflow: hidden;
+
+  transition: width 0.25s ease-out;
+}
+.editorTabEnlarged {
+  width: 100%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 65px;
+  right: 30px;
+  z-index: 100;
+}
+
+.editorNodeTitle {
+  width: 100%;
+  height: 45px;
+  background-color: #1d1f21;
+
+  display: flex;
+  align-items: center;
+  padding: 35px 0px 25px 25px;
+
+  font-size: 25px;
+  color: #cdcbc7;
+}
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color1);
+
+  border-radius: 2rem;
+  padding: 0px 45px;
+}
+.title {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  padding-top: 35px;
+}
+
+.nodeInfo {
+  width: 100%;
+  display: flex;
+  height: fit-content;
+}
+.nodeInfo .left {
+  padding-top: 15px;
+  width: 30%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: rgba(255, 0, 0, 0.144); */
+}
+.nodeInfo .right {
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* background-color: rgba(0, 0, 255, 0.116); */
+}
+.nodeCodeName {
+  width: 120px;
+  height: 30px;
+  max-height: 30px;
+  border-radius: 15px;
+  background-color: #363636;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1px;
+  padding-bottom: 5px;
+
+  cursor: text;
+  transition: background-color 0.1s ease-in-out;
+}
+.nodeCodeName:hover {
+  background-color: #474747;
+}
+
+.iconSettigns {
+  padding-top: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  max-width: 200px;
+  max-height: 200px;
+}
+.iconUploadPreview {
+  display: flex;
+  flex-direction: column;
+  max-width: 150px;
+  max-height: 150px;
+
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
+}
+.entityIconContainer {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s ease-in-out;
+}
+.entityIconContainer:hover {
+  background-color: #18182e7e;
+}
+.entityIconOverlay {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+  transition: all 0.2s;
+}
+.entityIconOverlay:hover {
+  opacity: 1;
+}
+.basicConfigEntityIcon {
+  width: 100%;
+  max-height: 100px;
+  margin-right: 15px;
+  margin: 0px;
+  object-fit: contain;
+}
+
+.entityRoles {
+  display: flex;
+  padding: 10px;
+}
+
+.tabs {
+  position: relative;
+}
+.tabContent {
+  height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+}
+
+.catNodeInfo {
+  width: fit-content;
+  padding-top: 40px;
+  display: flex;
+  gap: 1rem;
+  /* flex-direction: column; */
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+}
+
+.categoryConfigContainer {
+  width: 100%;
+  height: 400px;
+
+  overflow: hidden;
+  border: 1px solid #25205e;
+  border-bottom-right-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
+.configContainer {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #25205e;
+  border-bottom-right-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
+.bulkEditorSegmentsWidget {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  top: 20px;
+  right: 0%;
+}
+
+.offersList {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: var(--regular-card-bg-color2);
+  height: 100%;
+  padding: 10px;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+.noOffers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  vertical-align: middle;
+}
+.offerItem {
+  width: 100%;
+  height: 55px;
+  background-color: #78592b41;
+  border: 1px solid #78592b;
+  transition: filter 0.1s ease-in-out;
+  filter: brightness(1);
+  display: flex;
+  align-items: center;
+  border-radius: 2rem;
+
+  user-select: none;
+  cursor: pointer;
+}
+.offerItem:hover {
+  filter: brightness(1.2);
+}
+.offerItem .icon {
+  width: 15%;
+  height: 75%;
+  display: flex;
+  margin-left: 15px;
+  margin-right: 15px;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+.offerItem .icon img {
+  object-fit: contain;
+}
+.offerItem .offerIcon {
+  width: 100%;
+  height: 100%;
+}
+
+.offerItem .content {
+  width: 85%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin-left: 15px;
+}
+.offerItem .contentItem {
+  height: 85%;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+  position: relative;
+}
+.contentItem .entityIcon {
+  width: 30px;
+  height: 40px;
+  display: flex;
+}
+.contentItem .amountLabel {
+  position: absolute;
+  top: 60%;
+  width: 100%;
+
+  z-index: 2;
+  text-align: center;
+
+  pointer-events: none;
+}
+.contentItem .amountLabel {
+  color: rgb(255, 255, 255);
+  text-shadow:
+    2px 2px 0 #000000,
+    2px -2px 0 #000000,
+    -2px 2px 0 #000000,
+    -2px -2px 0 #000000,
+    2px 0px 0 #000000,
+    0px 2px 0 #000000,
+    -2px 0px 0 #000000,
+    0px -2px 0 #000000,
+    1px 1px 0px rgba(0, 0, 0, 0);
+}

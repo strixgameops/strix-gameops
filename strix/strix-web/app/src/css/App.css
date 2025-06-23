@@ -1,0 +1,290 @@
+/* CSS Custom Properties for theming */
+:root {
+  /* Dark theme variables */
+  --text-primary-color: #e7e7e7;
+  --bg-color1: #12131b;
+  --bg-color2: #171721;
+  --bg-color3: #181a1b;
+  --navbar-bg-color: #100f14;
+  --navbar-bg-color2: #13111b;
+  --scrollbar-color: #2a2964 #100f14;
+  --danger-zone-bg-color: #1f1212;
+  --upperbar-bg-color: #17161d;
+
+  --datepicker-color1: #101018;
+  --datepicker-color2: rgb(180, 191, 196);
+
+  --charts-bg-color: #181a1b;
+  --datatable-header-color: #18182cb6;
+
+  --beh-tree-text-color: #e7e7e7;
+  --beh-tree-leaf-body-bg-color: #282a2d;
+
+  --event-searcher-body-bg-color: #12101d;
+  --regular-card-bg-color: #18182cb6;
+
+  --d3-grid-color: #303044;
+  --flows-unfilled-property-fill-color: #1b1d20;
+
+  --leaderboards-subitems-list-bg-color: #0c0a14;
+  --leaderboards-timeframe-bg-color: #0c0a14;
+
+  --flows-variable-string-color: #fc62ff;
+  --flows-variable-dynamic-color: #e7e7e7;
+  --flows-variable-number-color: #ff9b5d;
+  --flows-variable-bool-color: #ff5b5b;
+  --flows-variable-file-color: #6eff5b;
+
+  --entities-tree-color1: #133d49;
+  --entities-tree-color2: #1f4a60;
+
+  --entity-props-builder-header-color: #232941;
+  --entity-props-builder-workspace-color: #121020;
+  --entity-props-builder-inh-category-color: #10121d;
+
+  --game-events-day-item-bg-color: #191825;
+  --game-events-day-item-previous-bg-color: #191923;
+  --game-events-current-day-border-color: #b6850063;
+  --game-events-current-day-bg-color: rgba(182, 134, 0, 0.055);
+
+  --main-upperbar-bg-color: rgb(218, 222, 252);
+  --main-upperbar-help-icon-color: rgb(132, 143, 230);
+
+  --composition-middle-body-bg-color: #181a1b;
+
+  /* Transitions for smooth theme switching */
+  --transition-duration: 0.2s;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --text-primary-color: #151720;
+  --bg-color1: rgb(211, 213, 230);
+  --bg-color2: rgb(187, 190, 216);
+  --bg-color3: rgb(212, 216, 231);
+  --navbar-bg-color: rgb(218, 222, 252);
+  --navbar-bg-color2: rgb(210, 212, 240);
+  --scrollbar-color: rgb(167, 170, 194) rgb(224, 226, 253);
+  --danger-zone-bg-color: #fa6c6c5b;
+  --upperbar-bg-color: rgba(250, 251, 255, 0.44);
+
+  --datepicker-color1: #c0c0d6;
+  --datepicker-color2: rgb(20, 26, 48);
+
+  --charts-bg-color: rgb(225, 230, 250);
+  --datatable-header-color: rgb(225, 230, 250);
+
+  --beh-tree-leaf-body-bg-color: rgb(210, 216, 236);
+  --beh-tree-text-color: #151720;
+
+  --event-searcher-body-bg-color: rgb(211, 213, 230);
+  --regular-card-bg-color: #e6e7ec;
+  --regular-card-bg-color2: #d0d1d4;
+  --regular-header-bg-color: rgb(218, 222, 252);
+
+  --d3-grid-color: #a0a0a0;
+  --flows-unfilled-property-fill-color: #dadada;
+
+  --leaderboards-subitems-list-bg-color: #ffffff69;
+  --leaderboards-timeframe-bg-color: #ffffff;
+
+  --flows-variable-string-color: #a40ca7;
+  --flows-variable-dynamic-color: var(--text-primary-color);
+  --flows-variable-number-color: #9b4008;
+  --flows-variable-bool-color: #8f0202;
+  --flows-variable-file-color: #108d00;
+
+  --entities-tree-color1: #1f5f70;
+  --entities-tree-color2: #2c6683;
+
+  --entity-props-builder-configs-color: var(--bg-color3);
+  --entity-props-builder-header-color: rgb(218, 222, 252);
+  --entity-props-builder-workspace-color: var(--bg-color2);
+  --entity-props-builder-inh-category-color: rgb(179, 184, 221);
+
+  --game-events-day-item-bg-color: #e6e7ec;
+  --game-events-day-item-previous-bg-color: #d7d7da;
+  --game-events-current-day-border-color: #006fcac9;
+  --game-events-current-day-bg-color: rgba(0, 85, 165, 0.13);
+
+  --main-upperbar-bg-color: rgb(218, 222, 252);
+  --main-upperbar-help-icon-color: rgb(93, 109, 228);
+
+  --composition-middle-body-bg-color: #e1e6ff;
+
+  --game-model-variable-bg-color: #ebf0ff;
+  --game-model-variable-create-bg-color: rgb(198, 202, 236);
+  --game-model-link-bg-color: rgb(238, 240, 255);
+}
+
+/* Base layout styles with performance optimizations */
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+  /* Use transform3d to enable hardware acceleration */
+  transform: translate3d(0, 0, 0);
+  /* Optimize rendering */
+  contain: layout style paint;
+}
+
+.App-Tower {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  /* Optimize for fixed positioning children */
+  contain: layout;
+}
+
+.page-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  /* Optimize scrolling performance */
+  will-change: scroll-position;
+  /* Create stacking context */
+  z-index: 0;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition:
+    background-color var(--transition-duration) var(--transition-easing),
+    color var(--transition-duration) var(--transition-easing),
+    border-color var(--transition-duration) var(--transition-easing);
+}
+
+/* React Grid resizable handle styling */
+.react-grid-item > .react-resizable-handle::after {
+  border-right: 2px solid white !important;
+  border-bottom: 2px solid white !important;
+}
+
+/* Improved scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color);
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--flows-variable-string-color);
+  background-clip: padding-box;
+}
+
+/* Performance optimizations for animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Container queries for responsive design */
+@container (max-width: 768px) {
+  .page-content {
+    padding: 0.5rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .App-Tower {
+    height: auto;
+  }
+
+  .page-content {
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Hide non-essential elements when printing */
+  nav,
+  .navbar,
+  .upperbar,
+  .demo-badge {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary-color: #000000;
+    --bg-color1: #ffffff;
+    --regular-card-bg-color: #ffffff;
+  }
+
+  [data-theme="light"] {
+    --text-primary-color: #000000;
+    --bg-color1: #ffffff;
+  }
+}
+
+/* Reduced transparency for better accessibility */
+@media (prefers-reduced-transparency: reduce) {
+  * {
+    backdrop-filter: none !important;
+  }
+}
+
+/* Loading animation utility */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Utility classes for common patterns */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

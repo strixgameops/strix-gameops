@@ -1,0 +1,600 @@
+{templateList !== undefined && (
+          <div className={s.segmentInnerBody}>
+            <CustomDragLayer />
+            <div className={s.elementViewContainer}>
+              <div className={s.elementViewUpperbar}>
+                <ButtonGroup fullWidth aria-label="text button group">
+                  <Button
+                    sx={{ }}
+                    variant={
+                      selectedCategory === "analytics"
+                        ? "contained"
+                        : "outlined"
+                    }
+                    onClick={() => setSelectedCategory("analytics")}
+                  >
+                    Analytics
+                  </Button>
+                  <Button
+                    variant={
+                      selectedCategory === "liveops" ? "contained" : "outlined"
+                    }
+                    onClick={() => setSelectedCategory("liveops")}
+                  >
+                    Statistics
+                  </Button>
+                  <Button
+                    disabled
+                    variant={
+                      selectedCategory === "inventory"
+                        ? "contained"
+                        : "outlined"
+                    }
+                    onClick={() => setSelectedCategory("inventory")}
+                  >
+                    Inventory
+                  </Button>
+                  <Button
+                    disabled
+                    sx={{ borderRight: "none" }}
+                    variant={
+                      selectedCategory === "ua" ? "contained" : "outlined"
+                    }
+                    onClick={() => setSelectedCategory("ua")}
+                  >
+                    UA
+                  </Button>
+                </ButtonGroup>
+              </div>
+              <div className={s.elementViewList}>
+                {selectedCategory === "analytics" &&
+                  templateList.analytics &&
+                  templateList.analytics.length > 0 &&
+                  templateList.analytics.map((template, index) => (
+                    <TemplateItemDraggable
+                      onDragStateChange={onDragStateChange}
+                      key={index}
+                      template={template}
+                    />
+                  ))}
+                {selectedCategory === "liveops" &&
+                  templateList.statistics &&
+                  templateList.statistics.length > 0 &&
+                  templateList.statistics.map((template, index) => (
+                    <TemplateItemDraggable
+                      onDragStateChange={onDragStateChange}
+                      key={index}
+                      template={template}
+                    />
+                  ))}
+              </div>
+            </div>
+            <div className={`${s.conditionViewContainer}`} ref={drop}>
+              {(isDragging || currentConditions.length < 1) && (
+                <div className={s.dragOverContainer}>
+                  <div className={s.conditionViewContainerDragOver}>
+                    {currentConditions.length < 1
+                      ? `Drag elements here from left panel`
+                      : `Drop`}
+                  </div>
+                </div>
+              )}
+              <div className={s.conditionList}>
+                {currentConditions &&
+                  currentConditions.length > 0 &&
+                  currentConditions.map((condition, index) =>
+                    condition.conditionOperator === "and" ||
+                    condition.conditionOperator === "or" ? (
+                      <div key={index} className={s.operatorContainer}>
+                        <Box key={index} sx={{ p: 0, paddingBottom: "10px" }}>
+                          <FormControl
+                            size="small"
+                            sx={{ m: 1, minWidth: "100px" }}
+                          >
+                            <Select
+                              id="demo-simple-select-autowidth"
+                              value={
+                                currentConditions[index]?.conditionOperator ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                onChangeConditionOperator(e, index)
+                              }
+                            >
+                              <MenuItem
+                                className="dropdown-option"
+                                key="and"
+                                value={"and"}
+                              >
+                                AND
+                              </MenuItem>
+                              <MenuItem
+                                className="dropdown-option"
+                                key="or"
+                                value={"or"}
+                              >
+                                OR
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </div>
+                    ) : (
+                      <Box
+                        key={index}
+                        sx={{
+                          p: 0,
+                          paddingBottom: "10px",
+                          maxWidth: "100%",
+                          maxHeight: "100px",
+                        }}
+                      >
+                        <div className={s.valueContainer} key={index}>
+                          {/* Template name */}
+                          <FormControl
+                            sx={{
+                              m: 1,
+                              width: "40%",
+                              maxWidth: "max-content",
+                              maxHeight: "100px",
+                            }}
+                          >
+                            <TextField
+                              spellCheck={false}
+                              id="demo-simple-select-autowidth"
+                              value={
+                                currentConditions[index]?.templateName || ""
+                              }
+                              disabled
+                              size="small"
+                              label="Element Name"
+                            >
+                              <MenuItem
+                                className="dropdown-option"
+                                key="equal"
+                                value={currentConditions[index]?.templateName}
+                              >
+                                {currentConditions[index]?.templateName}
+                              </MenuItem>
+                            </TextField>
+                          </FormControl>
+
+                          {/* Condition field */}
+                          <FormControl size="small" sx={{ m: 1, width: "25%" }}>
+                            <InputLabel id="demo-simple-select-small-label">
+                              Condition
+                            </InputLabel>
+                            <Select
+                              id="demo-simple-select-autowidth"
+                              value={currentConditions[index]?.condition || ""}
+                              onChange={(e) =>
+                                onSelectTemplateCondition(e, index)
+                              }
+                              label="Condition"
+                            >
+                              {/* Determine what conditions to render. If templateValue is an array, show different options */}
+                              {currentConditions[index]?.templateMethod ===
+                                "mostCommon" ||
+                              currentConditions[index]?.templateMethod ===
+                                "leastCommon"
+                                ? [
+                                    <MenuItem
+                                      className="dropdown-option"
+                                      key="includes"
+                                      value={"includes"}
+                                    >
+                                      Includes
+                                    </MenuItem>,
+                                    <MenuItem
+                                      className="dropdown-option"
+                                      key="notIncludes"
+                                      value={"notIncludes"}
+                                    >
+                                      Not Includes
+                                    </MenuItem>,
+                                    <MenuItem
+                                      className="dropdown-option"
+                                      key="includesOnly"
+                                      value={"includesOnly"}
+                                    >
+                                      Includes Only
+                                    </MenuItem>,
+                                  ]
+                                : [
+                                    // If regular template (i.e. any template using .templateValue field instead of .templateValues), render regular conditions
+                                    condition.valueFormat === "integer" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="equal"
+                                        value={"="}
+                                      >
+                                        Is Equal (=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="notEqual"
+                                        value={"!="}
+                                      >
+                                        Is Not Equal (!=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThan"
+                                        value={">"}
+                                      >
+                                        More than ({">"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThan"
+                                        value={"<"}
+                                      >
+                                        Less than ({"<"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThanOrEqual"
+                                        value={">="}
+                                      >
+                                        More than or Equal to ({">="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThanOrEqual"
+                                        value={"<="}
+                                      >
+                                        Less than or Equal to ({"<="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="inrange"
+                                        value={"range"}
+                                      >
+                                        In Range
+                                      </MenuItem>,
+                                    ],
+                                    condition.valueFormat === "string" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="is"
+                                        value={"is"}
+                                      >
+                                        Is
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="isNot"
+                                        value={"isNot"}
+                                      >
+                                        Is Not
+                                      </MenuItem>,
+                                    ],
+                                    condition.valueFormat === "bool" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="is"
+                                        value={"is"}
+                                      >
+                                        Is
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="isNot"
+                                        value={"isNot"}
+                                      >
+                                        Is Not
+                                      </MenuItem>,
+                                    ],
+                                    condition.valueFormat === "float" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="equal"
+                                        value={"="}
+                                      >
+                                        Is Equal (=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="notEqual"
+                                        value={"!="}
+                                      >
+                                        Is Not Equal (!=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThan"
+                                        value={">"}
+                                      >
+                                        More than ({">"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThan"
+                                        value={"<"}
+                                      >
+                                        Less than ({"<"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThanOrEqual"
+                                        value={">="}
+                                      >
+                                        More than or Equal to ({">="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThanOrEqual"
+                                        value={"<="}
+                                      >
+                                        Less than or Equal to ({"<="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="inrange"
+                                        value={"range"}
+                                      >
+                                        In Range
+                                      </MenuItem>,
+                                    ],
+                                    condition.valueFormat === "percentile" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="equal"
+                                        value={"="}
+                                      >
+                                        Is Equal (=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="notEqual"
+                                        value={"!="}
+                                      >
+                                        Is Not Equal (!=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThan"
+                                        value={">"}
+                                      >
+                                        More than ({">"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThan"
+                                        value={"<"}
+                                      >
+                                        Less than ({"<"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThanOrEqual"
+                                        value={">="}
+                                      >
+                                        More than or Equal to ({">="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThanOrEqual"
+                                        value={"<="}
+                                      >
+                                        Less than or Equal to ({"<="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="inrange"
+                                        value={"range"}
+                                      >
+                                        In Range
+                                      </MenuItem>,
+                                    ],
+                                    condition.valueFormat === "money" && [
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="equal"
+                                        value={"="}
+                                      >
+                                        Is Equal (=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="notEqual"
+                                        value={"!="}
+                                      >
+                                        Is Not Equal (!=)
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThan"
+                                        value={">"}
+                                      >
+                                        More than ({">"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThan"
+                                        value={"<"}
+                                      >
+                                        Less than ({"<"})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="moreThanOrEqual"
+                                        value={">="}
+                                      >
+                                        More than or Equal to ({">="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="lessThanOrEqual"
+                                        value={"<="}
+                                      >
+                                        Less than or Equal to ({"<="})
+                                      </MenuItem>,
+                                      <MenuItem
+                                        className="dropdown-option"
+                                        key="inrange"
+                                        value={"range"}
+                                      >
+                                        In Range
+                                      </MenuItem>,
+                                    ],
+                                  ]}
+                            </Select>
+                          </FormControl>
+                          {/* Value field */}
+                          <FormControl
+                            size="small"
+                            sx={{ m: 1, width: "30%" }}
+                            variant="outlined"
+                            disabled={
+                              currentConditions[index]?.condition === ""
+                            }
+                          >
+                            {condition.valueFormat === "bool" ? (
+                              <Select
+                                value={
+                                  currentConditions[index]?.conditionValue || ""
+                                }
+                                endAdornment={
+                                  <InputAdornment position="end" sx={{ pr: 2 }}>
+                                    {(() => {
+                                      switch (condition.valueFormat) {
+                                        case "money":
+                                          return "$";
+                                        case "string":
+                                          return "str";
+                                        case "integer":
+                                          return "123";
+                                        case "float":
+                                          return "1.23";
+                                        case "percentile":
+                                          return "%";
+                                        case "bool":
+                                          return "bool";
+                                        default:
+                                          return "";
+                                      }
+                                    })()}
+                                  </InputAdornment>
+                                }
+                                onChange={(e) =>
+                                  onElementConditionValueChange(
+                                    e,
+                                    condition.valueFormat,
+                                    index
+                                  )
+                                }
+                              >
+                                <MenuItem value={"True"}>True</MenuItem>
+                                <MenuItem value={"False"}>False</MenuItem>
+                              </Select>
+                            ) : (
+                              <OutlinedInput
+                                spellCheck={false}
+                                id="outlined-adornment-weight"
+                                value={
+                                  currentConditions[index]?.conditionValue || ""
+                                }
+                                onChange={(e) =>
+                                  onElementConditionValueChange(
+                                    e,
+                                    condition.valueFormat,
+                                    index
+                                  )
+                                }
+                                endAdornment={
+                                  <InputAdornment position="end">
+                                    {(() => {
+                                      switch (condition.valueFormat) {
+                                        case "money":
+                                          return "$";
+                                        case "string":
+                                          return "str";
+                                        case "integer":
+                                          return "123";
+                                        case "float":
+                                          return "1.23";
+                                        case "percentile":
+                                          return "%";
+                                        default:
+                                          return "";
+                                      }
+                                    })()}
+                                  </InputAdornment>
+                                }
+                                aria-describedby="outlined-weight-helper-text"
+                                inputProps={{
+                                  "aria-label": "weight",
+                                }}
+                              />
+                            )}
+                          </FormControl>
+                          {/* Double value field if value is range */}
+                          {currentConditions[index]?.condition === "range" && (
+                            <div className={s.rangeHyphen}>—</div>
+                          )}
+                          {currentConditions[index]?.condition === "range" && (
+                            <FormControl
+                              size="small"
+                              sx={{ m: 1, width: "25ch" }}
+                              variant="outlined"
+                              disabled={
+                                currentConditions[index]?.condition === ""
+                              }
+                            >
+                              <OutlinedInput
+                                spellCheck={false}
+                                id="outlined-adornment-weight"
+                                value={
+                                  currentConditions[index]
+                                    ?.conditionSecondaryValue || ""
+                                }
+                                onChange={(e) =>
+                                  onElementConditionSecondaryValueChange(
+                                    e,
+                                    condition.valueFormat,
+                                    index
+                                  )
+                                }
+                                endAdornment={
+                                  <InputAdornment position="end">
+                                    {(() => {
+                                      switch (condition.valueFormat) {
+                                        case "money":
+                                          return "$";
+                                        case "string":
+                                          return "str";
+                                        case "integer":
+                                          return "123";
+                                        case "float":
+                                          return "1.23";
+                                        case "percentile":
+                                          return "%";
+                                        default:
+                                          return "";
+                                      }
+                                    })()}
+                                  </InputAdornment>
+                                }
+                                aria-describedby="outlined-weight-helper-text"
+                                inputProps={{
+                                  "aria-label": "weight",
+                                }}
+                              />
+                            </FormControl>
+                          )}
+                          <IconButton
+                            aria-label="delete"
+                            size="small"
+                            onClick={() => removeTemplateFromConditions(index)}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      </Box>
+                    )
+                  )}
+              </div>
+            </div>
+          </div>
+        )}

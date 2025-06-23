@@ -1,0 +1,134 @@
+.navbarContainer {
+  background-color: var(--navbar-bg-color);
+  width: 100%;
+  max-width: 300px;
+  min-width: 300px;
+  position: relative;
+  top: 0;
+  z-index: 1000;
+  border-right: 1px solid #615ff449;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+.navbarInnerContainer {
+  width: 100%;
+  padding-top: 20px;
+  height: 95%;
+  max-height: 95%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+}
+.overviewButtonContainer {
+  margin-bottom: 20px;
+}
+
+/* Game Selector Section */
+.gameSelectorSection {
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+.gameSelectorContainer {
+  padding: 12px;
+  background-color: rgba(87, 80, 210, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(87, 80, 210, 0.15);
+  transition: all 0.3s ease;
+}
+.gameSelectorContainer:hover {
+  background-color: rgba(87, 80, 210, 0.08);
+  border-color: rgba(87, 80, 210, 0.25);
+}
+
+/* Aspect Switcher Section */
+.aspectSwitcherSection {
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+.aspectSwitcher {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navigation Container with transitions */
+.navigationContainer {
+  min-height: 200px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gameName {
+  display: flex;
+  padding-left: 15px;
+  margin-bottom: 12px;
+}
+.gameSelectedLabel {
+  color: #818181;
+  text-align: left;
+  padding-left: 20px;
+  padding-bottom: 0px;
+  font-size: 15px;
+  margin-bottom: 0px;
+  opacity: 0.7;
+}
+.gameNameLabel {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 2px;
+  font-size: 20px;
+}
+
+.userMenu {
+  width: 100%;
+  position: sticky;
+  top: 100%;
+  display: flex;
+  background-color: var(--navbar-bg-color2);
+  align-items: center;
+  border-top: 1px solid #615ff449;
+}
+.logoutButton {
+  margin-left: auto;
+}
+
+.gameDisplayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.gameNameDisplay {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-height: 600px) {
+  .gameSelectorSection,
+  .aspectSwitcherSection {
+    margin-bottom: 4px;
+  }
+  
+  .overviewButtonContainer {
+    margin-bottom: 12px;
+  }
+  
+  .gameName {
+    margin-bottom: 8px;
+  }
+}
+
+.navbarInnerContainer {
+  scroll-behavior: smooth;
+}
+
+.gameSelectorContainer:hover,
+.aspectSwitcher:hover {
+  transform: translateY(-1px);
+}
+
+/* Loading states */
+.gameSelectorContainer.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}

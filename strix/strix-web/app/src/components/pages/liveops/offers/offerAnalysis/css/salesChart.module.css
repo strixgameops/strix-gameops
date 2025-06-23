@@ -1,0 +1,78 @@
+.LineChartBody {
+  width: 100%;
+  height: 210px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 0px 15px;
+
+  /* margin: 15px; */
+
+  /* border: 1px solid rgba(98, 95, 244, 0.2);
+    -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2); */
+}
+.LineChartUpper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.LineChartName {
+  font-size: 1.5rem;
+  color: white;
+  /* padding-bottom: 10px; */
+}
+.LineChartDeltaLabel {
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+}
+.LineChart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.chart {
+  width: 100%;
+  height: 100%;
+  /* background-color: red; */
+}
+.noDataChart {
+  opacity: 0.2;
+  pointer-events: none;
+}
+.noDataLabel {
+  font-size: 2rem;
+  padding-bottom: 50px;
+  color: rgba(87, 87, 87, 0.411);
+  position: absolute;
+  user-select: none;
+}
+
+.positiveDelta {
+  color: rgb(0, 170, 0);
+}
+.negativeDelta {
+  color: rgb(197, 30, 0);
+}
+.neutralDelta {
+  color: rgb(143, 143, 143);
+}
+
+.ChartContainerOnly {
+  position: relative;
+  width: 100%;
+  height: 190px;
+}
+
+/* .mapChartBody {
+    width: 800px;
+    height: 350px;
+    padding-left: 25px;
+    background-color: var(--bg-color3);
+
+    display: flex;
+    flex-direction: column;
+} */

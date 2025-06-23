@@ -1,0 +1,6 @@
+body.grabbing  {
+    * {
+        cursor: grabbing !important;
+        user-select: none;
+    }
+}

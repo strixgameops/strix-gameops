@@ -1,0 +1,72 @@
+.nodeListItemContainer {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.nodeListItemContainerPreview {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.nodeDragging {
+    border: 2px solid pink;
+    opacity: 100%;
+}
+.draggableIconContainer {
+    display: flex;
+    align-items: center;
+    cursor: grab;
+    margin: 5px;
+    margin-right: 0px;
+    width: 20px;
+    height: 20px;
+    scale: 0.80;
+}
+
+.folderIconContainer {
+    display: flex;
+    align-items: center;
+    flex: 0;
+    padding-left: 15px;
+    scale: 0.80;
+    margin: 5px;
+    color:var(--text-primary-color);
+}
+.title {
+    padding-left: 5px;
+    margin-right: 5px;
+    color:var(--text-primary-color);
+}
+.uncategorizedIconContainer {
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    scale: 0.80;
+    color:rgb(153, 99, 0);
+}
+.categoryIconContainer {
+    display: flex;
+    align-items: center;
+    flex: 0;
+    width: 35px;
+    height: 35px;
+    margin: 5px;
+}
+.entityIconContainer {
+    display: flex;
+    align-items: center;
+    flex: 0;
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+}
+.removeButton {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 85%;
+    height: 100%;
+}
+.removeButtonShow {
+    display: block;
+}

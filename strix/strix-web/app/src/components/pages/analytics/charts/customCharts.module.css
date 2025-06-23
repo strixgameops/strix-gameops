@@ -1,0 +1,103 @@
+.main {
+  width: 100%;
+  height: 100%;
+}
+.newChartSelection {
+  background-color: var(--bg-color3);
+  height: fit-content;
+  padding-bottom: 35px;
+  border-bottom: 1px solid #312a5e;
+  transition: all 0.25s ease-in-out;
+}
+.newChartSelectionNoDisplay {
+  padding-bottom: 20px;
+}
+
+.chartCard {
+  display: flex;
+  flex-direction: column;
+
+  width: 120px;
+  height: 120px;
+  background-color: var(--regular-card-bg-color);;
+  border: 1px solid #40367d;
+
+  padding: 0px 34px 0px 34px;
+
+  -webkit-box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 0.25);
+  -moz-box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 0.25);
+  box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 0.25);
+  transition:
+    box-shadow 0.15s ease-out,
+    height 0.25s ease-out background-color 0.1s ease-out;
+}
+.chartCard:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 1);
+  -moz-box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 1);
+  box-shadow: 0px 0px 10px 3px rgba(53, 40, 129, 1);
+  user-select: none;
+}
+.chartCardActive {
+  background-color: #36355f;
+}
+.chartCardMinimized {
+  height: 35px;
+  width: 100%;
+}
+.newChartSelectionContent {
+  display: flex;
+  gap: 15px;
+  padding-top: 15px;
+  padding-left: 75px;
+  padding-right: 35px;
+  transition: padding-left 0.25s ease-in-out;
+}
+.newChartSelectionContentMinimized {
+  padding-left: 35px;
+}
+.chartBuilder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.customDashboards {
+  background-color: var(--bg-color2);
+  height: 100%;
+}
+.dashboardList {
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  gap: 15px;
+  height: 100%;
+}
+
+.upperbarButtons {
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  padding-left: 32px;
+  gap: 2em;
+  flex-wrap: nowrap;
+  height: fit-content;
+  align-items: center;
+  background-color: var(--upperbar-bg-color);
+  border-bottom: 1px solid #615ff449;
+}
+.dashboardItem {
+  width: 85%;
+  margin-left: 2.5em;
+  height: 55px;
+  padding-right: 17px;
+  display: flex;
+  align-items: center;
+
+  border-radius: 2rem;
+  
+}
+.dashboardItem:last-of-type {
+  margin-bottom: 10px;
+}

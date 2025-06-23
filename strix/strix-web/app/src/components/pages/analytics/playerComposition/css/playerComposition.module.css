@@ -1,0 +1,447 @@
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--upperbar-bg-color);
+  border-bottom: 1px solid #615ff44f;
+  display: flex;
+}
+.subHeader {
+  width: 100%;
+  background-color: var(--upperbar-bg-color);
+  border-bottom: 1px solid #615ff44f;
+}
+.list {
+  height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  overflow-y: auto;
+  max-height: 100%;
+  border-bottom: 1px solid #615ff44f;
+}
+.innerList {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.segmentsList {
+  background-color: rgb(232, 234, 255);
+  gap: 5px;
+  height: 100%;
+  width: 40%;
+  border-right: 1px solid #615ff44f;
+  display: flex;
+  flex-direction: column;
+}
+.segmentsList .innerList {
+  box-sizing: border-box;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.elementsList {
+  background-color: rgb(232, 234, 255);
+  border-right: 1px solid #615ff44f;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.elementsList .innerList {
+  flex-direction: row;
+  padding: 5px;
+  flex-wrap: wrap;
+}
+.innerBodyRow {
+  height: 100%;
+  display: flex;
+}
+.subElements {
+  width: 100%;
+  height: 100%;
+  /* display: flex; */
+  flex-direction: column;
+}
+.subElements:first-of-type {
+  border-right: 1px solid #615ff44f;
+}
+.subElements .list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+.subElements .innerList {
+  height: fit-content;
+  align-items: start;
+  justify-content: start;
+}
+
+.upperBody {
+  width: 100%;
+  height: 30%;
+  display: flex;
+  overflow: hidden;
+}
+.middleBody {
+  width: 100%;
+  height: 55%;
+  min-height: 45%;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+  background-color: var(--composition-middle-body-bg-color);
+
+  position: relative;
+}
+.bottomBody {
+  width: 100%;
+  height: 30%;
+  min-height: 30%;
+  max-height: 30%;
+  display: flex;
+  border-top: 1px solid #615ff44f;
+}
+.filtersList {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 234, 255);
+  height: 100%;
+  width: 30%;
+  min-width: 30%;
+  max-width: 57%;
+  transition:
+    min-width 0.3s ease-in-out,
+    width 0.3s ease-in-out;
+}
+.collapsed {
+  width: 0%;
+  min-width: 45px;
+}
+
+.filtersList .innerList {
+  padding: 5px;
+  padding-top: 10px;
+  padding-bottom: 55px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: fit-content;
+  align-items: flex-start;
+  justify-content: start;
+  gap: 5px;
+}
+.filtersList .subHeader {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  padding-top: 8.8px;
+  padding-bottom: 4px;
+}
+.filterItem {
+  width: fit-content;
+  min-width: 150px;
+  width: 100%;
+  height: 45px;
+  border: 1px solid #615ff44f;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  transition: border 0.3s ease-in-out;
+  border-radius: 2rem;
+}
+.filterItem.error {
+  border: 1px solid #c44848;
+}
+.conditionItem {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #615ff44f;
+  display: flex;
+  align-items: center;
+  transition: border 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubbleChartSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  background-color: rgb(232, 234, 255);
+  border-left: 1px solid #615ff44f;
+  height: 100%;
+
+  width: 30%;
+  max-width: 30%;
+}
+.axis {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 20px;
+  margin-bottom: 20px;
+}
+.disabled {
+  filter: brightness(0.7);
+}
+
+.selectedData {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 234, 255);
+  border-left: 1px solid #615ff44f;
+  height: 100%;
+
+  width: 20%;
+  max-width: 20%;
+  transition:
+    width 0.3s ease-in-out,
+    max-width 0.3s ease-in-out;
+  overflow: hidden;
+}
+.overExpanded {
+  width: 70%;
+  max-width: 70%;
+}
+.selectedData .subHeader {
+  display: flex;
+  align-items: center;
+}
+.selectedData .innerList {
+  padding: 10px;
+  height: fit-content;
+  padding-bottom: 50px;
+}
+.selectedData .element {
+  display: flex;
+  gap: 5px;
+  border: 1px solid #5f7af483;
+  transition: all 0.15s ease-in-out;
+  justify-content: start;
+  cursor: pointer;
+  filter: brightness(1);
+}
+.element:hover {
+  border: 1px solid #5f7af4ad;
+  background-color: #5f7af41c;
+}
+.element.elementSelected {
+  filter: brightness(1.3);
+  border: 1px solid #5f7af4ad;
+  background-color: #5f7af41c;
+}
+
+.bubbleChartPresets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgb(232, 234, 255);
+  border-left: 1px solid #615ff44f;
+  height: 100%;
+
+  width: 20%;
+  min-width: 20%;
+  max-width: 20%;
+}
+.bubbleChartPresets .innerList {
+  /* align-items: center; */
+  margin-bottom: 50px;
+}
+.presetItem {
+  width: 100%;
+  padding: 0px;
+  margin-left: 12px;
+  /* padding-left: 2em; */
+  height: 30px;
+  padding-right: 17px;
+  display: flex;
+  align-items: center;
+}
+.presetItem:last-of-type {
+  margin-bottom: 10px;
+}
+
+.tooltipSelectedData {
+  width: 700px;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color3);
+  border: 1px solid #615ff44f;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2rem;
+
+  /* position: relative;
+    right: 500px;
+    top: -15px; */
+}
+.tooltipSelectedData .list {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  max-height: 400px;
+  width: 100%;
+}
+.elementMinimized {
+  display: flex;
+  gap: 5px;
+  height: 25px;
+  border: 1px solid #5f7af483;
+  transition: all 0.3s ease-in-out;
+  justify-content: start;
+}
+
+.correlationTable {
+  height: 100%;
+  padding-top: 50px;
+  padding-bottom: 25px;
+
+  display: flex;
+  flex-direction: column;
+}
+.correlationTable .subHeader {
+  background: none;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.correlationItem {
+  display: flex;
+  align-items: center;
+}
+
+.color {
+  color: #910000;
+}
+
+.selectItemsContainer {
+  height: fit-content;
+  max-height: 400px;
+  scrollbar-width: thin;
+  overflow-y: auto;
+}
+.sideTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.templateItem {
+  height: fit-content;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s;
+  border: 1px solid rgba(99, 87, 255, 0.411);
+}
+.templateItem:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+.templateItemPreview {
+  width: fit-content;
+  height: 35px;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+}
+@keyframes fadeIn {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(1.5deg);
+  }
+}
+
+.templateItemPreviewAnimation {
+  transition: all 0.1s;
+  animation: fadeIn 0.1s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.templateItemName {
+  padding-left: 5px;
+  margin-right: 5px;
+  user-select: none;
+}
+
+
+.pieChartMiddleBodyLayout {
+  width: 100%;
+  display: flex;
+  height: 100%;
+  padding: 2rem;
+  padding-top: 6rem;
+  padding-right: 0rem;
+  padding-bottom: 0rem;
+
+}
+.middleBody.expanded {
+  display: flex;
+  height: 100%;
+}
+
+.pieChartMiddleBodyLayout .bubbleChartPresets {
+  max-width: 30%;
+  width: 30%;
+  
+}
+
+.pieChartCategoriesAndFilters {
+  display: flex;
+  width: 70%;
+}
+.pieChartCategoriesAndFilters .filtersList {
+  width: 85%;
+  max-width: 100%;
+  border: 1px solid #615ff44f;
+  
+  border-right: none;
+  background-color: rgb(232, 234, 255);
+}
+.pieChartCategories {
+ 
+  border: 1px solid #615ff44f;
+  border-right: none;
+  border-top-left-radius: 2rem;
+  width: 50%;
+  background-color: rgb(232, 234, 255);
+  display: flex;
+  flex-direction: column;
+
+}
+.pieChartCategories .list {
+  
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  gap: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3rem;
+
+}
+
+.filterName {
+  width: fit-content;
+}

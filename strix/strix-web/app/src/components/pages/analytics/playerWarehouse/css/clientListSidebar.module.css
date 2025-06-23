@@ -1,0 +1,82 @@
+.sidebarContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.queryContainer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  background-color: var(--upperbar-bg-color);
+  border-bottom: 1px solid #272654;
+
+  position: relative;
+  padding: 5px;
+}
+.clientList {
+  width: 100%;
+  height: 90%;
+  color: var(--text-primary-color);
+  position: relative;
+  background-color: var(--bg-color3);
+}
+
+.queryContainer .queryBox {
+  width: 100%;
+  height: fit-content;
+  padding: 5px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.elementsSelect {
+  scrollbar-color: var(--scrollbar-color);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 600px;
+  padding: 16px;
+}
+.innerList {
+  display: flex;
+  padding: 5px;
+  padding-top: 10px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: fit-content;
+  align-items: flex-start;
+  justify-content: start;
+  gap: 5px;
+}
+
+.filterItem {
+  width: fit-content;
+  min-width: 150px;
+  width: 100%;
+  height: 45px;
+  border: 2px solid #615ff44f;
+  display: flex;
+  border-radius: 2rem;
+  align-items: center;
+  padding: 10px;
+  transition: border 0.3s ease-in-out;
+}
+.filterItem:last-child {
+  margin-bottom: 25px;
+}
+.filterItem.error {
+  border: 1px solid #c44848;
+}
+.conditionItem {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #615ff44f;
+  display: flex;
+  align-items: center;
+  transition: border 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

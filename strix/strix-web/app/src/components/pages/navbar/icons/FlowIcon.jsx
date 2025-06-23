@@ -1,0 +1,101 @@
+import React from "react";
+
+const FlowIcon = ({ color = "currentColor" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    color={color}
+    width="24px"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      x="1.368"
+      y="9.092"
+      width="7.098"
+      height="4.618"
+      style={{ fillRule: "nonzero", fill: color, paintOrder: "fill", stroke: color }}
+    />
+    <rect
+      x="14.793"
+      y="1.168"
+      width="7.127"
+      height="4.618"
+      style={{ fillRule: "nonzero", fill: color, paintOrder: "fill", stroke: color }}
+    />
+    <rect
+      x="14.793"
+      y="9.092"
+      width="7.127"
+      height="4.618"
+      style={{ fillRule: "nonzero", fill: color, paintOrder: "fill", stroke: color }}
+    />
+    <rect
+      x="14.793"
+      y="17.016"
+      width="7.127"
+      height="4.618"
+      style={{ fillRule: "nonzero", fill: color, paintOrder: "fill", stroke: color }}
+    />
+    <rect
+      x="8.922"
+      y="10.974"
+      width="5.444"
+      height="0.713"
+      style={{ fill: color, paintOrder: "fill", stroke: color }}
+    />
+    <rect
+      x="13.769"
+      y="8.138"
+      width="7.981"
+      height="0.713"
+      style={{
+        fill: color,
+        paintOrder: "fill",
+        stroke: color,
+        transformOrigin: "17.7595px 8.4945px",
+      }}
+      transform="matrix(0, 1, -1, 0, -5.959040641785, -1.381855964661)"
+    />
+    <rect
+      x="-17.971"
+      y="-3.834"
+      width="5.444"
+      height="0.713"
+      style={{
+        fill: color,
+        paintOrder: "fill",
+        stroke: color,
+        transformOrigin: "-15.249px -3.477px",
+      }}
+      transform="matrix(-1, 0, 0, -1, 30.498220443726, 6.953896999345)"
+    />
+    <rect
+      x="14.914"
+      y="8.138"
+      width="8.645"
+      height="0.713"
+      style={{
+        fill: color,
+        paintOrder: "fill",
+        stroke: color,
+        transformOrigin: "19.239px 8.495px",
+      }}
+      transform="matrix(0, 1, -1, 0, -7.437525749207, 6.909512042999)"
+    />
+    <rect
+      x="-18.283"
+      y="-19.725"
+      width="5.444"
+      height="0.713"
+      style={{
+        fill: color,
+        paintOrder: "fill",
+        stroke: color,
+        transformOrigin: "-15.561px -19.368px",
+      }}
+      transform="matrix(-1, 0, 0, -1, 31.122821807862, 38.735141754093)"
+    />
+  </svg>
+);
+
+export default FlowIcon;

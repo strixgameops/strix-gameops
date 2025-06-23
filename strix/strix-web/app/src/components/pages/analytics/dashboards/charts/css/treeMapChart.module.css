@@ -1,0 +1,248 @@
+.LineChartBody {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 5px 15px;
+
+  margin: 15px;
+  background-color: var(--bg-color3);
+
+  border: 1px solid rgba(98, 95, 244, 0.2);
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+}
+.LineChartUpper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.LineChartName {
+  font-size: 1.5rem;
+  color: white;
+  padding-bottom: 10px;
+}
+.LineChartDeltaLabel {
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+}
+.LineChart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 450px;
+  position: relative;
+}
+.chart {
+  width: 100%;
+  height: 100%;
+  /* background-color: red; */
+}
+.noDataChart {
+  opacity: 0.2;
+  pointer-events: none;
+}
+.noDataLabel {
+  font-size: 2rem;
+  padding-bottom: 50px;
+  color: rgba(87, 87, 87, 0.411);
+  position: absolute;
+  user-select: none;
+}
+
+.positiveDelta {
+  color: rgb(0, 170, 0);
+}
+.negativeDelta {
+  color: rgb(197, 30, 0);
+}
+.neutralDelta {
+  color: rgb(143, 143, 143);
+}
+
+.ChartContainerOnly {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 10px;
+}
+
+.rfmGrid {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 16px 16px 65px 65px;
+  font-size: 13px;
+}
+
+/* Axis Y */
+.rfmGrid .axisY {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 49px;
+  bottom: 65px;
+  color: #537087;
+}
+.axisY .ticks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.axisY .ticks .tick {
+  text-align: right;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 1em;
+}
+.axisY .ticks .tick:first-child {
+  color: rgba(0, 0, 0, 0);
+  visibility: hidden;
+}
+.axisY .label {
+  position: absolute;
+  display: flex;
+  gap: 25px;
+  top: 50%;
+  left: 4px;
+  transform: rotate(270deg) translate(-50%, -50%);
+  transform-origin: 0 0;
+  text-wrap: nowrap;
+}
+
+/* Axis X */
+.rfmGrid .axisX {
+  position: absolute;
+  left: 65px;
+  right: 16px;
+  height: 49px;
+  bottom: 16px;
+  color: #537087;
+}
+.axisX .label {
+  position: absolute;
+  display: flex;
+  gap: 25px;
+  bottom: -12px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.axisX .ticks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding-top: 12px;
+  line-height: 1;
+  display: flex;
+  justify-content: space-between;
+}
+.axisX .ticks .tick {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 1em;
+}
+
+.rfmGrid .chart {
+  position: relative;
+  font-weight: 500;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-rows: minmax(44px, auto);
+  grid-gap: 1px;
+  border-radius: 4px;
+  font-size: 14px;
+  overflow: hidden;
+}
+.chart .item {
+  transition: all 0.1s ease-in-out;
+  padding: 16px;
+}
+.chart .item:nth-child(1) {
+  background-color: rgba(219, 76, 76, 0.75);
+  color: #fff;
+  grid-column: 1/5;
+  grid-row: 1/3;
+}
+.chart .item:nth-child(2) {
+  background-color: rgba(63, 134, 45, 0.75);
+  color: #181818;
+  grid-column: 5/9;
+  grid-row: 1/5;
+}
+.chart .item:nth-child(3) {
+  background-color: rgba(45, 207, 66, 0.75);
+  color: #181818;
+  grid-column: 9/11;
+  grid-row: 1/5;
+}
+.chart .item:nth-child(4) {
+  background-color: rgb(253, 143, 64, 0.75);
+  color: #fff;
+  grid-column: 1/5;
+  grid-row: 3/7;
+}
+.chart .item:nth-child(5) {
+  background-color: rgb(255, 199, 90, 0.75);
+  color: #181818;
+  grid-column: 5/7;
+  grid-row: 5/7;
+}
+.chart .item:nth-child(6) {
+  background-color: rgba(152, 209, 144, 0.75);
+  color: #fff;
+  grid-column: 7/11;
+  grid-row: 5/9;
+}
+.chart .item:nth-child(7) {
+  background-color: rgba(168, 176, 187, 0.75);
+  color: #181818;
+  grid-column: 1/5;
+  grid-row: 7/11;
+}
+.chart .item:nth-child(8) {
+  background-color: rgba(104, 136, 180, 0.75);
+  color: #fff;
+  grid-column: 5/7;
+  grid-row: 7/11;
+}
+.chart .item:nth-child(9) {
+  background-color: rgba(83, 143, 211, 0.75);
+  color: #181818;
+  grid-column: 7/9;
+  grid-row: 9/11;
+}
+.chart .item:nth-child(10) {
+  background-color: rgb(193, 242, 219, 0.75);
+  color: #181818;
+  grid-column: 9/11;
+  grid-row: 9/11;
+}
+
+.chart .item:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+  transition-property: filter, border-color;
+  transition-timing-function: ease-in;
+  transition-duration: 0.2s;
+}
+
+.item .labelTitle {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.item .label {
+  font-size: 12px;
+}

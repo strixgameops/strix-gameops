@@ -1,0 +1,19 @@
+.dashboardContent {
+  width: 100%;
+  max-width: 100%;
+  max-height: 100vh;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+
+  padding: 15px;
+  height: fit-content;
+  gap: 15px;
+
+  min-height: 100lvh;
+
+  /* align-content: baseline; */
+}
+.chartContainer {
+  width: fit-content;
+  height: fit-content;
+}

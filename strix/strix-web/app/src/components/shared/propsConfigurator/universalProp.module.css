@@ -1,0 +1,138 @@
+.universalProp {
+    display: flex;
+    flex-direction: row;
+
+    margin-bottom: 25px;
+    padding-right: 15px;
+    min-width: 100%;
+}
+.childProp {
+    margin-bottom: 15px;
+}
+.universalPropMapContainer {
+    display: flex;
+    flex-direction: column;
+}
+.propID {
+    /* min-width: 30%; */
+}
+.propType {
+    padding-left: 5px;
+    min-width: 100px;
+    max-width: 220px;
+}
+.propValue {
+    min-width: 25%;
+    max-width: 35%;
+}
+.propCompareValue {
+    min-width: 20%;
+}
+.propDelete {
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    width: 25px;
+}
+
+.propMapValues {
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.verticalLine {
+    background-image: linear-gradient(to bottom, #3d366c 50%, transparent 0%);
+    background-repeat: repeat-y;
+    background-position: bottom;
+    background-size: 2px 6px;
+    width: 2px;
+    min-width: 2px;
+    margin-top: -25px;
+    margin-bottom: 9px;
+}
+.lastVerticalLine {
+    width: 2px;
+    min-width: 2px;
+    margin-top: -25px;
+    margin-bottom: 21px;
+}
+.smallVerticalLine {
+    background-image: linear-gradient(to bottom, #3d366c 50%, transparent 0%);
+    background-repeat: repeat-y;
+    background-position: bottom;
+    background-size: 2px 6px;
+    width: 2px;
+    min-width: 2px;
+    height: 45px;
+    margin-top: -70px;
+    margin-bottom: -20px;
+}
+.addNewField_lastVerticalLine {
+    background-image: linear-gradient(to bottom, #3d366c 50%, transparent 0%);
+    background-repeat: repeat-y;
+    background-position: bottom;
+    background-size: 2px 6px;
+    width: 2px;
+    min-width: 2px;
+    height: 58px;
+    margin-top: -80px;
+    margin-bottom: -20px;
+}
+.horizontalLine {
+    background-image: linear-gradient(to right, #3d366c 50%, transparent 0%);
+    background-repeat: repeat-x;
+    background-position: right;
+    background-size: 6px 2px;
+    height: 46px;
+    width: 16px;
+    min-width: 16px;
+    margin-top: -3px;
+}
+
+.addNewField {
+    display: flex;
+    align-items: center;
+    /* padding-left: 20px; */
+    margin-bottom: 25px;
+}
+.fileInputPreviewContainer {
+    display: flex;
+    max-height: 100%;
+    width: 100%;
+}
+.fileInputPreviewContainer img {
+    max-width: 40%;
+    height: auto;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+}
+.fileInputPreviewContainer video {
+    max-width: 50px;
+    margin-left: 10px;
+}
+.fileInputPreviewContainer canvas {
+    max-width: 50px;
+}
+.fileInputPreviewContainer #audio {
+    width: 5px;
+}
+
+.fileInputTooltipPreviewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: fit-content
+}
+.fileInputTooltipPreview {
+    max-width: 100%;
+    max-height: 100%;
+}
+.fileInputTooltipPreviewVideo {
+    max-width: 100%;
+    max-height: 400px;
+}

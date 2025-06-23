@@ -1,0 +1,216 @@
+/* .playerwarehouse-modal-background {
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+} */
+.playerwarehouseModal {
+  width: 650px;
+  height: fit-content;
+  padding: 25px;
+  padding-left: 0px;
+  position: relative;
+}
+.playerwarehouseModal h1 {
+  margin-bottom: 55px;
+}
+.playerwarehouseModal p {
+  margin-bottom: 0px;
+}
+.playerwarehouseModal .hyphen {
+  font-size: 1.2rem;
+  padding-top: 25px;
+}
+.playerwarehouse-close-button {
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  width: 25px;
+  height: 25px;
+}
+.playerwarehouseModalStatValueType {
+  padding-top: 10px;
+  display: flex;
+  width: fit-content;
+  justify-content: space-evenly;
+}
+.maxRangeContainer {
+  padding-top: 5px;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  gap: 5px;
+}
+
+.searchAnalyticsEventInput {
+}
+.searchAnalyticsEventContainer {
+  position: relative;
+}
+.foundEventsContainer {
+  padding: 1rem;
+  /* padding-top: 0px; */
+
+  border-left: 1px solid #47474a;
+  border-right: 1px solid #47474a;
+  border-bottom: 1px solid #47474a;
+
+  background-color: var(--event-searcher-body-bg-color);
+
+  height: 300px;
+  overflow-y: auto;
+  scrollbar-color: var(--scrollbar-color);
+  scrollbar-width: thin;
+
+  border-bottom-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+
+  transition: height 0.35s ease-in-out;
+}
+.eventsBody {
+  padding-top: 10px;
+}
+@keyframes expandEvents {
+  from {
+    height: 0px;
+  }
+
+  to {
+    height: 300px;
+  }
+}
+.foundEventsContainerClosed {
+  height: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-bottom: none;
+}
+
+/* Analytics event values */
+.matchOption {
+  /* margin-bottom: 10px; */
+  padding: 2px;
+}
+.category .header {
+  /* margin-bottom: 10px; */
+}
+.node .header {
+  /* margin-bottom: 5px; */
+}
+
+.gameplay {
+  border: 1px solid rgba(0, 128, 0, 0.699);
+  color: #dedede;
+  font-size: 18px;
+  transition: background-color 0.15s;
+}
+.gameplay:hover {
+  background-color: rgba(0, 128, 0, 0.219);
+}
+.gameplay .node {
+  border: 1px solid rgba(0, 128, 0, 0.699);
+  font-size: 16px;
+  padding: 5px;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+.gameplay .node:hover {
+  background-color: rgba(0, 128, 0, 0.219);
+}
+
+.gameplay .event {
+  border: 1px solid rgb(0, 158, 0);
+  background-color: rgba(0, 128, 0, 0.219);
+  padding: 5px 5px 5px 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.gameplay .event:hover {
+  background-color: rgba(0, 128, 0, 0.651);
+}
+
+.entity {
+  border: 1px solid rgb(0, 95, 95);
+  color: #dedede;
+  font-size: 18px;
+  transition: background-color 0.15s;
+}
+.entity:hover {
+  background-color: rgba(0, 143, 143, 0.226);
+}
+
+.entity .node {
+  border: 1px solid rgb(0, 95, 95);
+  font-size: 16px;
+  padding: 5px;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+.entity .node:hover {
+  background-color: rgba(0, 143, 143, 0.226);
+}
+
+.event {
+  border: 1px solid rgb(48, 57, 131);
+  background-color: rgba(45, 58, 126, 0.233);
+  /* padding: 5px 5px 5px 15px; */
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  transition: background-color 0.15s ease-in-out;
+
+  display: flex;
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  border-radius: 2rem;
+}
+.event:hover {
+  background-color: rgba(45, 58, 126, 0.651);
+}
+.eventValues {
+  width: 100%;
+  gap: 15px;
+  /* background-color: #273ca79d; */
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.valueContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.targetValueInputsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.methodTimeInput {
+  max-width: 70px;
+}
+.conditionsHeader {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.conditionsListBody {
+  margin-bottom: 35px;
+}

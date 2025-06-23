@@ -1,0 +1,56 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Create React App",
+    "_version": "2.0.0",
+
+    "compilerOptions": {
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "module": "esnext",
+      "moduleResolution": "node",
+      "target": "es2015",
+      "typeRoots": ["node_modules/@types", "libdefs/globals"],
+      "baseUrl": "./",
+
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "isolatedModules": true,
+      "jsx": "react-jsx",
+      "noEmit": true,
+      "noFallthroughCasesInSwitch": true,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "strict": true,
+
+    "paths": {
+      "shared/canUseDOM": ["./packages/shared/src/canUseDOM.ts"],
+      "shared/caretFromPoint": ["./packages/shared/src/caretFromPoint.ts"],
+      "shared/simpleDiffWithCursor": [
+        "packages/shared/src/simpleDiffWithCursor.ts"
+      ],
+      "shared/invariant": ["./packages/shared/src/invariant.ts"],
+      "shared/warnOnlyOnce": ["./packages/shared/src/warnOnlyOnce.ts"],
+      "shared/environment": ["./packages/shared/src/environment.ts"],
+      "shared/useLayoutEffect": ["./packages/shared/src/useLayoutEffect.ts"],
+      "strix": ["./packages/strix-website/src/"],
+      "@strix/axios": ["./packages/strix-website/src/API/axios.js"],
+      "@strix/components/contexts/globalContext": ["./packages/strix-website/src/components/contexts/globalContext.jsx"]
+    }
+  },
+  "include": ["./libdefs", "./packages", "vite.config.js"],
+  "exclude": [
+    "**/__tests__/**",
+    "**/dist/**",
+    "**/npm/**",
+    "**/node_modules/**",
+    "./packages/playwright-core/**"
+  ],
+  "typedocOptions": {
+    "logLevel": "Verbose"
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "transpileOnly": true
+  }
+}

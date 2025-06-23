@@ -1,0 +1,78 @@
+.sidebarBody {
+  width: 100%;
+  height: 100%;
+  margin: none;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color2);
+  border-left: 1px solid #615ff449;
+}
+.searchFilters {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.searchFilters .searchContainer {
+  padding-top: 0.6rem;
+  width: 100%;
+  background-color: var(--bg-color2);
+}
+.searchFilters .buttonsContainer {
+  width: 100%;
+  padding: 5px;
+  background-color: var(--upperbar-bg-color);
+  position: relative;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.searchFilters .buttonsContainer .buttonNewNode {
+  height: 35px;
+  width: 65px;
+  margin: 5px 5px 5px 5px;
+  border-radius: 0px;
+  background-color: var(--bg-color2);
+}
+.searchFilters .buttonsContainer .buttonSortBy {
+  height: 35px;
+  width: 100px;
+  margin: 5px 100px 5px 5px;
+  border-radius: 0px;
+}
+.searchFilters .buttonsContainer .buttonExpand {
+  height: 35px;
+  width: 35px;
+  margin: auto;
+  border-radius: 0px;
+  text-align: center;
+  align-items: center;
+  background-color: var(--bg-color2);
+}
+
+.nodeList {
+  width: 100%;
+  height: 100%;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  overflow-y: auto;
+
+  background-color: var(--bg-color1);
+  padding-bottom: 150px;
+}
+.nodeList .nodeItem {
+  width: 100%;
+  /* background-color: #0c0c22; */
+  user-select: none;
+  color: var(--text-primary-color);
+  border-left: 1px solid #1c1c47;
+}
+.noNodesPlaceholder {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary-color);
+}

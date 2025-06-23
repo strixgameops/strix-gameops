@@ -1,0 +1,111 @@
+.avgProfileTable {
+  position: relative;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 5px;
+  overflow: hidden;
+
+  background-color: var(--bg-color3);
+
+  height: 90px;
+  transition: all 0.3s ease-in-out;
+}
+.avgProfileExpanded {
+  height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+}
+.innerProfilesContainer {
+  display: flex;
+  height: fit-content;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: start;
+  justify-content: start;
+  max-width: 95%;
+}
+.profileItem {
+  width: 80px;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #584420;
+
+  font-family: "Inter";
+
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 1rem;
+  transition: all 0.1s ease-in-out;
+}
+[data-theme="light"] {
+  .profileItem {
+    background-color: #dfdede;
+    border: 1px solid rgb(202, 149, 50);
+    -webkit-box-shadow: 0px 5px 10px 2px rgba(88, 68, 32, 0.2);
+    -moz-box-shadow: 0px 5px 10px 2px rgba(88, 68, 32, 0.2);
+    box-shadow: 0px 5px 10px 2px rgba(88, 68, 32, 0.2);
+  }
+}
+.profileItemSelected {
+  border: 2px solid #8d6825;
+  background-color: #222222;
+}
+.profileItem:hover {
+  background-color: #3033363b;
+}
+.profileItemSelected {
+  background-color: #414d5865;
+  border: 2px solid #3d5fa8;
+}
+.profileItemSelected:hover {
+  background-color: #414d5879;
+  transition: all 0.1s ease-in-out;
+}
+
+.itemText {
+  width: 100%;
+  text-wrap: nowrap;
+  font-weight: 500;
+  text-align: center;
+  color: #bababa;
+
+  /* Important, otherwise will be 
+    overriden by MUI's DataTable styles */
+  line-height: normal;
+}
+.itemValue {
+  font-weight: 600;
+  color: #e7e7e7;
+}
+[data-theme="light"] {
+  .itemText {
+    color: #1a2033;
+  }
+  .itemShare {
+    color: #14941a;
+  }
+  .itemValue {
+    color: #1a2033;
+  }
+}
+.tooltipSelectedData {
+  width: 700px;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color3);
+  border: 1px solid #615ff44f;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2rem;
+}

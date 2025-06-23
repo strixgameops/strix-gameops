@@ -1,0 +1,6 @@
+.datePickerBodyWrapper {
+    position: relative;
+    display: flex;
+    align-items: start;
+    border-radius: 2rem;
+}

@@ -1,0 +1,598 @@
+.segmentItemBody {
+  width: 100%;
+  height: 200px;
+}
+.relationContainer {
+  width: 100%;
+  height: 200px;
+
+  padding: 20px 20px 20px 20px;
+  display: flex;
+  align-items: center;
+
+  transition: height 0.7s;
+}
+.defaultSegmentContainer {
+  height: 170px;
+}
+.relationContainerEnlarged {
+  height: 550px;
+}
+.svg {
+  width: inherit;
+  height: inherit;
+}
+.relationInnerContainer {
+  border: 1px solid;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+}
+.relationInnerContainer:hover {
+  border: 1px solid rgba(98, 95, 244, 0.25);
+  -webkit-box-shadow: 0px 1px 10px 2px rgba(98, 95, 244, 0.2);
+  -moz-box-shadow: 0px 1px 10px 2px rgba(98, 95, 244, 0.2);
+  box-shadow: 0px 1px 10px 2px rgba(98, 95, 244, 0.2);
+}
+.leftSide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: 0%;
+
+  display: flex;
+  flex-direction: column;
+}
+.rightSide {
+  width: 40%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: inline-block;
+  transition: width 0.7s;
+}
+.commentCollapseInner {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 20px;
+  height: 100%;
+  background-color: rgba(211, 211, 211, 0.404);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.name {
+  padding-left: 15px;
+  max-height: 35px;
+  background-color: var(--datatable-header-color);
+  display: flex;
+
+  align-items: center;
+
+  transition: all 0.3s;
+}
+.name:hover {
+  cursor: pointer;
+  background-color: rgb(54, 54, 54);
+}
+.disabledName {
+  padding-left: 15px;
+  max-height: fit-content;
+  background-color: var(--datatable-header-color);
+  color: white;
+  display: flex;
+
+  transition: all 0.3s;
+}
+.defaultSegmentPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: rgb(100, 100, 100);
+}
+
+.playerCounter {
+  padding-left: 10px;
+  flex: 0.5;
+}
+
+.editorContainer {
+  height: 100%;
+}
+.pointerCursor {
+  cursor: pointer;
+}
+.svgContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+.svgContent {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.preventClick {
+  pointer-events: none;
+}
+
+/* Comment */
+.comment {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  left: 0%;
+  transition:
+    left 0.7s,
+    opacity 0.3s;
+}
+.rightSideCollapsed {
+  width: 20px;
+}
+
+.commentTextArea {
+  padding: 15px;
+  padding-left: 25px;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+
+  color: var(--text-primary-color);
+
+  background-color: var(--bg-color3);
+  transition: all 0.3s;
+}
+.commentTextArea:hover {
+  filter: brightness(1.05);
+}
+.commentTextAreaHidden {
+  opacity: 0;
+}
+
+.collapseContainer {
+  display: none;
+  height: 0px;
+  transition: height 0.7s;
+}
+.collapseEnabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 100%;
+  height: 40px;
+  opacity: 0.6;
+  background-color: rgb(0, 0, 0);
+}
+.collapseEnabled:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* EDITOR SIDEBAR & ITS ANIMATION */
+.editorSidebar {
+  /* overflow: hidden; */
+  top: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.7s;
+  z-index: 2;
+  opacity: 0;
+}
+.editorSidebarEnabled {
+  left: 0%;
+  transition: left 0.7s;
+}
+
+@keyframes left_to_right {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+@keyframes right_to_left {
+  from {
+    opacity: 0;
+    right: -100%;
+  }
+
+  to {
+    opacity: 1;
+    right: 0%;
+  }
+}
+
+.rightTransitionsEditorNav {
+  transition: all 0.7s;
+  position: relative;
+  animation: right_to_left 0.7s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.leftTransitionsEditorNav {
+  transition: all 0.7s;
+  position: relative;
+  animation: left_to_right 0.7s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+/* Preview on hovering link */
+.rightTransitionsPreviewLink {
+  transition: all 0.15s;
+  position: relative;
+  animation: right_to_left 0.15s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.leftTransitionsPreviewLink {
+  transition: all 0.15s;
+  position: relative;
+  animation: left_to_right 0.15s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.previewWindow {
+  position: relative;
+  top: -200%;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.15s;
+  z-index: 3;
+  opacity: 0;
+}
+
+.previewBody {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bodyContainer {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  /* overflow: hidden; */
+}
+.container {
+  position: relative;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+}
+.relationNodeEditor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  top: -100%;
+  z-index: 4;
+}
+
+@keyframes bottom_to_top {
+  from {
+    opacity: 0;
+    top: 0%;
+  }
+
+  to {
+    opacity: 1;
+    top: -100%;
+  }
+}
+.topTransitionsNodeEditor {
+  position: relative;
+  top: -100%;
+
+  /* Removed animation below because of weird bug which broke container until Ctrl+F5 */
+
+  /* transition: all 0.3s; */
+  /* animation: bottom_to_top 0.3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards; */
+}
+
+.relationNodeEditorBody {
+  width: 100%;
+  height: 100%;
+}
+
+.relationEditorUpperbar {
+  width: 100%;
+  height: 70px;
+}
+
+.relationEditorShell {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0%;
+  background-color: chartreuse;
+}
+.relationEditorShellDisabled {
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  background-color: black;
+  z-index: 5;
+}
+
+.upperbar1 {
+  width: 100%;
+  height: 50%;
+
+  display: flex;
+  align-items: center;
+}
+.upperbar2 {
+  width: 100%;
+  height: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upperbarButton {
+  width: 100%;
+  height: 100%;
+}
+.upperbarButtonSelected {
+  width: 100%;
+  height: 100%;
+  border: 2px solid blue;
+}
+.upperbarButtonDisabled {
+  opacity: 0.3;
+  color: rgb(46, 46, 46);
+}
+
+.segmentInnerBodyPreview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: rgb(100, 100, 100);
+  background-color: #191c1d;
+}
+
+/* Inner body */
+.segmentInnerBody {
+  width: 100%;
+  min-height: 440px;
+  height: 440px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #281e50;
+}
+.builderContainer {
+  width: 100%;
+  min-height: 440px;
+  height: 440px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 2rem;
+  overflow: hidden;
+  border: 1px solid #281e50;
+}
+/* Left side */
+.elementViewContainer {
+  width: 50%;
+  max-width: 565px;
+  height: 100%;
+  display: flex;
+  background-color: #191c1d;
+  flex-direction: column;
+  border-right: 1px solid rgb(75, 75, 75);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.elementViewUpperbar {
+  flex: 0.1;
+}
+.elementViewList {
+  flex: 0.9;
+  padding: 5px;
+  padding-left: 15px;
+}
+.templateItem {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s;
+}
+.templateItem:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+.templateItemPreview {
+  width: 450px;
+  height: 35px;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+}
+@keyframes fadeIn {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(1.5deg);
+  }
+}
+
+.templateItemPreviewAnimation {
+  transition: all 0.1s;
+  animation: fadeIn 0.1s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.templateItemName {
+  padding-left: 15px;
+  user-select: none;
+}
+
+/* Right side */
+.conditionViewContainer {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+  overflow-y: auto;
+  background-color: #191c1d;
+}
+.conditionList {
+  width: 100%;
+  height: 100%;
+  padding-top: 15px;
+  display: block;
+  align-items: flex-start;
+  justify-content: center;
+
+  flex-direction: column;
+}
+.operatorContainer {
+  height: fit-content;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.dragOverContainer {
+  z-index: 2;
+  min-width: 500px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+.conditionViewContainerDragOver {
+  position: relative;
+  padding: 15px;
+  z-index: 2;
+  width: 450px;
+  height: 400px;
+  opacity: 0.3;
+  background-color: #374552;
+  font-size: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: rgb(158, 158, 158);
+  user-select: none;
+}
+.saveContainer {
+  margin-right: 25px;
+  display: flex;
+  align-items: center;
+
+  cursor: default;
+}
+.valueContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+.rangeHyphen {
+  /* width: 10px; */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #e7e7e7;
+}
+
+.avgProfileTable {
+  position: relative;
+
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 5px;
+  overflow-y: auto;
+  gap: 5px;
+
+  background-color: var(--bg-color3);
+
+  height: 250px;
+  transition: all 0.3s ease-in-out;
+}
+
+.templatesContainer {
+  width: 20%;
+  overflow-y: auto;
+  scrollbar-color: var(--scrollbar-color);
+  scrollbar-width: thin;
+  background-color: var(--bg-color3);
+  border-right: 1px solid #615ff449;
+  padding: 0.5rem;
+}
+.upperbarButtons {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  height: 40px;
+  margin-bottom: 0.8rem;
+}
+.templatesList {
+  display: flex;
+  flex-direction: column;
+}
+.segmentStats {
+  width: 100%;
+  height: fit-content;
+
+  padding-top: 15px;
+  padding-left: 15px;
+  margin-bottom: 25px;
+
+  color: #dbdbc9;
+
+  font-size: 20px;
+}
+.statItem {
+  margin-left: 45px;
+}
+
+.segmentList {
+  width: 100%;
+  height: fit-content;
+}

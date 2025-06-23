@@ -1,0 +1,39 @@
+.header {
+    width: 100%;
+
+    color: #f5f5f5;
+    font-size: 26px;
+    padding: 15px;
+    margin-right: 25px;
+
+    background-color: #100e16;
+    transition: background-color 0.15s;
+
+    border: 1px solid #615ff45e;
+
+    display: flex;
+    justify-content: space-between;
+}
+.headerCardsAmount {
+    padding-right: 150px;
+}
+.header:hover {
+    background-color: #222231;
+}
+
+.content {
+    width: 100%;
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    align-items: flex-start;
+    background-color: var(--bg-color1);
+    border: 1px solid #615ff449;
+    border-top: none;
+    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+
+    gap: 15px;
+    flex-wrap: wrap;
+}

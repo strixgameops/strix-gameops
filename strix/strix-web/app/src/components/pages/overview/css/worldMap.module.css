@@ -1,0 +1,495 @@
+.mapContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--bg-color2) 0%,
+    var(--bg-color3) 100%
+  );
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.worldMapSvg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  background: transparent;
+}
+
+.worldMapSvg:active {
+  cursor: grabbing;
+}
+
+.country {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 2px rgba(98, 95, 244, 0.3));
+  transform-origin: center;
+}
+
+.country:hover {
+  filter: drop-shadow(0 0 12px rgba(98, 95, 244, 1)) !important;
+  transform: translateZ(0);
+}
+
+/* Toolbar styles */
+.toolbar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--regular-card-bg-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 280px;
+  animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toolbarSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbarLabel {
+  color: var(--text-primary-color) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  min-width: 60px;
+}
+
+.toggleGroup {
+  background: var(--bg-color3) !important;
+  border-radius: 8px !important;
+}
+
+.toggleButton {
+  color: var(--text-primary-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.2) !important;
+  text-transform: none !important;
+  font-size: 0.8rem !important;
+  padding: 6px 12px !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.toggleButton.Mui-selected {
+  background: rgba(98, 95, 244, 0.3) !important;
+  color: white !important;
+  border-color: rgba(98, 95, 244, 0.6) !important;
+  transform: scale(1.05);
+}
+
+.toggleButton:hover {
+  background: rgba(98, 95, 244, 0.1) !important;
+}
+
+.compareButton {
+  color: var(--text-primary-color) !important;
+  border-color: rgba(98, 95, 244, 0.4) !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.compareButton.MuiButton-contained {
+  background: linear-gradient(135deg, rgba(98, 95, 244, 0.3) 0%, rgba(78, 75, 218, 0.3) 100%) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(98, 95, 244, 0.3) !important;
+  border: 1px solid rgba(98, 95, 244, 0.8) !important;
+}
+
+.compareButton:hover {
+  border-color: rgba(98, 95, 244, 0.6) !important;
+  background: rgba(98, 95, 244, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+/* Compare info panel */
+.compareInfo {
+  position: absolute;
+  top: 20px !important;
+  left: 40%;
+  transform: translateX(-30%) !important;
+  z-index: 1001;
+  background: var(--regular-card-bg-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.4) !important;
+  border-radius: 20px !important;
+  padding: 20px 24px !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+  min-width: 300px;
+  max-width: 500px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.compareInfoAnimate {
+  animation: pulseScale 0.6s ease-out;
+}
+
+@keyframes pulseScale {
+  0%, 100% {
+    transform: translateX(-30%) scale(1);
+  }
+  50% {
+    transform: translateX(-30%) scale(1.02);
+  }
+}
+
+.compareContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.compareIcon {
+  color: rgba(98, 95, 244, 0.7) !important;
+  font-size: 24px !important;
+  margin-bottom: 4px;
+}
+
+.compareText {
+  color: var(--text-primary-color) !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+}
+
+.comparePrompt {
+  color: var(--text-secondary-color) !important;
+  font-size: 0.85rem !important;
+  font-weight: 400 !important;
+}
+
+.selectedCountry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.countryChip1 {
+  background: linear-gradient(135deg, rgba(98, 95, 244, 0.3) 0%, rgba(78, 75, 218, 0.3) 100%) !important;
+  color: white !important;
+  border: 1px solid rgba(98, 95, 244, 0.6) !important;
+  font-weight: 600 !important;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.compareResults {
+  position: relative;
+  width: 100%;
+}
+
+.clearButton {
+  position: absolute !important;
+  top: -12px !important;
+  right: -12px !important;
+  background: var(--bg-color3) !important;
+  color: var(--text-primary-color) !important;
+  width: 28px !important;
+  height: 28px !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+}
+
+.clearButton:hover {
+  background: rgba(98, 95, 244, 0.1) !important;
+  color: var(--text-primary-color) !important;
+  transform: scale(1.1);
+}
+
+.compareMetrics {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.countryMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  animation: slideInMetric 0.4s ease-out;
+}
+
+@keyframes slideInMetric {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.countryLabel {
+  color: var(--text-secondary-color) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.countryValue1 {
+  color: rgba(98, 95, 244, 1) !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+.countryValue2 {
+  color: rgba(244, 95, 98, 1) !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+.swapButton {
+  background: var(--bg-color3) !important;
+  color: var(--text-secondary-color) !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(98, 95, 244, 0.2) !important;
+}
+
+.swapButton:hover {
+  background: rgba(98, 95, 244, 0.1) !important;
+  color: var(--text-primary-color) !important;
+  transform: rotate(180deg);
+}
+
+.compareDifference {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(98, 95, 244, 0.2);
+  animation: fadeIn 0.5s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.differenceLabel {
+  color: var(--text-secondary-color) !important;
+  font-size: 0.75rem !important;
+}
+
+.differenceValues {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.differenceChip {
+  background: var(--bg-color3) !important;
+  color: var(--text-primary-color) !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+}
+
+.positiveChip {
+  background: linear-gradient(135deg, rgba(0, 170, 0, 0.2) 0%, rgba(0, 150, 0, 0.2) 100%) !important;
+  color: rgb(0, 170, 0) !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(0, 170, 0, 0.5) !important;
+}
+
+.negativeChip {
+  background: linear-gradient(135deg, rgba(197, 30, 0, 0.2) 0%, rgba(177, 10, 0, 0.2) 100%) !important;
+  color: rgb(197, 30, 0) !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(197, 30, 0, 0.5) !important;
+}
+
+/* Hover tooltip */
+.hoverTooltip {
+  position: absolute;
+  z-index: 999;
+  background: var(--regular-card-bg-color) !important;
+  border: 1px solid rgba(98, 95, 244, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  pointer-events: none;
+  animation: fadeInUp 0.2s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltipCountry {
+  color: var(--text-secondary-color) !important;
+  font-size: 0.75rem !important;
+  margin-bottom: 4px !important;
+}
+
+.tooltipValue {
+  color: var(--text-primary-color) !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+}
+
+/* Label group scaling */
+.label-group {
+  transition: transform 0.2s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .toolbar {
+    top: 10px;
+    right: 10px;
+    min-width: 220px;
+    padding: 12px !important;
+    gap: 12px;
+  }
+
+  .toolbarSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .toolbarLabel {
+    min-width: auto;
+    font-size: 0.8rem !important;
+  }
+
+  .toggleButton {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .compareInfo {
+    left: 10px;
+    right: 10px;
+    transform: none;
+    max-width: none;
+    bottom: 20px !important;
+    padding: 16px !important;
+  }
+
+  .compareInfoAnimate {
+    animation: none;
+  }
+
+  .countryValue1,
+  .countryValue2 {
+    font-size: 1.2rem !important;
+  }
+
+  .hoverTooltip {
+    bottom: 60px;
+  }
+}
+
+/* Light theme specific styles */
+[data-theme="light"] .positiveChip {
+  background: linear-gradient(135deg, rgba(0, 130, 0, 0.15) 0%, rgba(0, 110, 0, 0.15) 100%) !important;
+  color: rgb(0, 130, 0) !important;
+  border: 1px solid rgba(0, 130, 0, 0.4) !important;
+}
+
+[data-theme="light"] .negativeChip {
+  background: linear-gradient(135deg, rgba(180, 20, 0, 0.15) 0%, rgba(160, 10, 0, 0.15) 100%) !important;
+  color: rgb(180, 20, 0) !important;
+  border: 1px solid rgba(180, 20, 0, 0.4) !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+.country[data-selected="first"] {
+  fill: rgba(98, 95, 244, 0.9) !important;
+  stroke: #625ff4 !important;
+  stroke-width: 3px !important;
+  filter: url(#selection-glow) !important;
+  animation: pulseFirst 2s infinite;
+}
+
+.country[data-selected="second"] {
+  fill: rgba(244, 95, 98, 0.9) !important;
+  stroke: #f45f62 !important;
+  stroke-width: 3px !important;
+  filter: url(#selection-glow) !important;
+  animation: pulseSecond 2s infinite;
+}
+
+@keyframes pulseFirst {
+  0%, 100% { filter: url(#selection-glow) drop-shadow(0 0 8px rgba(98, 95, 244, 0.8)); }
+  50% { filter: url(#selection-glow) drop-shadow(0 0 16px rgba(98, 95, 244, 1)); }
+}
+
+@keyframes pulseSecond {
+  0%, 100% { filter: url(#selection-glow) drop-shadow(0 0 8px rgba(244, 95, 98, 0.8)); }
+  50% { filter: url(#selection-glow) drop-shadow(0 0 16px rgba(244, 95, 98, 1)); }
+}
+
+.compareInfoSlideIn {
+  animation: slideInFromTop 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateX(-30%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-30%) translateY(0);
+  }
+}

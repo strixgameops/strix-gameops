@@ -1,0 +1,96 @@
+/* Whole page */
+.main {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  background-color: var(--bg-color2);
+  flex: 5 5 150px;
+  overflow-y: hidden;
+}
+.containersColumn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.containers {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+.upperbar {
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  background-color: var(--navbar-bg-color);
+  border-bottom: 1px solid #615ff449;
+}
+.upperbar .backToVisuals {
+  height: 2rem;
+  width: 8rem;
+  margin: 6px;
+}
+.upperbar .branchContainer {
+  margin-left: 50px;
+}
+.upperbar .switchBranch {
+  height: 2rem;
+  width: 8rem;
+  margin: 6px;
+}
+
+.workspace {
+  width: 100%;
+  position: relative;
+}
+.treeContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.nodeContainer {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+}
+.sidebarLeft {
+  color: #fff;
+  background-color: #242433; /*    */
+  height: 100vh;
+  width: 285px;
+}
+.sidebarRight {
+  height: 100%;
+  width: 600px; /*     */
+  background-color: #242433; /*    */
+}
+
+.node.expanded,
+.childNode {
+  fill: lightblue;
+}
+
+.controlsHint {
+  border: 1px solid #25205e;
+  border-radius: 1rem;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  scale: 0.78;
+  shape-rendering: geometricPrecision;
+}
+.LMBIcon {
+  width: 16px;
+}
+[data-theme="light"] {
+  .LMBIcon {
+    fill: #000;
+  }
+}

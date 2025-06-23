@@ -1,0 +1,112 @@
+.UniversalChartBody {
+  width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 5px 15px;
+
+  /* margin: 15px; */
+
+  background-color: var(--bg-color3);
+  border-radius: 2rem;
+
+  border: 1px solid rgba(98, 95, 244, 0.2);
+  -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+
+  /* Needed for custom dashboard, where we can resize charts. These determine the min/max resize boundaries */
+  /* max-width: 97%;
+  min-width: 300px;
+  min-height: 200px; */
+
+  /* Needed to draw Backdrop for loading */
+  position: relative;
+}
+.moveOverlayContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  top: 0px;
+  left: 0px;
+  padding: 45px;
+  padding-top: 65px;
+  background-color: #0000007c;
+  border-radius: 2rem;
+}
+.moveOverlay {
+  background-color: rgba(77, 93, 117, 0.3);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: all 0.15s ease-in-out;
+}
+.moveOverlay:hover {
+  background-color: rgba(77, 93, 117, 0.45);
+}
+
+.UniversalChartBodyFullWidth {
+  width: 100%;
+}
+.UniversalChartUpper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.UniversalChartName {
+  font-size: 1.5rem;
+}
+.UniversalChartDeltaLabel {
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+  margin-left: auto;
+}
+.UniversalChart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100%;
+}
+.chart {
+  width: 100%;
+  height: 100%;
+  /* background-color: red; */
+}
+.noDataChart {
+  opacity: 0.2;
+  pointer-events: none;
+}
+.noDataLabel {
+  font-size: 2rem;
+  padding-bottom: 50px;
+  color: rgba(87, 87, 87, 0.411);
+  position: absolute;
+  user-select: none;
+}
+
+.positiveDelta {
+  color: rgb(0, 170, 0);
+}
+.negativeDelta {
+  color: rgb(197, 30, 0);
+}
+.neutralDelta {
+  color: rgb(143, 143, 143);
+}
+
+.ChartContainerOnly {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.chartResizer {
+  margin-left: auto;
+}
