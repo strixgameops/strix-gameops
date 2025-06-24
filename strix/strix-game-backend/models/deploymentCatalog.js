@@ -14,4 +14,6 @@ const schemaCatalog = new Schema({
   deployRealtime: Boolean,
 });
 
+schemaCatalog.index({ gameID: 1 });
+
 export const DeploymentCatalog = model("DeploymentCatalog", schemaCatalog);

@@ -10,7 +10,8 @@ const tutorialSchema = new Schema({
     default: "none",
   },
 });
-export const User = model("User", {
+
+const userSchema = new Schema({
   username: String,
   email: String,
   password: String,
@@ -23,3 +24,8 @@ export const User = model("User", {
   scheduledDeletionDate: Date,
   tutorialsWatched: [tutorialSchema],
 });
+
+userSchema.index({ email: 1 });
+userSchema.index({ username: 1 });
+
+export const User = model("User", userSchema);

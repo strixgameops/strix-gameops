@@ -27,4 +27,6 @@ const studiosSchema = new Schema({
   alertEmail: String,
 });
 
+studiosSchema.index({ studioID: 1 });
+
 export const Studio = model("Studio", studiosSchema);

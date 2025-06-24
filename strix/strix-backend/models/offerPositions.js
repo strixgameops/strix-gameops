@@ -15,4 +15,7 @@ const positionSchema = new Schema({
   segments: [segmentedPositionSchema],
 });
 
+positionSchema.index({ gameID: 1, branch: 1 });
+positionSchema.index({ gameID: 1, branch: 1, positionID: 1 });
+
 export const OffersPositionsModel = model("OffersPositionsModel", positionSchema, "offersPositions");

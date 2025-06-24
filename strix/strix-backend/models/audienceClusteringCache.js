@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export const ClusteringCache = model("ClusteringCache", {
+const clusteringCacheSchema = new Schema({
   gameID: String,
   branch: String,
   mainClusterUID: String,
@@ -11,3 +11,9 @@ export const ClusteringCache = model("ClusteringCache", {
     default: Date.now,
   },
 });
+clusteringCacheSchema.index({ gameID: 1, branch: 1 });
+clusteringCacheSchema.index({ gameID: 1, clientIDs: 1, branch: 1 });
+clusteringCacheSchema.index({ gameID: 1, clientIDs: 1 });
+clusteringCacheSchema.index({ gameID: 1, branch: 1, mainClusterUID: 1 });
+clusteringCacheSchema.index({ gameID: 1, branch: 1, subClusterUID: 1 });
+export const ClusteringCache = model("ClusteringCache", clusteringCacheSchema);

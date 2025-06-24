@@ -9,4 +9,6 @@ const ldbrdsSchema = new Schema({
   top: Object,
 });
 
+ldbrdsSchema.index({ gameID: 1, branch: 1 });
+
 export const LeaderboardStates = model("LeaderboardState", ldbrdsSchema);

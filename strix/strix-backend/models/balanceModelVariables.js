@@ -10,6 +10,9 @@ const variableSchema = new Schema({
   respectiveCategory: String,
 });
 
+variableSchema.index({ gameID: 1, branch: 1 });
+variableSchema.index({ gameID: 1, branch: 1, variableID: 1 });
+
 export const BalanceModelVariables = model(
   "BalanceModelVariables",
   variableSchema,

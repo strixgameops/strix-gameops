@@ -27,4 +27,6 @@ const planningTreePlanningTypeSchema = new Schema({
   nodes: [planningTreeSubnodeSchema],
 });
 
+planningTreePlanningTypeSchema.index({ gameID: 1, branch: 1 });
+
 export const PlanningTreeModel = model("Planning", planningTreePlanningTypeSchema);

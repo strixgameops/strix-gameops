@@ -7,6 +7,9 @@ const tabSchema = new Schema({
   tabName: String,
 });
 
+tabSchema.index({ gameID: 1, branch: 1 });
+tabSchema.index({ gameID: 1, branch: 1, tabID: 1 });
+
 export const BalanceModelTabs = model(
   "BalanceModelTabs",
   tabSchema,

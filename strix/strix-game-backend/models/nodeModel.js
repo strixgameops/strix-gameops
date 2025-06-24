@@ -37,4 +37,7 @@ const resultNodeSchema = new Schema({
   groupName: String,
 });
 
+resultNodeSchema.index({ gameID: 1, branch: 1 });
+resultNodeSchema.index({ gameID: 1, branch: 1, nodeID: 1 });
+
 export const NodeModel = model("Node", resultNodeSchema, "nodes");

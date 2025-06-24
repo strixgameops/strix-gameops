@@ -33,4 +33,7 @@ const playerWarehouseSchema = new Schema({
   templateDefaultVariantType: String,
 });
 
+playerWarehouseSchema.index({ gameID: 1, branch: 1 });
+playerWarehouseSchema.index({ gameID: 1, branch: 1, templateID: 1 });
+
 export const PWtemplates = model("pwtemplates", playerWarehouseSchema);

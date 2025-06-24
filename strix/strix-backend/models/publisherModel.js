@@ -7,6 +7,7 @@ import { Schema, model } from 'mongoose';const publisherSchema = new Schema({
       userID: String, 
       userPermissions: [{ permission: String }] }]
   });
-  
-  export const Publisher = model('Publisher', publisherSchema);
 
+publisherSchema.index({ publisherID: 1 });
+  
+export const Publisher = model('Publisher', publisherSchema);

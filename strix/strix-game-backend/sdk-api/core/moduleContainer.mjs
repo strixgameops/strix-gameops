@@ -104,6 +104,9 @@ export class ModuleContainer {
       push: {
         import: () => import("../services/enterprise/pushService.mjs"),
       },
+      deploymentFull: {
+        import: () => import("../services/enterprise/deploymentService_full.mjs"),
+      },
     };
 
     await this.loadOptionalServices(optionalServiceConfigs);

@@ -19,8 +19,12 @@ const campaigns = new Schema({
 
   lastRun: Date,
 
+
   // Stats
   messagesSent: Number,
 });
+
+campaigns.index({ gameID: 1, branch: 1 });
+campaigns.index({ gameID: 1, branch: 1, id: 1 });
 
 export const PushCampaigns = model("pushCampaigns", campaigns);

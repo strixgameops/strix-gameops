@@ -19,6 +19,10 @@ const eventSchema = new Schema({
   comment: String,
   tags: [String],
 });
+eventSchema.index({ gameID: 1, branch: 1 });
+
+eventSchema.index({ gameID: 1, branch: 1, eventID: 1 });
+eventSchema.index({ gameID: 1, branch: 1, eventCodeName: 1 });
 
 export const AnalyticsEvents = model('AnalyticsEvents', eventSchema);
 

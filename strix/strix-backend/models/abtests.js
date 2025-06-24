@@ -49,5 +49,7 @@ const tests = new Schema({
   archivedResult: String,
   removed: Boolean,
 });
+tests.index({ gameID: 1, branch: 1 });
+tests.index({ gameID: 1, branch: 1, id: 1 });
 
 export const ABTests = model("ABTests", tests);

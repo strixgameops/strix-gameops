@@ -226,10 +226,11 @@ export class PaymentsAnalyticsService {
     studioID,
     branch,
     environment,
-    filterDate, // Time interval we want to get
-    filterSegments, // An array of segments that player must meet in order for his events to be included in the result
+    filterDate,
+    filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const utilityService = this.moduleContainer.get("utility");
@@ -239,30 +240,28 @@ export class PaymentsAnalyticsService {
       gameID,
       studioID,
       branch,
-      filterDate, // Time interval we want to get
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      filterDate,
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getSalesAndRevenueQuery(
         studioID,
         gameID,
         branch,
         interval,
-        filterSegments
+        filterSegments,
+        gameIDs // Pass gameIDs parameter
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
-
-      // utilityService.log("TS response stringified: ", data);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       formattedResult = data.map((dataItem) => {
         dataItem.timestamp = dataItem.x;
@@ -270,21 +269,19 @@ export class PaymentsAnalyticsService {
         return dataItem;
       });
 
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-      // utilityService.log("Post-formatted data:", formattedResult);
-
       return formattedResult;
     } catch (error) {
       console.error(error);
       return [];
     }
+
     function getSalesAndRevenueQuery(
       studioID,
       gameID,
       branch,
       interval,
-      filterSegments
+      filterSegments,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -304,9 +301,12 @@ export class PaymentsAnalyticsService {
           )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
-      //
-      // Default query. Append everything we made above to this.
-      //
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
+      // Default query with multiple gameIDs support
       parsedSQL =
         `WITH all_sessions AS (
           SELECT s."clientID",
@@ -318,7 +318,7 @@ export class PaymentsAnalyticsService {
           WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-          AND s."gameID" = '${gameID}'
+          AND s."gameID" ${gameIDCondition}
           ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
           ${
             includeEnvironmentInAnalytics
@@ -326,7 +326,7 @@ export class PaymentsAnalyticsService {
               : ""
           }
         ),
-           filteredEvents AS (
+          filteredEvents AS (
             SELECT 
               e."clientID",
               s."sessionID",
@@ -339,7 +339,7 @@ export class PaymentsAnalyticsService {
             WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-              AND e."gameID" = '${gameID}'
+              AND e."gameID" ${gameIDCondition}
               ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
               ${
                 includeEnvironmentInAnalytics
@@ -444,10 +444,11 @@ export class PaymentsAnalyticsService {
     studioID,
     branch,
     environment,
-    filterDate, // Time interval we want to get
-    filterSegments, // An array of segments that player must meet in order for his events to be included in the result
+    filterDate,
+    filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -458,28 +459,28 @@ export class PaymentsAnalyticsService {
       gameID,
       studioID,
       branch,
-      filterDate, // Time interval we want to get
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      filterDate,
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getARPPU_query(
         studioID,
         gameID,
         branch,
         interval,
-        filterSegments
+        filterSegments,
+        gameIDs // Pass gameIDs parameter
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       formattedResult = data
         .sort(
@@ -488,21 +489,19 @@ export class PaymentsAnalyticsService {
         )
         .map((i) => ({ ...i, value: parseFloat(i.value) }));
 
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-      // utilityService.log("Post-formatted data:", formattedResult);
-
       return formattedResult;
     } catch (error) {
       console.error(error);
       return [];
     }
+
     function getARPPU_query(
       studioID,
       gameID,
       branch,
       interval,
-      filterSegments
+      filterSegments,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -522,21 +521,24 @@ export class PaymentsAnalyticsService {
       )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
-      //
-      // Default query. Append everything we made above to this.
-      //
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
+      // Default query with multiple gameIDs support
       parsedSQL =
         `WITH all_sessions AS (
       SELECT s."clientID",
       s."sessionID",
       s."environment",
-s."branch",
-s."gameID"
+  s."branch",
+  s."gameID"
       FROM "sessions-${studioID}" AS s
       WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-      AND s."gameID" = '${gameID}'
+      AND s."gameID" ${gameIDCondition}
       ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
       ${
         includeEnvironmentInAnalytics
@@ -544,12 +546,12 @@ s."gameID"
           : ""
       }
     ),
-       filteredEvents AS (
+      filteredEvents AS (
           SELECT 
             e."clientID",
             s."sessionID",
             CAST(e."field2" AS NUMERIC) AS price,
-           DATE_TRUNC('${interval.granularity}', e."timestamp") AS x
+          DATE_TRUNC('${interval.granularity}', e."timestamp") AS x
           FROM "events-${studioID}" e
           JOIN all_sessions s
             ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID"
@@ -557,7 +559,7 @@ s."gameID"
           WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-            AND e."gameID" = '${gameID}'
+            AND e."gameID" ${gameIDCondition}
             ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
             ${
               includeEnvironmentInAnalytics

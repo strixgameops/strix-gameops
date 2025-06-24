@@ -99,6 +99,8 @@ ENV_FILES=(
     "env/.env-strix-game-backend-liveservices"
     "env/.env-strix-web"
     "env/.env-strix-web-backend"
+    "env/.env-strix-web-backend-alerts-manager"
+    "env/.env-strix-web-backend-demo-generator"
     ".env-strix-game-backend-analytics"
     ".env-strix-game-backend-cacher"
     ".env-strix-game-backend-deployment"
@@ -107,6 +109,8 @@ ENV_FILES=(
     ".env-strix-game-backend-liveservices"
     ".env-strix-web"
     ".env-strix-web-backend"
+    ".env-strix-web-backend-alerts-manager"
+    ".env-strix-web-backend-demo-generator"
 )
 
 for env_file in "${ENV_FILES[@]}"; do

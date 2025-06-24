@@ -42,6 +42,7 @@ const localizationItemSchema = new Schema({
 });
 
 // Create indexes for efficient queries
+localizationItemSchema.index({ gameID: 1, branch: 1 });
 localizationItemSchema.index({ gameID: 1, branch: 1, type: 1 });
 localizationItemSchema.index({ gameID: 1, branch: 1, sid: 1 }, { unique: true });
 
@@ -65,6 +66,8 @@ const gameLocalizationSchema = new Schema({
   tags: [String],
   prefixGroups: [String]
 });
+
+gameLocalizationSchema.index({ gameID: 1, branch: 1 });
 
 export const GameLocalizationSettings = model(
   "GameLocalizationSettings",

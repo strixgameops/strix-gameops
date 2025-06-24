@@ -26,4 +26,7 @@ const gamesSchema = new Schema({
   realtimeDeploy: { type: Boolean, default: false },
   apiKeys: Array,
 });
+
+gamesSchema.index({ gameID: 1 });
+
 export const Game = model("Game", gamesSchema);

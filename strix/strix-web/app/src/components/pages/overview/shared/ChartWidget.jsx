@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback, memo } from "react";
-import { Box, Skeleton, Backdrop, CircularProgress } from "@mui/material";
+import { Box, Skeleton, Backdrop, CircularProgress, Typography } from "@mui/material";
 import Chart from "chart.js/auto";
 import dayjs from "dayjs";
 import chroma from "chroma-js";
 
 const ChartWidget = memo(
-  ({ config, analyticsData, variant = "card", onRendered, isLoading = false }) => {
+  ({ config, analyticsData, variant = "card", onRendered, isLoading = false, forceRecreate }) => {
     const chartRef = useRef(null);
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
@@ -13,7 +13,37 @@ const ChartWidget = memo(
     const [showSkeleton, setShowSkeleton] = useState(true);
     const [chartRendered, setChartRendered] = useState(false);
 
-    // Update skeleton state based on loading and data availability
+    // Format values for display (NEW)
+    const formatValue = useCallback((value, format, formatPosition) => {
+      if (value === null || value === undefined || isNaN(value)) return "0";
+      
+      const numValue = parseFloat(value);
+      
+      // Format based on type
+      let formattedValue;
+      if (format === "$") {
+        if (numValue < 10) {
+          formattedValue = numValue.toFixed(2);
+        } else {
+          formattedValue = Math.round(numValue).toLocaleString();
+        }
+      } else if (format === "%") {
+        formattedValue = numValue < 10 ? numValue.toFixed(1) : Math.round(numValue).toString();
+      } else {
+        formattedValue = Math.abs(numValue).toLocaleString();
+      }
+
+      // Add format symbol
+      if (format && formatPosition === "start") {
+        return `${format}${formattedValue}`;
+      }
+      if (format && formatPosition === "end") {
+        return `${formattedValue}${format}`;
+      }
+      return formattedValue;
+    }, []);
+
+    // ORIGINAL LOGIC - Update skeleton state based on loading and data availability
     useEffect(() => {
       if (isLoading) {
         setShowSkeleton(false); // Don't show skeleton when loading (show backdrop instead)
@@ -32,9 +62,19 @@ const ChartWidget = memo(
       }
     }, []);
 
+    // BACK TO ORIGINAL LOGIC - but with enhanced tooltips
     const createChart = useCallback(() => {
       if (!canvasRef.current || !containerRef.current) {
         console.log("Canvas or container not ready");
+        return;
+      }
+
+      // Check if canvas is visible and has dimensions
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      if (canvasRect.width === 0 || canvasRect.height === 0) {
+        console.log("Canvas not visible or has no dimensions, retrying...");
+        // Retry after a short delay
+        setTimeout(() => createChart(), 100);
         return;
       }
 
@@ -50,8 +90,7 @@ const ChartWidget = memo(
       const deltaValue = analyticsData?.deltaValue || 0;
 
       const ctx = canvasRef.current.getContext("2d");
-      const color =
-        deltaValue >= 0 ? "rgba(98, 95, 244, 1)" : "rgba(244, 95, 98, 1)";
+      const color = deltaValue >= 0 ? "rgba(98, 95, 244, 1)" : "rgba(244, 95, 98, 1)";
 
       try {
         const chart = new Chart(ctx, {
@@ -84,6 +123,17 @@ const ChartWidget = memo(
               tooltip: {
                 enabled: true,
                 intersect: false,
+                callbacks: {
+                  // Enhanced tooltip formatting (NEW)
+                  label: (context) => {
+                    const value = context.parsed.y;
+                    const formattedValue = formatValue(value, config.format, config.formatPosition);
+                    return `${config.name}: ${formattedValue}`;
+                  },
+                  title: (context) => {
+                    return dayjs(context[0].label).format("MMM DD, YYYY");
+                  }
+                },
               },
               datalabels: {
                 display: false,
@@ -102,7 +152,7 @@ const ChartWidget = memo(
         console.error("Chart creation failed:", error);
         destroyChart();
       }
-    }, [analyticsData, isLoading, config.metricName, destroyChart, onRendered]);
+    }, [analyticsData, isLoading, config.metricName, destroyChart, onRendered, formatValue, config]);
 
     // Setup ResizeObserver
     useEffect(() => {
@@ -111,8 +161,6 @@ const ChartWidget = memo(
       }
 
       const handleResize = (entries) => {
-        const entry = entries[0];
-        const { width, height } = entry.contentRect;
         // Could handle resize logic here if needed
       };
 
@@ -126,15 +174,32 @@ const ChartWidget = memo(
       };
     }, []);
 
-    // Create/update chart when data changes or loading stops
+    // ORIGINAL LOGIC - Create/update chart when data changes or loading stops
     useEffect(() => {
       if (!isLoading && analyticsData?.data?.length) {
-        createChart();
+        // Add small delay for multiple charts to avoid canvas conflicts
+        const timer = setTimeout(() => {
+          createChart();
+        }, config.chartID ? parseInt(config.chartID) * 50 : 0); // Stagger chart creation
+        
+        return () => clearTimeout(timer);
       } else if (isLoading || !analyticsData?.data?.length) {
         // Destroy chart when loading starts or no data
         destroyChart();
       }
-    }, [analyticsData, isLoading, createChart, destroyChart]);
+    }, [analyticsData, isLoading, createChart, destroyChart, config.chartID]);
+
+    // Force recreate chart when forceRecreate prop changes (for view mode switching)
+    useEffect(() => {
+      if (forceRecreate && !isLoading && analyticsData?.data?.length) {
+        const timer = setTimeout(() => {
+          console.log(`Force recreating chart for ${config.metricName}`);
+          createChart();
+        }, config.chartID ? parseInt(config.chartID) * 50 : 0);
+        
+        return () => clearTimeout(timer);
+      }
+    }, [forceRecreate, isLoading, analyticsData, createChart, config.chartID, config.metricName]);
 
     // Cleanup on unmount
     useEffect(() => {
@@ -146,6 +211,7 @@ const ChartWidget = memo(
       };
     }, [destroyChart]);
 
+    // ORIGINAL SKELETON LOGIC
     if (showSkeleton) {
       return (
         <Box

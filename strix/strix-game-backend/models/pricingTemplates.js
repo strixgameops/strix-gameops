@@ -2,21 +2,23 @@ import { Schema, model } from "mongoose";
 
 const templates = new Schema({
   gameID: String,
-  branch: String,
-  pricing: {
-    currencies: [
-      {
-        code: String,
-        base: Number,
-      },
-    ],
-    regions: [
-      {
-        code: String,
-        base: Number,
-      },
-    ],
-  },
+  asku: String, // acts as unique ID
+  name: String,
+  baseValue: Number,
+  regions: [
+    {
+      code: String,
+      base: Number,
+      changed: Boolean,
+    },
+  ],
 });
 
-export const PricingTemplates = model("PricingTemplates", templates, "pricingtemplates");
+templates.index({ gameID: 1 });
+templates.index({ gameID: 1, asku: 1 });
+
+export const PricingTemplates = model(
+  "PricingTemplates",
+  templates,
+  "pricingtemplates"
+);

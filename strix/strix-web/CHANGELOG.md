@@ -2,6 +2,55 @@
 
 <!--- next entry here -->
 
+## 9.0.43
+2025-06-24
+
+### Fixes
+
+- overview page done (27df994b649cf481c60cf18d2e11fef69b69b050)
+
+## 9.0.42
+2025-06-24
+
+### Fixes
+
+- docker community (984926706d8a4d0f4cddc5bd949e196c7885a79f)
+
+## 9.0.41
+2025-06-24
+
+### Fixes
+
+- docker entrypoint (b0a1f31555278e4848fdaebe7675362a55f11df5)
+
+## 9.0.40
+2025-06-24
+
+### Fixes
+
+- docker (d77db69f67bcadb4f8aeac864bfb76fb85e549f2)
+
+## 9.0.39
+2025-06-24
+
+### Fixes
+
+- docker (a17db1f7e9948ed59334b6e33a67cf1740edbef3)
+
+## 9.0.38
+2025-06-23
+
+### Fixes
+
+- overview UI+charts update (a31e0b039f062d48f161a39eaf1de033acc47e92)
+
+## 9.0.37
+2025-06-23
+
+### Fixes
+
+- fix (abbbdd971cc2325edaf85613fe94c8d25fc1d261)
+
 ## 9.0.36
 2025-06-23
 

@@ -26,4 +26,7 @@ const ldbrdsSchema = new Schema({
   comment: String,
 });
 
+ldbrdsSchema.index({ gameID: 1, branch: 1 });
+ldbrdsSchema.index({ gameID: 1, branch: 1, id: 1 });
+
 export const Leaderboards = model("Leaderboard", ldbrdsSchema);

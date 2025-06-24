@@ -67,6 +67,7 @@ export class AnalyticsQueriesController {
       filterSegments,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -81,7 +82,8 @@ export class AnalyticsQueriesController {
       filterDate,
       filterSegments,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {
@@ -159,6 +161,7 @@ export class AnalyticsQueriesController {
       filterSegments,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -173,7 +176,8 @@ export class AnalyticsQueriesController {
       filterDate,
       filterSegments,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {
@@ -238,6 +242,7 @@ export class AnalyticsQueriesController {
       filterDateSecondary,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -253,7 +258,8 @@ export class AnalyticsQueriesController {
       filterSegments,
       filterDateSecondary,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {
@@ -277,6 +283,7 @@ export class AnalyticsQueriesController {
       filterSegments,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -291,7 +298,8 @@ export class AnalyticsQueriesController {
       filterDate,
       filterSegments,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {
@@ -391,6 +399,7 @@ export class AnalyticsQueriesController {
       filterSegments,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs (keep existing for compatibility)
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -405,7 +414,8 @@ export class AnalyticsQueriesController {
       filterDate,
       filterSegments,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {
@@ -750,6 +760,7 @@ export class AnalyticsQueriesController {
         filterSegments,
         includeBranchInAnalytics,
         includeEnvironmentInAnalytics,
+        gameIDs = null, // Optional parameter for multiple gameIDs
       } = req.body;
 
       const studioID = await this.utilityService.getStudioIDByGameID(
@@ -767,7 +778,8 @@ export class AnalyticsQueriesController {
           pastInterval,
           filterSegments,
           includeBranchInAnalytics,
-          includeEnvironmentInAnalytics
+          includeEnvironmentInAnalytics,
+          gameIDs // Pass gameIDs parameter
         ),
         this.paymentsAnalytics.querySalesAndRevenue(
           this.utilityService.getDemoGameID(gameID),
@@ -777,7 +789,8 @@ export class AnalyticsQueriesController {
           filterDate,
           filterSegments,
           includeBranchInAnalytics,
-          includeEnvironmentInAnalytics
+          includeEnvironmentInAnalytics,
+          gameIDs // Pass gameIDs parameter
         ),
       ]);
 
@@ -818,6 +831,7 @@ export class AnalyticsQueriesController {
       filterSegments,
       includeBranchInAnalytics,
       includeEnvironmentInAnalytics,
+      gameIDs = null, // Optional parameter for multiple gameIDs
     } = req.body;
 
     const studioID = await this.utilityService.getStudioIDByGameID(
@@ -832,7 +846,8 @@ export class AnalyticsQueriesController {
       filterDate,
       filterSegments,
       includeBranchInAnalytics,
-      includeEnvironmentInAnalytics
+      includeEnvironmentInAnalytics,
+      gameIDs // Pass gameIDs parameter
     );
 
     if (result) {

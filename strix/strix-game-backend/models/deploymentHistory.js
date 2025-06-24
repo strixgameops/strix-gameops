@@ -10,4 +10,6 @@ const schemaCatalog = new Schema({
   tags: [String]
 });
 
+schemaCatalog.index({ gameID: 1, branch: 1 });
+
 export const DeploymentHistory = model("DeploymentHistory", schemaCatalog);

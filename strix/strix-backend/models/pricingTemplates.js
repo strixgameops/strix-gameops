@@ -14,6 +14,9 @@ const templates = new Schema({
   ],
 });
 
+templates.index({ gameID: 1 });
+templates.index({ gameID: 1, asku: 1 });
+
 export const PricingTemplates = model(
   "PricingTemplates",
   templates,

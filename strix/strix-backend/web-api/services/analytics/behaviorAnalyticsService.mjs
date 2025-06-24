@@ -321,7 +321,7 @@ s."gameID"
           )
       )
       ${segmentsQueryFilters}
-      LIMIT 1000
+      LIMIT ${parseInt(process.env.BEHAVIOR_TREE_SESSIONS_LIMIT)}
     )
     SELECT e."timestamp", e."clientID", e."sessionID", e."type", e."field1", e."field2", e."field3", e."field4", e."field5", e."customData"
       FROM "events-${studioID}" AS e
@@ -574,7 +574,7 @@ s."gameID"
       AND e."type" = 'economyEvent'
       
       ${segmentsQueryFilters}
-      LIMIT 1000
+      LIMIT ${parseInt(process.env.BEHAVIOR_TREE_SESSIONS_LIMIT)}
     )
     SELECT e."timestamp", e."clientID", e."sessionID", e."type", e."field1", e."field2", e."field3", e."field4", e."field5", e."customData"
       FROM "events-${studioID}" AS e

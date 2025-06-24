@@ -1,9 +1,19 @@
 import { Schema, model } from "mongoose";
+const chartSchema = new Schema({
+  id: String,
+  chartID: String,
+  name: String,
+  metrics: Array,
+  chartSettings: Object,
+  categoryField: String,
+  dimension: String,
+  layoutSettings: Object,
+});
 const dashboardSchema = new Schema({
   id: String,
   name: String,
   linkName: String,
-  charts: Array,
+  charts: [chartSchema],
 });
 const gameSchema = new Schema({
   gameID: String,
@@ -12,5 +22,7 @@ const gameSchema = new Schema({
   dashboards: [dashboardSchema],
   profileCompositionPresets: String,
 });
+
+gameSchema.index({ gameID: 1, branch: 1 });
 
 export const Charts = model("charts", gameSchema);

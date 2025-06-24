@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-export const PaymentTransactions = model('payments', {
+
+const paymentSchema = new Schema({
     gameID: String,
     studioID: String,
     branch: String,
@@ -9,3 +10,8 @@ export const PaymentTransactions = model('payments', {
     data: {},
     price: Number,
 });
+
+paymentSchema.index({ gameID: 1, branch: 1 });
+paymentSchema.index({ gameID: 1, branch: 1, offerID: 1 });
+
+export const PaymentTransactions = model('payments', paymentSchema);

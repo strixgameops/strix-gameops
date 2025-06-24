@@ -2,6 +2,34 @@
 
 <!--- next entry here -->
 
+## 8.0.66
+2025-06-24
+
+### Fixes
+
+- model indexing (ef63ee7187ed651ffd9f544032809010c156be1d)
+
+## 8.0.65
+2025-06-24
+
+### Fixes
+
+- added indexes (1163059f1457f2420b86c537a1fb789510cbbd1d)
+
+## 8.0.64
+2025-06-24
+
+### Fixes
+
+- moved some code to enterprise (747a20e0d68d3d53a00ad856ea26a8f4fbd103bd)
+
+## 8.0.63
+2025-06-24
+
+### Fixes
+
+- docker (f5ab4bd10d99cda0ea983a1af2ca4ba41c642ee8)
+
 ## 8.0.62
 2025-06-23
 

@@ -56,4 +56,12 @@ const playerSchema = new Schema({
   environment: String,
 });
 
+playerSchema.index({ gameID: 1, branch: 1 });
+playerSchema.index({ gameID: 1, clientID: 1, branch: 1 });
+playerSchema.index({ gameID: 1, clientID: 1 });
+playerSchema.index({ "elements.analytics.elementID": 1 });
+playerSchema.index({ "elements.statistics.elementID": 1 });
+playerSchema.index({ firstJoinDate: 1 });
+playerSchema.index({ lastJoinDate: 1 });
+
 export const PWplayers = model("pwplayers", playerSchema);

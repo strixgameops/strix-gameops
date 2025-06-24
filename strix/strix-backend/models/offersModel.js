@@ -41,4 +41,7 @@ const offerSchema = new Schema({
   removed: Boolean,
 });
 
+offerSchema.index({ gameID: 1, branch: 1 });
+offerSchema.index({ gameID: 1, branch: 1, offerID: 1 });
+
 export const OffersModel = model("Offers", offerSchema, "offers");

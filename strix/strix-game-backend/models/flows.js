@@ -11,4 +11,7 @@ const flowsSchema = new Schema({
   comment: String,
 });
 
+flowsSchema.index({ gameID: 1, branch: 1 });
+flowsSchema.index({ gameID: 1, branch: 1, sid: 1 });
+
 export const Flows = model("Flows", flowsSchema);

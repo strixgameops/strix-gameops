@@ -12,6 +12,9 @@ const segmentSchema = new Schema({
   ],
 });
 
+segmentSchema.index({ gameID: 1, branch: 1 });
+segmentSchema.index({ gameID: 1, branch: 1, segmentID: 1 });
+
 export const BalanceModelSegments = model(
   "BalanceModelSegments",
   segmentSchema,

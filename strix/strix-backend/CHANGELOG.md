@@ -2,6 +2,48 @@
 
 <!--- next entry here -->
 
+## 11.0.49
+2025-06-24
+
+### Fixes
+
+- added env (3c8ee3bcfa474b8b695c5fac2235c8f6183e573c)
+
+## 11.0.48
+2025-06-24
+
+### Fixes
+
+- model indexing (bbd189ffa25416e735988f343cd79035fbd51eff)
+
+## 11.0.47
+2025-06-24
+
+### Fixes
+
+- added indexes (3acf128adc52a957cdacb9f6a72a3d5bc0c441a3)
+
+## 11.0.46
+2025-06-24
+
+### Fixes
+
+- overview page done (9cac1a359caf55399a999b3c1640b9073fd6d6e0)
+
+## 11.0.45
+2025-06-24
+
+### Fixes
+
+- docker (6ef9e48c2a31d1538e2a30cc75c140b33865a5f8)
+
+## 11.0.44
+2025-06-24
+
+### Fixes
+
+- docker (7e740e31e12944b97ccb748c8aeae54bebd793d3)
+
 ## 11.0.43
 2025-06-23
 

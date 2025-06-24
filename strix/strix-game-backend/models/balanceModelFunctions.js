@@ -19,6 +19,9 @@ const functionSchema = new Schema({
   respectiveCategory: String,
 });
 
+functionSchema.index({ gameID: 1, branch: 1 });
+functionSchema.index({ gameID: 1, branch: 1, functionID: 1 });
+
 export const BalanceModelFunctions = model(
   "BalanceModelFunctions",
   functionSchema,

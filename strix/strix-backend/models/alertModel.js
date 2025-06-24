@@ -15,4 +15,7 @@ const alerts = new Schema({
   lastUpdateDate: Date,
 });
 
+alerts.index({ gameID: 1, branch: 1 });
+alerts.index({ gameID: 1, branch: 1, alertID: 1 });
+
 export const Alerts = model("Alerts", alerts);

@@ -14,7 +14,18 @@ const observedMetrics = new Schema({
     queryMethod: String,
     queryValueFilters: Array,
   },
+  cupedMetric: {
+    queryAnalyticEventID: String,
+    queryCategoryFilters: Array,
+    queryEventTargetValueId: String,
+    queryMethod: String,
+    queryValueFilters: Array,
+  },
+  cupedState: Boolean,
+  cupedDateStart: String,
+  cupedDateEnd: String,
   archivedData: String,
+
 });
 const subjects = new Schema({
   changedFields: Object,
@@ -38,5 +49,7 @@ const tests = new Schema({
   archivedResult: String,
   removed: Boolean,
 });
+tests.index({ gameID: 1, branch: 1 });
+tests.index({ gameID: 1, branch: 1, id: 1 });
 
 export const ABTests = model("ABTests", tests);

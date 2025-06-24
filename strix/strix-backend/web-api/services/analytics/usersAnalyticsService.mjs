@@ -16,7 +16,8 @@ export class UsersAnalyticsService {
     filterDate,
     filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -27,47 +28,46 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       filterDate,
-      filterSegments
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getNewUsersQuery(
         studioID,
         gameID,
         interval,
         filterSegments,
-        branch
+        branch,
+        gameIDs // Pass gameIDs to query function
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       formattedResult = data.sort(
         (a, b) =>
           dayjs.utc(a.timestamp).valueOf() - dayjs.utc(b.timestamp).valueOf()
       );
 
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-
       return formattedResult;
     } catch (error) {
       console.error(error);
       return [];
     }
+
     function getNewUsersQuery(
       studioID,
       gameID,
       interval,
       filterSegments,
-      branch
+      branch,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -87,6 +87,11 @@ export class UsersAnalyticsService {
         )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
       parsedSQL = `
         WITH all_sessions AS (
         SELECT s."clientID",
@@ -95,10 +100,8 @@ export class UsersAnalyticsService {
         s."environment",
         s."gameID"
         FROM "sessions-${studioID}" AS s
-        WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
-        interval.interval[1]
-      }'
-        AND s."gameID" = '${gameID}'
+        WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
+        AND s."gameID" ${gameIDCondition}
         ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
         ${
           includeEnvironmentInAnalytics
@@ -107,16 +110,14 @@ export class UsersAnalyticsService {
         }
       )
         SELECT
-         DATE_TRUNC('${interval.granularity}', timestamp) AS "timestamp",
+        DATE_TRUNC('${interval.granularity}', timestamp) AS "timestamp",
           COUNT(DISTINCT s."clientID") AS "value"
         FROM "events-${studioID}" e
         JOIN all_sessions s
           ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID" 
         ${segmentsJoin}
-        WHERE "timestamp" BETWEEN '${interval.interval[0]}' AND '${
-        interval.interval[1]
-      }'
-        AND s."gameID" = '${gameID}'
+        WHERE "timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
+        AND s."gameID" ${gameIDCondition}
         AND e."type" = 'newSession'
         AND e."field1" = 'true'
         ${segmentsQueryFilters}
@@ -127,55 +128,19 @@ export class UsersAnalyticsService {
       utilityService.log("Parsed SQL:\n", parsedSQL);
       return parsedSQL;
     }
-
-    // parsedSQL =
-    //     `WITH all_sessions AS (
-    //   	SELECT s."clientID",
-    //     s."sessionID",
-    //     s."branch",
-    //     s."gameID"
-    //   	FROM "sessions-${studioID}" AS s
-    //   	WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //     AND s."gameID" = '${gameID}'
-    //   	AND s."branch" = '${branch}'
-    //   ),
-    //      filteredEvents AS (
-    //     SELECT
-    //       e."clientID",
-    //       s."sessionID",
-    //       e."field1" AS offerID,
-    //       CAST(e."field2" AS NUMERIC) AS amount,
-    //       e."field3" AS currency,
-    //       e."field4"
-    //     FROM "events-${studioID}" e
-    //     JOIN all_sessions s
-    //       ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID"
-    //     ${segmentsJoin}
-    //     WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //       AND e."gameID" = '${gameID}'
-    //       AND s."branch" = '${branch}'
-    //       AND e."type" = 'offerEvent'` +
-    //     segmentsQueryFilters +
-    //     offersFilter +
-    //     `)` +
-    //     `SELECT
-    //         offerID,
-    //         SUM(amount) AS totalSpend,
-    //         COUNT(offerID) AS totalSales,
-    //         currency
-    //       FROM filteredEvents e
-    //       WHERE e."field4" IS NOT NULL
-    //       GROUP BY offerID, currency`;
   }
+
   async getRetention(
     gameID,
     studioID,
     branch,
     environment,
-    filterDate, // Time interval we want to get
-    filterSegments, // An array of segments that player must meet in order for his events to be included in the result
+    filterDate,
+    filterSegments,
+    filterDateSecondary,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -186,13 +151,13 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       branch,
-      filterDate, // Time interval we want to get
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      filterDate,
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       const promises = iterateAndShrinkInterval(
         interval.interval[0],
@@ -215,12 +180,9 @@ export class UsersAnalyticsService {
               finalEndDate.format("YYYY-MM-DD"),
             ]
           );
-          // utilityService.log("Retention interval:", retentionInterval);
           promises.push(makeRequest(retentionInterval));
 
           eventsCount++;
-
-          // Shift interval as we iterate
           currentStartDate = currentStartDate.add(1, "day");
         }
         return promises;
@@ -231,21 +193,18 @@ export class UsersAnalyticsService {
           gameID,
           studioID,
           branch,
-          interval, // Time interval we want to get
-          filterSegments // An array of segments that player must meet in order for his events to be included in the result
+          interval,
+          filterSegments,
+          gameIDs // Pass gameIDs to query function
         );
 
-        let formattedResult = []; // Define that and change to result later
+        let formattedResult = [];
         const data = await db.PGquery(query);
 
         if (data.errorMessage) {
           coreAnalytics.handleSqlError(data.errorMessage);
-          // Should throw error if there is error
         }
         formattedResult = data[0];
-
-        // utilityService.log("Pre-formatted data length:", data.length);
-        // utilityService.log("Post-formatted data length:", formattedResult.length);
 
         return formattedResult;
       }
@@ -283,12 +242,14 @@ export class UsersAnalyticsService {
       console.error(error);
       return [];
     }
+
     function getQuery_Retention(
       gameID,
       studioID,
       branch,
-      interval, // Time interval we want to get
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      interval,
+      filterSegments,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -326,6 +287,11 @@ export class UsersAnalyticsService {
           ? interval.diff
           : Math.round(interval.diff / 24);
 
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = (gameIDs && Array.isArray(gameIDs) && gameIDs.length > 0) 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
       let NdayRetentionStatements = ``;
       for (let i = 0; i < numDays; i++) {
         const formattedDay = dayjs
@@ -344,10 +310,10 @@ export class UsersAnalyticsService {
       FROM "events-${studioID}" e
       JOIN "sessions-${studioID}" s
         ON e."clientID" = s."clientID" 
-       AND e."sessionID" = s."sessionID"
+      AND e."sessionID" = s."sessionID"
       ${segmentsJoin}
       WHERE e."timestamp" BETWEEN '${startDay[0]}' AND '${startDay[1]}'
-        AND e."gameID" = '${gameID}'
+        AND e."gameID" ${gameIDCondition}
         ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
         ${
           includeEnvironmentInAnalytics
@@ -365,7 +331,7 @@ export class UsersAnalyticsService {
       WHERE "event_day" BETWEEN '${interval.interval[0]}' AND '${
         interval.interval[1]
       }'
-        AND "gameID" = '${gameID}'
+        AND "gameID" ${gameIDCondition}
     )
 
     SELECT
@@ -375,56 +341,11 @@ export class UsersAnalyticsService {
       ON c."clientID" = r."clientID";
     `;
 
-      // parsedSQL = `
-      //   WITH all_sessions AS (
-      // 	SELECT s."clientID",
-      //   s."sessionID",
-      //   s."branch",
-      //   s."gameID"
-      // 	FROM "sessions-${studioID}" AS s
-      // 	WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-      //   AND s."gameID" = '${gameID}'
-      // 	AND s."branch" = '${branch}'
-      //   ),
-
-      //   filteredEvents AS (
-      //       SELECT DISTINCT
-      //         e."clientID",
-      //         s."sessionID",
-      //        DATE_TRUNC('${interval.granularity}', e."timestamp") AS event_day
-      //       FROM "events-${studioID}" e
-      //       JOIN all_sessions s
-      //         ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID"
-      //       ${segmentsJoin}
-      //       WHERE e."timestamp" BETWEEN '${startDay[0]}' AND '${startDay[1]}'
-      //         AND e."gameID" = '${gameID}'
-      //         AND s."branch" = '${branch}'
-      //         ${segmentsQueryFilters}
-      //   ),
-
-      //   events_next_N_days AS (
-      //       SELECT e."clientID",
-      //              f.event_day
-      //       FROM "events-${studioID}" AS e
-      //       JOIN filteredEvents AS f
-      //         ON e."clientID" = f."clientID" AND e."sessionID" = f."sessionID"
-      //       WHERE "timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-      //   )
-
-      //   SELECT
-      //       ${NdayRetentionStatements}
-      //   FROM
-      //       filteredEvents AS f
-      //   LEFT JOIN
-      //       events_next_N_days AS e
-      //   ON
-      //       f."clientID" = e."clientID";
-      // `;
-
-      utilityService.log("Parsed SQL:\n", parsedSQL);
+      // utilityService.log("Parsed SQL:\n", parsedSQL);
       return parsedSQL;
     }
   }
+
   async getDAU(
     gameID,
     studioID,
@@ -433,7 +354,8 @@ export class UsersAnalyticsService {
     filterDate,
     filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -444,42 +366,40 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       filterDate,
-      filterSegments
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getDAUQuery(
         studioID,
         gameID,
         interval,
         filterSegments,
-        branch
+        branch,
+        gameIDs // Pass gameIDs to query function
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       formattedResult = data.sort(
         (a, b) =>
           dayjs.utc(a.timestamp).valueOf() - dayjs.utc(b.timestamp).valueOf()
       );
 
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-
       return formattedResult;
     } catch (error) {
       console.error(error);
       return [];
     }
-    function getDAUQuery(studioID, gameID, interval, filterSegments, branch) {
+
+    function getDAUQuery(studioID, gameID, interval, filterSegments, branch, gameIDs) {
       const segmentsCondition =
         filterSegments.length > 0
           ? `AND seg."segments" @> ARRAY[${filterSegments
@@ -495,6 +415,11 @@ export class UsersAnalyticsService {
       )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
       const parsedSQL = `
       WITH all_sessions AS (
         SELECT
@@ -503,10 +428,8 @@ export class UsersAnalyticsService {
           s."branch",
           s."gameID"
         FROM "sessions-${studioID}" AS s
-        WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
-        interval.interval[1]
-      }'
-          AND s."gameID" = '${gameID}'
+        WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
+          AND s."gameID" ${gameIDCondition}
           ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
           ${
             includeEnvironmentInAnalytics
@@ -515,16 +438,14 @@ export class UsersAnalyticsService {
           }
       )
       SELECT
-       DATE_TRUNC('${interval.granularity}', e."timestamp") AS "timestamp",
+      DATE_TRUNC('${interval.granularity}', e."timestamp") AS "timestamp",
         COUNT(DISTINCT s."clientID") AS "value"
       FROM "events-${studioID}" e
       JOIN all_sessions s
         ON e."clientID" = s."clientID"
         AND e."sessionID" = s."sessionID"
       ${segmentsJoin}
-      WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${
-        interval.interval[1]
-      }'
+      WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
       ${segmentsCondition}
       GROUP BY DATE_TRUNC('${interval.granularity}', e."timestamp")
       ORDER BY "timestamp" DESC
@@ -533,46 +454,8 @@ export class UsersAnalyticsService {
       utilityService.log("Parsed SQL:\n", parsedSQL);
       return parsedSQL;
     }
-
-    // parsedSQL =
-    //     `WITH all_sessions AS (
-    //   	SELECT s."clientID",
-    //     s."sessionID",
-    //     s."branch",
-    //     s."gameID"
-    //   	FROM "sessions-${studioID}" AS s
-    //   	WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //     AND s."gameID" = '${gameID}'
-    //   	AND s."branch" = '${branch}'
-    //   ),
-    //      filteredEvents AS (
-    //     SELECT
-    //       e."clientID",
-    //       s."sessionID",
-    //       e."field1" AS offerID,
-    //       CAST(e."field2" AS NUMERIC) AS amount,
-    //       e."field3" AS currency,
-    //       e."field4"
-    //     FROM "events-${studioID}" e
-    //     JOIN all_sessions s
-    //       ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID"
-    //     ${segmentsJoin}
-    //     WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //       AND e."gameID" = '${gameID}'
-    //       AND s."branch" = '${branch}'
-    //       AND e."type" = 'offerEvent'` +
-    //     segmentsQueryFilters +
-    //     offersFilter +
-    //     `)` +
-    //     `SELECT
-    //         offerID,
-    //         SUM(amount) AS totalSpend,
-    //         COUNT(offerID) AS totalSales,
-    //         currency
-    //       FROM filteredEvents e
-    //       WHERE e."field4" IS NOT NULL
-    //       GROUP BY offerID, currency`;
   }
+
   async getRetentionBig(
     gameID,
     studioID,
@@ -984,7 +867,7 @@ export class UsersAnalyticsService {
       ON c."clientID" = r."clientID";
     `;
 
-      utilityService.log("Parsed SQL: ", parsedSQL);
+      // utilityService.log("Parsed SQL: ", parsedSQL);
       return parsedSQL;
     }
   }
@@ -997,7 +880,8 @@ export class UsersAnalyticsService {
     filterDate,
     filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -1009,27 +893,27 @@ export class UsersAnalyticsService {
       studioID,
       branch,
       filterDate,
-      filterSegments
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
-      //       (00:00:00 - 23:59:59)
+      // Get the start and end of the day for retention calculation
       const startDay = dayjs
         .utc(interval.interval[0])
         .startOf("day")
         .toISOString();
       const endDay = dayjs.utc(interval.interval[0]).endOf("day").toISOString();
 
-      //
       const query = getQuery_RetentionByCountry(
         gameID,
         studioID,
         branch,
         { startDay, endDay },
-        filterSegments
+        filterSegments,
+        gameIDs // Pass gameIDs parameter
       );
 
       const data = await db.PGquery(query);
@@ -1037,9 +921,7 @@ export class UsersAnalyticsService {
         throw new Error(data.errorMessage);
       }
 
-      // utilityService.log("Input data (allResults):", JSON.stringify(data, null, 2));
-
-      //
+      // Group results by country
       const countryMap = data.reduce((acc, row) => {
         const country = row.country || "unknown";
 
@@ -1056,7 +938,7 @@ export class UsersAnalyticsService {
 
         const countryEntry = acc.get(country);
 
-        //
+        // Sum up retention values
         countryEntry.d0 += parseInt(row.d0) || 0;
         countryEntry.d1 += parseInt(row.d1) || 0;
         countryEntry.d3 += parseInt(row.d3) || 0;
@@ -1066,7 +948,7 @@ export class UsersAnalyticsService {
         return acc;
       }, new Map());
 
-      //       d0
+      // Sort results by d0 (initial cohort size)
       const sortedResults = Array.from(countryMap.values()).sort(
         (a, b) => b.d0 - a.d0
       );
@@ -1081,8 +963,9 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       branch,
-      interval, //   startDay  endDay
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      interval,
+      filterSegments,
+      gameIDs
     ) {
       const { startDay, endDay } = interval;
 
@@ -1102,16 +985,21 @@ export class UsersAnalyticsService {
       )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
       const parsedSQL = `
       WITH cohort AS (
         SELECT DISTINCT e."clientID", s."country"
         FROM "events-${studioID}" e
         JOIN "sessions-${studioID}" s
           ON e."clientID" = s."clientID"
-         AND e."sessionID" = s."sessionID"
+        AND e."sessionID" = s."sessionID"
         ${segmentsJoin}
         WHERE e."timestamp" BETWEEN '${startDay}' AND '${endDay}'
-          AND e."gameID" = '${gameID}'
+          AND e."gameID" ${gameIDCondition}
           ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
           ${
             includeEnvironmentInAnalytics
@@ -1128,7 +1016,7 @@ export class UsersAnalyticsService {
         FROM "events-${studioID}"
         WHERE "timestamp" BETWEEN '${startDay}'::timestamp + INTERVAL '1 days'
                               AND '${endDay}'::timestamp + INTERVAL '1 days'
-          AND "gameID" = '${gameID}'
+          AND "gameID" ${gameIDCondition}
       ),
 
       retention_3day AS (
@@ -1136,7 +1024,7 @@ export class UsersAnalyticsService {
         FROM "events-${studioID}"
         WHERE "timestamp" BETWEEN '${startDay}'::timestamp + INTERVAL '3 days'
                               AND '${endDay}'::timestamp + INTERVAL '3 days'
-          AND "gameID" = '${gameID}'
+          AND "gameID" ${gameIDCondition}
       ),
 
       retention_7day AS (
@@ -1144,7 +1032,7 @@ export class UsersAnalyticsService {
         FROM "events-${studioID}"
         WHERE "timestamp" BETWEEN '${startDay}'::timestamp + INTERVAL '7 days'
                               AND '${endDay}'::timestamp + INTERVAL '7 days'
-          AND "gameID" = '${gameID}'
+          AND "gameID" ${gameIDCondition}
       ),
 
       retention_30day AS (
@@ -1152,7 +1040,7 @@ export class UsersAnalyticsService {
       FROM "events-${studioID}"
       WHERE "timestamp" BETWEEN '${startDay}'::timestamp + INTERVAL '30 days'
                             AND '${endDay}'::timestamp + INTERVAL '30 days'
-        AND "gameID" = '${gameID}'
+        AND "gameID" ${gameIDCondition}
       )
 
       SELECT
@@ -1174,8 +1062,6 @@ export class UsersAnalyticsService {
       GROUP BY c."country";
     `;
 
-      utilityService.log("RetentionByCountry")
-      utilityService.log("Parsed SQL:\n", parsedSQL);
       return parsedSQL;
     }
   }
@@ -1188,7 +1074,8 @@ export class UsersAnalyticsService {
     filterDate,
     filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -1199,47 +1086,46 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       filterDate,
-      filterSegments
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getNewUsersByCountryQuery(
         studioID,
         gameID,
         interval,
         filterSegments,
-        branch
+        branch,
+        gameIDs // Pass gameIDs parameter
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       formattedResult = data.sort(
         (a, b) =>
           dayjs.utc(a.timestamp).valueOf() - dayjs.utc(b.timestamp).valueOf()
       );
 
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-
       return formattedResult;
     } catch (error) {
       console.error(error);
       return [];
     }
+
     function getNewUsersByCountryQuery(
       studioID,
       gameID,
       interval,
       filterSegments,
-      branch
+      branch,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -1259,6 +1145,11 @@ export class UsersAnalyticsService {
       )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
       parsedSQL = `
       WITH all_sessions AS (
       SELECT s."clientID",
@@ -1271,7 +1162,7 @@ export class UsersAnalyticsService {
       WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
         interval.interval[1]
       }'
-      AND s."gameID" = '${gameID}'
+      AND s."gameID" ${gameIDCondition}
       ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
       ${
         includeEnvironmentInAnalytics
@@ -1289,7 +1180,7 @@ export class UsersAnalyticsService {
       WHERE "timestamp" BETWEEN '${interval.interval[0]}' AND '${
         interval.interval[1]
       }'
-      AND s."gameID" = '${gameID}'
+      AND s."gameID" ${gameIDCondition}
       ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
       ${
         includeEnvironmentInAnalytics
@@ -1306,45 +1197,6 @@ export class UsersAnalyticsService {
       utilityService.log("Parsed SQL:\n", parsedSQL);
       return parsedSQL;
     }
-
-    // parsedSQL =
-    //     `WITH all_sessions AS (
-    //   	SELECT s."clientID",
-    //     s."sessionID",
-    //     s."branch",
-    //     s."gameID"
-    //   	FROM "sessions-${studioID}" AS s
-    //   	WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //     AND s."gameID" = '${gameID}'
-    //   	AND s."branch" = '${branch}'
-    //   ),
-    //      filteredEvents AS (
-    //     SELECT
-    //       e."clientID",
-    //       s."sessionID",
-    //       e."field1" AS offerID,
-    //       CAST(e."field2" AS NUMERIC) AS amount,
-    //       e."field3" AS currency,
-    //       e."field4"
-    //     FROM "events-${studioID}" e
-    //     JOIN all_sessions s
-    //       ON e."clientID" = s."clientID" AND e."sessionID" = s."sessionID"
-    //     ${segmentsJoin}
-    //     WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${interval.interval[1]}'
-    //       AND e."gameID" = '${gameID}'
-    //       AND s."branch" = '${branch}'
-    //       AND e."type" = 'offerEvent'` +
-    //     segmentsQueryFilters +
-    //     offersFilter +
-    //     `)` +
-    //     `SELECT
-    //         offerID,
-    //         SUM(amount) AS totalSpend,
-    //         COUNT(offerID) AS totalSales,
-    //         currency
-    //       FROM filteredEvents e
-    //       WHERE e."field4" IS NOT NULL
-    //       GROUP BY offerID, currency`;
   }
 
   async querySalesAndRevenueByCountry(
@@ -1352,10 +1204,11 @@ export class UsersAnalyticsService {
     studioID,
     branch,
     environment,
-    filterDate, // Time interval we want to get
-    filterSegments, // An array of segments that player must meet in order for his events to be included in the result
+    filterDate,
+    filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const utilityService = this.moduleContainer.get("utility");
@@ -1365,30 +1218,28 @@ export class UsersAnalyticsService {
       gameID,
       studioID,
       branch,
-      filterDate, // Time interval we want to get
-      filterSegments // An array of segments that player must meet in order for his events to be included in the result
+      filterDate,
+      filterSegments,
+      gameIDs
     );
 
     try {
-      const interval =
-        coreAnalytics.constructIntervalFromDateFilter(filterDate);
+      const interval = coreAnalytics.constructIntervalFromDateFilter(filterDate);
 
       let query = getSalesAndRevenueByCountryQuery(
         studioID,
         gameID,
         branch,
         interval,
-        filterSegments
+        filterSegments,
+        gameIDs // Pass gameIDs parameter
       );
 
-      let formattedResult = []; // Define that and change to result later
+      let formattedResult = [];
       const data = await db.PGquery(query);
-
-      // utilityService.log("TS response stringified: ", data);
 
       if (data.errorMessage) {
         coreAnalytics.handleSqlError(data.errorMessage);
-        // Should throw error if there is error
       }
       
       formattedResult = data.map((dataItem) => {
@@ -1398,10 +1249,6 @@ export class UsersAnalyticsService {
           sales: dataItem.sales
         };
       });
-
-      // utilityService.log("Pre-formatted data length:", data.length);
-      // utilityService.log("Post-formatted data length:", formattedResult.length);
-      // utilityService.log("Post-formatted data:", formattedResult);
 
       return formattedResult;
     } catch (error) {
@@ -1414,7 +1261,8 @@ export class UsersAnalyticsService {
       gameID,
       branch,
       interval,
-      filterSegments
+      filterSegments,
+      gameIDs
     ) {
       let parsedSQL = "";
 
@@ -1434,9 +1282,12 @@ export class UsersAnalyticsService {
           )}:' || '${environment}:' || e."clientID" = seg."clientID"`
           : "";
 
-      //
-      // Default query. Append everything we made above to this.
-      //
+      // Logic for gameID filtering - support multiple gameIDs
+      const gameIDCondition = gameIDs && gameIDs.length > 0 
+        ? `IN (${gameIDs.map(id => `'${id}'`).join(',')})`
+        : `= '${gameID}'`;
+
+      // Default query with multiple gameIDs support
       parsedSQL =
         `WITH all_sessions AS (
           SELECT s."clientID",
@@ -1449,7 +1300,7 @@ export class UsersAnalyticsService {
           WHERE s."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-          AND s."gameID" = '${gameID}'
+          AND s."gameID" ${gameIDCondition}
           ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
           ${
             includeEnvironmentInAnalytics
@@ -1470,7 +1321,7 @@ export class UsersAnalyticsService {
             WHERE e."timestamp" BETWEEN '${interval.interval[0]}' AND '${
           interval.interval[1]
         }'
-              AND e."gameID" = '${gameID}'
+              AND e."gameID" ${gameIDCondition}
               ${includeBranchInAnalytics ? `AND s."branch" = '${branch}'` : ""}
               ${
                 includeEnvironmentInAnalytics
@@ -1502,7 +1353,8 @@ export class UsersAnalyticsService {
     filterDate,
     filterSegments,
     includeBranchInAnalytics,
-    includeEnvironmentInAnalytics
+    includeEnvironmentInAnalytics,
+    gameIDs = null // Optional parameter for multiple gameIDs
   ) {
     const coreAnalytics = this.moduleContainer.get("coreAnalytics");
     const db = this.moduleContainer.get("database");
@@ -1518,7 +1370,8 @@ export class UsersAnalyticsService {
           filterDate,
           filterSegments,
           includeBranchInAnalytics,
-          includeEnvironmentInAnalytics
+          includeEnvironmentInAnalytics,
+          gameIDs // Pass gameIDs parameter
         ),
         this.getNewUsersByCountry(
           gameID,
@@ -1528,7 +1381,8 @@ export class UsersAnalyticsService {
           filterDate,
           filterSegments,
           includeBranchInAnalytics,
-          includeEnvironmentInAnalytics
+          includeEnvironmentInAnalytics,
+          gameIDs // Pass gameIDs parameter
         ),
         this.querySalesAndRevenueByCountry(
           gameID,
@@ -1538,12 +1392,10 @@ export class UsersAnalyticsService {
           filterDate,
           filterSegments,
           includeBranchInAnalytics,
-          includeEnvironmentInAnalytics
+          includeEnvironmentInAnalytics,
+          gameIDs // Pass gameIDs parameter
         ),
       ]);
-
-      // utilityService.log("Retention Raw Data:", JSON.stringify(retentionData, null, 2));
-      // utilityService.log("New Users Raw Data:", JSON.stringify(newUsersData, null, 2));
 
       const retentionMap = new Map();
       const newUsersMap = new Map();
@@ -1613,11 +1465,6 @@ export class UsersAnalyticsService {
       });
 
       const sortedResult = result.sort((a, b) => b.installs - a.installs);
-
-      // utilityService.log(
-      //   "Final Combined Result:",
-      //   JSON.stringify(sortedResult, null, 2)
-      // );
 
       return sortedResult;
     } catch (error) {

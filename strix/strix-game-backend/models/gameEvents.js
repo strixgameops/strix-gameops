@@ -32,4 +32,7 @@ const gameEventsSchema = new Schema({
   removed: Boolean, // Internal property. Do not return game event to frontend if "true". Might be useful in future, just store removed events for now
 });
 
+gameEventsSchema.index({ gameID: 1, branch: 1 });
+gameEventsSchema.index({ gameID: 1, branch: 1, id: 1 });
+
 export const GameEvents = model("GameEvents", gameEventsSchema);

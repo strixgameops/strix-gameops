@@ -8,4 +8,7 @@ const gameEventsNotesSchema = new Schema({
   note: String,
 });
 
+gameEventsNotesSchema.index({ gameID: 1, branch: 1 });
+gameEventsNotesSchema.index({ gameID: 1, branch: 1, id: 1 });
+
 export const GameEventsNotes = model("GameEventsNotes", gameEventsNotesSchema);

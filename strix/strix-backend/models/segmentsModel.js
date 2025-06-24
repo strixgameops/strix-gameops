@@ -21,4 +21,7 @@ const segmentsSchema = new Schema({
   usedTemplateIDs: [String],
 });
 
+segmentsSchema.index({ gameID: 1, branch: 1 });
+segmentsSchema.index({ gameID: 1, branch: 1, segmentID: 1 });
+
 export const Segments = model("Segments", segmentsSchema);

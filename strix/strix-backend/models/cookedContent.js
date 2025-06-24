@@ -8,4 +8,7 @@ const contentSchema = new Schema({
   data: String,
 });
 
+contentSchema.index({ gameID: 1, branch: 1 });
+contentSchema.index({ gameID: 1, branch: 1, segmentID: 1 });
+
 export const CookedContent = model("cookedcontents", contentSchema);

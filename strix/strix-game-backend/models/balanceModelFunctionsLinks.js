@@ -11,6 +11,9 @@ const entity = new Schema({
   outputPath: String,
   inheritedFromNodeID: String,
 });
+entity.index({ gameID: 1, branch: 1 });
+entity.index({ gameID: 1, branch: 1, linkedFunctionID: 1 });
+
 export const BalanceModelFunctionsLinks = model(
   "BalanceModelFunctionsLinks",
   entity,

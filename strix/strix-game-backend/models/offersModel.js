@@ -8,7 +8,10 @@ const contentItems = new Schema({
 const offerSchema = new Schema({
   gameID: String,
   branch: String,
-  offerID: String,
+  offerID: {
+    type: String,
+    required: true
+  },
   offerName: String,
   offerCodeName: String,
   offerIcon: String,
@@ -24,24 +27,21 @@ const offerSchema = new Schema({
     timeUnit: String,
   },
 
-  offerSegments: [String],
-  offerTriggers: Array,
-
   offerPrice: {
     targetCurrency: String,
+    isDerivedAmount: Boolean,
+    derivedAmount: String,
     amount: Number,
     nodeID: String,
-    moneyCurr: [
-      {
-        cur: String,
-        amount: Number,
-      },
-    ],
-    discount: Number,
+    pricingTemplateAsku: String,
   },
+  linkedEntities: [String],
 
   content: [contentItems],
   removed: Boolean,
 });
+
+offerSchema.index({ gameID: 1, branch: 1 });
+offerSchema.index({ gameID: 1, branch: 1, offerID: 1 });
 
 export const OffersModel = model("Offers", offerSchema, "offers");

@@ -23,4 +23,6 @@ const gameSchema = new Schema({
   profileCompositionPresets: String,
 });
 
+gameSchema.index({ gameID: 1, branch: 1 });
+
 export const Charts = model("charts", gameSchema);

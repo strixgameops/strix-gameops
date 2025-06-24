@@ -37,7 +37,7 @@ import {
 } from "@mui/icons-material";
 import { Helmet } from "react-helmet";
 import dayjs from "dayjs";
-import utc from "dayjs-plugin-utc";
+import utc from "dayjs/plugin/utc";
 import uuid from "react-uuid";
 
 // Components
@@ -98,8 +98,8 @@ const getChartConfigsForMetric = (metric) => {
       },
       {
         chartID: "2",
-        name: "ARPU",
-        metricName: "arpu",
+        name: "ARPPU",
+        metricName: "arppu",
         format: "$",
         formatPosition: "start",
         showDelta: true,
@@ -107,12 +107,32 @@ const getChartConfigsForMetric = (metric) => {
       },
       {
         chartID: "3",
-        name: "Revenue/DAU",
+        name: "Revenue/DAU (ARPU)",
         metricName: "revenueDau",
         format: "$",
         formatPosition: "start",
         showDelta: false,
         icon: AnalyticsIcon,
+      },
+    ],
+    retention: [
+      {
+        chartID: "1",
+        name: "Retention (Last 30 Days)",
+        metricName: "retention",
+        format: "",
+        formatPosition: "start",
+        showDelta: true,
+        icon: RetentionIcon,
+      },
+      {
+        chartID: "2",
+        name: "Retention (Previous 30 Days)",
+        metricName: "retentionPrevious",
+        format: "",
+        formatPosition: "start",
+        showDelta: true,
+        icon: RetentionIcon,
       },
     ],
   };
@@ -136,7 +156,8 @@ const Overview = () => {
     getARPPU,
     getNewUsers,
     getCombinedMetricsByCountry,
-    getCumulativeARPU
+    getCumulativeARPU,
+    getRetention // Add retention API method
   } = useApi();
 
   const {
@@ -168,24 +189,31 @@ const Overview = () => {
   const [fullStatsDataPublisher, setFullStatsDataPublisher] = useState(null);
   const [viewMode, setViewMode] = useState("charts");
   const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
+  
+  // Add state for retention table switching
+  const [selectedRetentionPeriod, setSelectedRetentionPeriod] = useState("retention");
 
   // PERSISTENT DATA STORAGE - Store API data separately from charts
   const [persistentAnalyticsData, setPersistentAnalyticsData] = useState({
     dau: [],
     revenue: [],
-    arpu: [],
+    arppu: [],
     newInstalls: [],
     revenueDau: [],
     installs: [],
-    installRate: []
+    installRate: [],
+    retention: [], // Add retention data
+    retentionPrevious: [] // Add previous retention data
   });
 
   // Loading states for each metric
   const [isLoading_DAU, setIsLoading_DAU] = useState(false);
   const [isLoading_Revenue, setIsLoading_Revenue] = useState(false);
-  const [isLoading_ARPU, setIsLoading_ARPU] = useState(false);
+  const [isLoading_ARPPU, setIsLoading_ARPPU] = useState(false);
   const [isLoading_NewUsers, setIsLoading_NewUsers] = useState(false);
   const [isLoading_CombinedMetricsByCountry, setIsLoading_CombinedMetricsByCountry] = useState(false);
+  const [isLoading_Retention, setIsLoading_Retention] = useState(false); // Add retention loading state
+  const [isLoading_RetentionPrevious, setIsLoading_RetentionPrevious] = useState(false); // Add previous retention loading state
 
   // Country data state - only real API data
   const [countryData, setCountryData] = useState({
@@ -216,6 +244,19 @@ const Overview = () => {
   const defaultDate = useMemo(() => [dayjs.utc(), dayjs.utc()], []);
   const isFetchingData = useRef(false);
 
+  // Helper function to determine if we should use gameIDs array
+  const shouldUseGameIDs = useCallback(() => {
+    return selectedGamesForAnalytics.length > 1;
+  }, [selectedGamesForAnalytics]);
+
+  // Helper function to get gameIDs array
+  const getGameIDs = useCallback(() => {
+    if (shouldUseGameIDs()) {
+      return selectedGamesForAnalytics.map(game => game.gameID);
+    }
+    return null; // Return null for single game to maintain backward compatibility
+  }, [selectedGamesForAnalytics, shouldUseGameIDs]);
+
   // Function to get data from persistent storage only (no fallbacks)
   const getDataForMetric = useCallback((metricName) => {
     const storedData = persistentAnalyticsData[metricName];
@@ -234,18 +275,22 @@ const Overview = () => {
         return isLoading_DAU;
       case "revenue":
         return isLoading_Revenue;
-      case "arpu":
-        return isLoading_ARPU;
+      case "arppu":
+        return isLoading_ARPPU;
       case "newInstalls":
         return isLoading_NewUsers;
       case "revenueDau":
         return isLoading_DAU || isLoading_Revenue; // Both needed for calculation
+      case "retention": // Add retention loading state
+        return isLoading_Retention;
+      case "retentionPrevious": // Add previous retention loading state
+        return isLoading_RetentionPrevious;
       default:
         return false;
     }
-  }, [isLoading_DAU, isLoading_Revenue, isLoading_ARPU, isLoading_NewUsers]);
+  }, [isLoading_DAU, isLoading_Revenue, isLoading_ARPPU, isLoading_NewUsers, isLoading_Retention, isLoading_RetentionPrevious]);
 
-  // API fetch functions
+  // Updated API fetch functions with multiple games support
   async function fetchDAU() {
     if (!selectedGamesForAnalytics.length) return;
     
@@ -255,6 +300,7 @@ const Overview = () => {
     
     const gameID = selectedGamesForAnalytics[0]?.gameID;
     const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
     
     try {
       response = await getDAU({
@@ -268,6 +314,7 @@ const Overview = () => {
         ],
         environment: 'production',
         filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
       });
       
       isError = !response.success;
@@ -300,6 +347,7 @@ const Overview = () => {
     
     const gameID = selectedGamesForAnalytics[0]?.gameID;
     const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
     
     try {
       response = await getRevenue({
@@ -313,6 +361,7 @@ const Overview = () => {
         ],
         environment: 'production',
         filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
       });
       
       isError = !response.success;
@@ -339,18 +388,19 @@ const Overview = () => {
     setIsLoading_Revenue(false);
   }
 
-  async function fetchARPU() {
+  async function fetchARPPU() {
     if (!selectedGamesForAnalytics.length) return;
     
     let response;
     let isError;
-    setIsLoading_ARPU(true);
+    setIsLoading_ARPPU(true);
     
     const gameID = selectedGamesForAnalytics[0]?.gameID;
     const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
     
     try {
-      response = await getARPU({
+      response = await getARPPU({
         gameID: gameID,
         branch: branch,
         includeBranchInAnalytics: false,
@@ -361,6 +411,7 @@ const Overview = () => {
         ],
         environment: 'production',
         filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
       });
       
       isError = !response.success;
@@ -372,16 +423,16 @@ const Overview = () => {
         
         setPersistentAnalyticsData(prev => ({
           ...prev,
-          arpu: processedData
+          arppu: processedData
         }));
         
-        console.log('ARPU data processed:', processedData.length, 'items');
+        console.log('ARPPU data processed:', processedData.length, 'items');
       }
     } catch (error) {
-      console.error('Error fetching ARPU:', error);
+      console.error('Error fetching ARPPU:', error);
     }
     
-    setIsLoading_ARPU(false);
+    setIsLoading_ARPPU(false);
   }
 
   async function fetchNewUsers() {
@@ -393,6 +444,7 @@ const Overview = () => {
     
     const gameID = selectedGamesForAnalytics[0]?.gameID;
     const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
     
     try {
       response = await getNewUsers({
@@ -406,6 +458,7 @@ const Overview = () => {
         ],
         environment: 'production',
         filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
       });
       
       isError = !response.success;
@@ -429,6 +482,103 @@ const Overview = () => {
     setIsLoading_NewUsers(false);
   }
 
+  // Add retention fetch function for last 30 days
+  async function fetchRetention() {
+    if (!selectedGamesForAnalytics.length) return;
+    
+    let response;
+    let isError;
+    setIsLoading_Retention(true);
+    
+    const gameID = selectedGamesForAnalytics[0]?.gameID;
+    const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
+    
+    try {
+      response = await getRetention({
+        gameID: gameID,
+        branch: branch,
+        includeBranchInAnalytics: false,
+        includeEnvironmentInAnalytics: false,
+        filterDate: [
+          dayjs.utc().subtract(30, 'days').toISOString(),
+          dayjs.utc().toISOString(),
+        ],
+        filterDateSecondary: null,
+        environment: 'production',
+        filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
+      });
+      
+      isError = !response.success;
+      if (!isError && response.message) {
+        const processedData = response.message.map(item => ({
+          timestamp: item.timestamp,
+          value: parseFloat(item.retention) || 0
+        }));
+        
+        setPersistentAnalyticsData(prev => ({
+          ...prev,
+          retention: processedData
+        }));
+        
+        console.log('Retention data processed:', processedData.length, 'items');
+      }
+    } catch (error) {
+      console.error('Error fetching Retention:', error);
+    }
+    
+    setIsLoading_Retention(false);
+  }
+
+  // Add retention fetch function for previous 30 days (30-60 days ago)
+  async function fetchRetentionPrevious() {
+    if (!selectedGamesForAnalytics.length) return;
+    
+    let response;
+    let isError;
+    setIsLoading_RetentionPrevious(true);
+    
+    const gameID = selectedGamesForAnalytics[0]?.gameID;
+    const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
+    
+    try {
+      response = await getRetention({
+        gameID: gameID,
+        branch: branch,
+        includeBranchInAnalytics: false,
+        includeEnvironmentInAnalytics: false,
+        filterDate: [
+          dayjs.utc().subtract(60, 'days').toISOString(),
+          dayjs.utc().subtract(30, 'days').toISOString(),
+        ],
+        environment: 'production',
+        filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
+      });
+      
+      isError = !response.success;
+      if (!isError && response.message) {
+        const processedData = response.message.map(item => ({
+          timestamp: item.timestamp,
+          value: parseFloat(item.retention) || 0
+        }));
+        
+        setPersistentAnalyticsData(prev => ({
+          ...prev,
+          retentionPrevious: processedData
+        }));
+        
+        console.log('Retention Previous data processed:', processedData.length, 'items');
+      }
+    } catch (error) {
+      console.error('Error fetching Retention Previous:', error);
+    }
+    
+    setIsLoading_RetentionPrevious(false);
+  }
+
   async function fetchCombinedMetricsByCountry() {
     console.log('🚀 fetchCombinedMetricsByCountry called');
     console.log('selectedGamesForAnalytics:', selectedGamesForAnalytics);
@@ -444,8 +594,9 @@ const Overview = () => {
     
     const gameID = selectedGamesForAnalytics[0]?.gameID;
     const branch = selectedGamesForAnalytics[0]?.branch || 'main';
+    const gameIDs = getGameIDs(); // Get gameIDs array if multiple games selected
     
-    console.log('📤 Making API call with:', { gameID, branch });
+    console.log('📤 Making API call with:', { gameID, branch, gameIDs });
     
     try {
       response = await getCombinedMetricsByCountry({
@@ -459,6 +610,7 @@ const Overview = () => {
         ],
         environment: 'production',
         filterSegments: [],
+        gameIDs: gameIDs, // Pass gameIDs array for multiple games
       });
       
       console.log('📥 API Response:', response);
@@ -481,13 +633,13 @@ const Overview = () => {
         response.message.forEach(country => {
           console.log('Processing country:', country);
           
-          // Installs и Revenue данные
+          // Installs and Revenue data
           newCountryData.installs[country.countryName] = country.installs || 0;
           newCountryData.revenue[country.countryName] = country.revenue || 0;
           
-          // Retention данные для всех периодов
+          // Retention data for all periods
           if (country.retention) {
-            // Обрабатываем каждый период retention если он есть в данных
+            // Process each retention period if available in data
             ['d1', 'd3', 'd7', 'd30'].forEach(period => {
               if (country.retention[period]) {
                 const retentionValue = typeof country.retention[period] === 'string' 
@@ -538,28 +690,42 @@ const Overview = () => {
     }
   }, [persistentAnalyticsData.revenue, persistentAnalyticsData.dau]);
 
-  // Main fetch function
+  // Main fetch function - Updated to include retention and multiple games support
   async function fetchAnalyticsData() {
     if (isFetchingData.current === true) return;
     isFetchingData.current = true;
 
     try {
+      // Log information about current selection
+      const gameIDs = getGameIDs();
+      console.log('🔄 Starting analytics data fetch for:', {
+        gamesCount: selectedGamesForAnalytics.length,
+        gameIDs: gameIDs,
+        usingMultipleGames: shouldUseGameIDs()
+      });
+
       await Promise.all([
         fetchCombinedMetricsByCountry(),
         fetchDAU(),
         fetchRevenue(),
-        fetchARPU(),
+        fetchARPPU(),
         fetchNewUsers(),
+        fetchRetention(), // Add retention fetch
+        fetchRetentionPrevious(), // Add previous retention fetch
       ]);
       
-      console.log('All analytics data fetched successfully');
+      console.log('✅ All analytics data fetched successfully');
       
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("❌ Error fetching data:", error);
     } finally {
       isFetchingData.current = false;
     }
   }
+
+  // Add memoized callbacks to prevent unnecessary re-renders
+  const memoizedShouldUseGameIDs = useMemo(() => shouldUseGameIDs(), [shouldUseGameIDs]);
+  const memoizedGameIDs = useMemo(() => getGameIDs(), [getGameIDs]);
 
   // Process Revenue/DAU when revenue and DAU data changes
   useEffect(() => {
@@ -678,16 +844,34 @@ const Overview = () => {
     }
   }, [navigationMode, selectedStudio, studios, selectedStudiosForAnalytics]);
 
-  // Fetch data when games change
+  // Enhanced debug logging with multiple games support
   useEffect(() => {
-    console.log('Games changed, current games:', selectedGamesForAnalytics);
+    console.log('=== MULTIPLE GAMES DEBUG ===');
+    console.log('Selected games count:', selectedGamesForAnalytics.length);
+    console.log('Should use gameIDs:', memoizedShouldUseGameIDs);
+    console.log('GameIDs array:', memoizedGameIDs);
+    console.log('Games list:', selectedGamesForAnalytics.map(g => ({ 
+      gameID: g.gameID, 
+      gameName: g.gameName || 'Unknown' 
+    })));
+  }, [selectedGamesForAnalytics, memoizedShouldUseGameIDs, memoizedGameIDs]);
+
+  // Update the effect that triggers data fetching
+  useEffect(() => {
+    console.log('🎮 Games selection changed:', {
+      gamesCount: selectedGamesForAnalytics.length,
+      gamesList: selectedGamesForAnalytics.map(g => g.gameID),
+      shouldUseMultiple: memoizedShouldUseGameIDs
+    });
+    
     if (selectedGamesForAnalytics.length > 0) {
-      console.log('Calling fetchAnalyticsData');
+      console.log('📊 Calling fetchAnalyticsData for', 
+        memoizedShouldUseGameIDs ? 'multiple games' : 'single game');
       fetchAnalyticsData();
     } else {
-      console.log('No games selected, not calling API');
+      console.log('⚠️ No games selected, skipping analytics fetch');
     }
-  }, [selectedGamesForAnalytics]);
+  }, [selectedGamesForAnalytics, memoizedShouldUseGameIDs]);
 
   // Handle navigation between publisher and studio views
   const handleNavigateToStudio = useCallback(
@@ -786,14 +970,17 @@ const Overview = () => {
     setCountryPopover({ open: false, countryName: "", anchorPosition: null });
   }, []);
 
-  // Get analytics title and background
+  // Update analytics title to reflect multiple games
   const getAnalyticsTitle = useMemo(() => {
     if (navigationMode === "publisher") {
       return selectedStudio ? selectedStudio.studioName : "All Studios";
     } else {
+      if (selectedGamesForAnalytics.length > 1) {
+        return `${selectedGamesForAnalytics.length} Games Selected`;
+      }
       return game ? game.gameName : "All Games";
     }
-  }, [navigationMode, selectedStudio, game]);
+  }, [navigationMode, selectedStudio, game, selectedGamesForAnalytics]);
 
   // Get available games and studios for selector based on current mode
   const selectorData = useMemo(() => {
@@ -876,7 +1063,7 @@ const Overview = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: "application/json",
     });
-    const url = window.URL.createObjectURL(url);
+    const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `analytics-${currentMetric}-${dayjs.utc().format("YYYY-MM-DD")}.json`;
@@ -884,15 +1071,31 @@ const Overview = () => {
     window.URL.revokeObjectURL(url);
   }, [dashboardSettings.charts, getAnalyticsTitle, currentMetric]);
 
-  // Get table data
+  // Updated Get table data with special handling for retention
   const getTableData = useMemo(() => {
-    // Find first chart with data to get timestamp
+    // Special handling for retention metric in table mode
+    if (currentMetric === "retention") {
+      const retentionData = persistentAnalyticsData[selectedRetentionPeriod];
+      
+      if (!retentionData || retentionData.length === 0) {
+        return [];
+      }
+
+      const tableData = retentionData.map(item => ({
+        date: item.timestamp,
+        [selectedRetentionPeriod]: item.value || 0
+      }));
+
+      return tableData;
+    }
+
+    // Original logic for other metrics
     const chartWithData = dashboardSettings.charts.find(
       chart => chart.data?.data?.length > 0
     );
     
     if (!chartWithData) {
-      return []; // If no data available at all
+      return [];
     }
 
     const maxLength = Math.max(
@@ -902,7 +1105,6 @@ const Overview = () => {
 
     for (let i = 0; i < maxLength; i++) {
       const row = {
-        // Take date from chart with data, not from the first chart
         date: chartWithData.data.data[i]?.timestamp || "",
         ...dashboardSettings.charts.reduce((acc, chart) => {
           acc[chart.metricName] = chart.data?.data?.[i]?.value || 0;
@@ -912,8 +1114,20 @@ const Overview = () => {
       tableData.push(row);
     }
 
-    return tableData.reverse();
-  }, [dashboardSettings.charts]);
+    return tableData;
+  }, [currentMetric, selectedRetentionPeriod, persistentAnalyticsData, dashboardSettings.charts]);
+
+  // Get table headers based on current metric
+  const getTableHeaders = useMemo(() => {
+    if (currentMetric === "retention") {
+      return [
+        "Date",
+        selectedRetentionPeriod === "retention" ? "Retention (Last 30 Days)" : "Retention (Previous 30 Days)"
+      ];
+    }
+    
+    return ["Date", ...dashboardSettings.charts.map((chart) => chart.name)];
+  }, [currentMetric, selectedRetentionPeriod, dashboardSettings.charts]);
 
   // Debug logging
   useEffect(() => {
@@ -1017,7 +1231,32 @@ const Overview = () => {
           <Collapse in={analyticsExpanded}>
             <Box className={analyticsStyles.panelContent}>
               {viewMode === "charts" ? (
-                <Box className={analyticsStyles.chartsGrid}>
+                <Box 
+                  sx={{
+                    display: 'grid',
+                    gap: 2,
+                    mt: 2,
+                    // Adaptive grid based on number of charts
+                    gridTemplateColumns: (() => {
+                      const chartCount = dashboardSettings.charts.length;
+                      
+                      if (chartCount === 1) {
+                        return { xs: '1fr', md: 'minmax(300px, 600px)' };
+                      } else if (chartCount === 2) {
+                        return { xs: '1fr', md: 'repeat(2, 1fr)' };
+                      } else if (chartCount === 3) {
+                        return { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, minmax(250px, 1fr))' };
+                      } else {
+                        return { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(auto-fit, minmax(240px, 1fr))' };
+                      }
+                    })(),
+                    justifyContent: dashboardSettings.charts.length === 1 ? 'center' : 'flex-start',
+                    maxWidth: '100%',
+                    // Add maximum height for the grid container
+                    maxHeight: '70vh', // Maximum 70% of viewport height
+                    overflow: 'visible', // Allow overflow if needed
+                  }}
+                >
                   {dashboardSettings.charts.map((chartConfig) => {
                     const IconComponent = chartConfig.icon;
                     const currentValue =
@@ -1031,21 +1270,67 @@ const Overview = () => {
                           ? "negative"
                           : "neutral";
 
+                    // Colors for delta values
+                    const deltaColor = 
+                      deltaValue > 0 ? '#22c55e' : 
+                      deltaValue < 0 ? '#ef4444' : '#6b7280';
+
                     return (
                       <Paper
                         key={chartConfig.chartID}
-                        className={analyticsStyles.chartCard}
+                        sx={{
+                          background: 'white',
+                          borderRadius: '12px',
+                          p: 2.5,
+                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                          border: '1px solid #e0e0e0',
+                          transition: 'box-shadow 0.2s ease',
+                          minHeight: { xs: 150, md: 200 },
+                          maxHeight: { xs: 200, md: 300 }, // Add maximum height constraint
+                          display: 'flex',
+                          flexDirection: 'column',
+                          '&:hover': {
+                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+                          }
+                        }}
                       >
-                        <Box className={analyticsStyles.chartHeader}>
+                        {/* Header with icon and title */}
+                        <Box 
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            mb: 1.5,
+                            gap: 1,
+                          }}
+                        >
                           <IconComponent
-                            className={analyticsStyles.chartIcon}
+                            sx={{
+                              fontSize: 20,
+                              color: '#666',
+                            }}
                           />
-                          <Typography className={analyticsStyles.chartTitle}>
+                          <Typography 
+                            sx={{
+                              fontSize: 14,
+                              fontWeight: 500,
+                              color: '#333',
+                              lineHeight: 1.2,
+                            }}
+                          >
                             {chartConfig.name}
                           </Typography>
                         </Box>
 
-                        <Typography className={analyticsStyles.chartValue}>
+                        {/* Current value */}
+                        <Typography 
+                          sx={{
+                            fontSize: { xs: 24, md: 28 },
+                            fontWeight: 700,
+                            color: '#1a1a1a',
+                            my: 1,
+                            lineHeight: 1.1,
+                          }}
+                        >
                           {formatValue(
                             currentValue,
                             chartConfig.format,
@@ -1053,9 +1338,15 @@ const Overview = () => {
                           )}
                         </Typography>
 
+                        {/* Delta value */}
                         {chartConfig.showDelta && (
                           <Box
-                            className={`${analyticsStyles.chartDelta} ${analyticsStyles[deltaClass]}`}
+                            sx={{
+                              fontSize: 14,
+                              fontWeight: 500,
+                              mb: 2,
+                              color: deltaColor,
+                            }}
                           >
                             <span>
                               {deltaValue >= 0 ? "+" : ""}
@@ -1068,8 +1359,16 @@ const Overview = () => {
                           </Box>
                         )}
 
-                        <Box className={analyticsStyles.chartWidget}>
+                        {/* Chart */}
+                        <Box 
+                          sx={{
+                            flex: 1,
+                            minHeight: 120,
+                            mt: 'auto',
+                          }}
+                        >
                           <ChartWidget
+                            key={`${chartConfig.chartID}-${viewMode}-${currentMetric}`}
                             config={{
                               chartID: chartConfig.chartID,
                               name: chartConfig.name,
@@ -1082,6 +1381,7 @@ const Overview = () => {
                             dateRange={defaultDate}
                             variant="card"
                             isLoading={getLoadingStateForMetric(chartConfig.metricName)}
+                            forceRecreate={viewMode}
                           />
                         </Box>
                       </Paper>
@@ -1090,22 +1390,91 @@ const Overview = () => {
                 </Box>
               ) : (
                 <Box>
-                  <Box className={analyticsStyles.tableHeader}>
-                    <Typography
-                      variant="h6"
-                      className={analyticsStyles.tableTitle}
+                  <Box 
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      mb: 2,
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontSize: 18,
+                          fontWeight: 600,
+                          color: '#333',
+                        }}
+                      >
+                        {currentMetric.charAt(0).toUpperCase() +
+                          currentMetric.slice(1)}{" "}
+                        Data - {getAnalyticsTitle}
+                      </Typography>
+                      
+                      {/* Add retention period selector for table view */}
+                      {currentMetric === "retention" && (
+                        <ToggleButtonGroup
+                          value={selectedRetentionPeriod}
+                          exclusive
+                          onChange={(e, value) => {
+                            if (value) setSelectedRetentionPeriod(value);
+                          }}
+                          size="small"
+                          sx={{
+                            '& .MuiToggleButton-root': {
+                              textTransform: 'none',
+                              fontSize: 12,
+                              px: 2,
+                              py: 0.5,
+                              borderColor: '#e0e0e0',
+                              color: '#666',
+                              backgroundColor: 'white',
+                              '&.Mui-selected': {
+                                backgroundColor: '#f0f0f0',
+                                color: '#333',
+                                borderColor: '#d0d0d0',
+                                '&:hover': {
+                                  backgroundColor: '#e8e8e8',
+                                }
+                              },
+                              '&:hover': {
+                                borderColor: '#d0d0d0',
+                                backgroundColor: '#f5f5f5',
+                              }
+                            }
+                          }}
+                        >
+                          <ToggleButton value="retention">
+                            Last 30 Days
+                          </ToggleButton>
+                          <ToggleButton value="retentionPrevious">
+                            Previous 30 Days
+                          </ToggleButton>
+                        </ToggleButtonGroup>
+                      )}
+                    </Box>
+                    
+                    <Box 
+                      sx={{
+                        display: 'flex',
+                        gap: 1,
+                      }}
                     >
-                      {currentMetric.charAt(0).toUpperCase() +
-                        currentMetric.slice(1)}{" "}
-                      Data - {getAnalyticsTitle}
-                    </Typography>
-                    <Box className={analyticsStyles.tableActions}>
                       <Button
                         variant="outlined"
                         startIcon={<DownloadIcon />}
                         onClick={exportToCSV}
-                        className={analyticsStyles.exportButton}
                         size="small"
+                        sx={{
+                          textTransform: 'none',
+                          borderColor: '#e0e0e0',
+                          color: '#666',
+                          '&:hover': {
+                            borderColor: '#d0d0d0',
+                            backgroundColor: '#f5f5f5',
+                          }
+                        }}
                       >
                         CSV
                       </Button>
@@ -1113,41 +1482,81 @@ const Overview = () => {
                         variant="outlined"
                         startIcon={<DownloadIcon />}
                         onClick={exportToJSON}
-                        className={analyticsStyles.exportButton}
                         size="small"
+                        sx={{
+                          textTransform: 'none',
+                          borderColor: '#e0e0e0',
+                          color: '#666',
+                          '&:hover': {
+                            borderColor: '#d0d0d0',
+                            backgroundColor: '#f5f5f5',
+                          }
+                        }}
                       >
                         JSON
                       </Button>
                     </Box>
                   </Box>
 
-                  <TableContainer className={analyticsStyles.tableContainer}>
+                  <TableContainer 
+                    sx={{
+                      maxHeight: 400,
+                      border: '1px solid #e0e0e0',
+                      borderRadius: 2,
+                    }}
+                  >
                     <Table stickyHeader size="small">
                       <TableHead>
                         <TableRow>
-                          <TableCell>Date</TableCell>
-                          {dashboardSettings.charts.map((chart) => (
-                            <TableCell key={chart.chartID} align="right">
-                              {chart.name}
+                          {getTableHeaders.map((header, index) => (
+                            <TableCell 
+                              key={index}
+                              align={index === 0 ? "left" : "right"}
+                              sx={{ 
+                                fontWeight: 600,
+                                backgroundColor: '#f8f9fa',
+                              }}
+                            >
+                              {header}
                             </TableCell>
                           ))}
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {getTableData.slice(0, 15).map((row, index) => (
-                          <TableRow key={index}>
+                          <TableRow 
+                            key={index}
+                            sx={{
+                              '&:nth-of-type(odd)': {
+                                backgroundColor: '#f9f9f9',
+                              },
+                              '&:hover': {
+                                backgroundColor: '#f0f0f0',
+                              }
+                            }}
+                          >
                             <TableCell>
                               {dayjs.utc(row.date).format("MMM DD, YYYY")}
                             </TableCell>
-                            {dashboardSettings.charts.map((chart) => (
-                              <TableCell key={chart.chartID} align="right">
+                            {currentMetric === "retention" ? (
+                              <TableCell align="right">
                                 {formatValue(
-                                  row[chart.metricName] || 0,
-                                  chart.format,
-                                  chart.formatPosition
+                                  row[selectedRetentionPeriod] || 0,
+                                  "",
+                                  "start"
                                 )}
                               </TableCell>
-                            ))}
+                            ) : (
+                              dashboardSettings.charts.map((chart) => (
+                                <TableCell key={chart.chartID} align="right">
+                                  {formatValue(
+                                    row[chart.metricName] || 0,
+                                    chart.format,
+                                    chart.formatPosition
+                                  )}
+                                </TableCell>
+                              ))
+                            )}
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1171,7 +1580,9 @@ const Overview = () => {
       exportToCSV,
       exportToJSON,
       getTableData,
+      getTableHeaders,
       getLoadingStateForMetric,
+      selectedRetentionPeriod,
     ]
   );
 

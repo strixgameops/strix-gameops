@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export const Clustering = model("Clustering", {
+const clusteringSchema = new Schema({
   gameID: String,
   branch: String,
   stage: Number,
@@ -17,3 +17,8 @@ export const Clustering = model("Clustering", {
     default: Date.now,
   },
 });
+
+clusteringSchema.index({ gameID: 1, branch: 1 });
+clusteringSchema.index({ gameID: 1, branch: 1, clusterUID: 1 });
+
+export const Clustering = model("Clustering", clusteringSchema);

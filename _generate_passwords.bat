@@ -47,7 +47,7 @@ if exist "seed\mongo-init\init-user.js" (
 )
 
 REM Update .env files
-set "env_files=env\.env-strix-game-backend-analytics env\.env-strix-game-backend-cacher env\.env-strix-game-backend-deployment env\.env-strix-game-backend-geocoder env\.env-strix-game-backend-ingester env\.env-strix-game-backend-liveservices env\.env-strix-web env\.env-strix-web-backend .env-strix-game-backend-analytics .env-strix-game-backend-cacher .env-strix-game-backend-deployment .env-strix-game-backend-geocoder .env-strix-game-backend-ingester .env-strix-game-backend-liveservices .env-strix-web .env-strix-web-backend"
+set "env_files=env\.env-strix-game-backend-analytics env\.env-strix-game-backend-cacher env\.env-strix-game-backend-deployment env\.env-strix-game-backend-geocoder env\.env-strix-game-backend-ingester env\.env-strix-game-backend-liveservices env\.env-strix-web env\.env-strix-web-backend  env\.env-strix-web-backend-alerts-manager  env\.env-strix-web-backend-demo-generator .env-strix-game-backend-analytics .env-strix-game-backend-cacher .env-strix-game-backend-deployment .env-strix-game-backend-geocoder .env-strix-game-backend-ingester .env-strix-game-backend-liveservices .env-strix-web .env-strix-web-backend .env-strix-web-backend-alerts-manager .env-strix-web-backend-demo-generator"
 
 for %%f in (!env_files!) do (
     call :update_env_file "%%f"

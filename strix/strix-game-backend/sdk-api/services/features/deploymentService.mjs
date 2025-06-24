@@ -15,7 +15,7 @@ export class DeploymentService {
     this.cacherService = this.moduleContainer.get("cacher");
     this.segmentService = this.moduleContainer.get("segment");
     this.fcmService = this.moduleContainer.getOptionalService("fcm");
-    
+
     this.initialized = true;
     console.log("DeploymentService initialized");
   }
@@ -65,11 +65,12 @@ export class DeploymentService {
     clientItemHashes
   ) {
     try {
-      const { version, segmentID } = await this.getIntendedConfigVersionForPlayer(
-        gameID,
-        environment,
-        clientID
-      );
+      const { version, segmentID } =
+        await this.getIntendedConfigVersionForPlayer(
+          gameID,
+          environment,
+          clientID
+        );
 
       // Get all current content
       const allContent = await this.cacherService.getCachedContent(
@@ -154,7 +155,7 @@ export class DeploymentService {
         totalChecksum,
         itemHashes,
       };
-    }
+    };
 
     await Promise.all(
       tableNames.map(async (name) => {
@@ -175,7 +176,10 @@ export class DeploymentService {
     return result;
   }
   async getIntendedConfigVersionForPlayer(gameID, environment, clientID) {
-    const versions = await this.cacherService.getCurrentDeploymentVersions(gameID, environment);
+    const versions = await this.cacherService.getCurrentDeploymentVersions(
+      gameID,
+      environment
+    );
     if (!versions || versions.length === 0) {
       return "";
     }
@@ -185,7 +189,7 @@ export class DeploymentService {
       { branch: 1, segments: 1 }
     ).lean();
     let targetVersion = "";
-    let targetConfigSegmentID = "";
+    let targetConfigSegmentID = "everyone";
     let alreadyInSomeVersion = false;
     if (player) {
       targetVersion = player.branch;
@@ -229,18 +233,13 @@ export class DeploymentService {
       }
     }
 
-    // Get all segments we have configured our model for
-    let segments = await this.cacherService.getCachedBalanceModelSegments(gameID, targetVersion);
-    // Reverse the array so "everyone" segment is at the bottom and it's the last we check against
-    segments = segments.reverse();
-    for (const s of segments) {
-      // Check until player has a segment from model segments. If so, set and break;
-      // The config for this exact segment will be given after that.
-      if (player.segments.some(id === s.segmentID)) {
-        targetConfigSegmentID = s.segmentID;
-        break;
-      }
+    const deploymentServiceFull =
+      this.moduleContainer.getOptionalService("deploymentFull");
+
+    if (deploymentServiceFull && deploymentServiceFull.chooseSegment) {
+      targetConfigSegmentID = await deploymentServiceFull.chooseSegment(gameID, targetVersion, player);
     }
+
     if (!targetConfigSegmentID) {
       // Should not happen but just in case
       targetConfigSegmentID = "everyone";
