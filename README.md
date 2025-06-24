@@ -148,7 +148,7 @@ Strix backends output Prometheus-compatible metrics from /metrics endpoint.
 
 ### Performance Problems
 
-It is not a simple task to make community edition available for a decent load without Kubernetes and orchestration. All `.env` files are already configured for the best balance of performance and stability. But below you can find some tips of you experience instability.
+It is not a simple task to make community edition available for a decent load without Kubernetes and orchestration. All `.env` files are already configured for the best balance of performance and stability. But below you can find some tips if you experience instability.
 
 1. **Analytics events processing is too slow in game-backend:** This may happen if you send too many events, or they are linked with too many Player Warehouse elements. Consider cutting the load or contacting Strix team so we can transfer you to a paid plan and provide a managed and scalable solution. If you cannot do that yet, as a last resort, you can try to increase the amount of `EVENTS_PULSAR_LISTENERS` in analytics game-backends, but this can lead to data loss in case of problems linked to higher memory consumption. Since the backend is created using NodeJS, processing isn't multithreaded, so increasing the amount of events listeners will only increase the load on this particular process. When the capability of Pulsar listeners will exceed your CPU and RAM capabilities, you wil eventually start catching errors and lose data.
 2. **Analytics queries are too slow:** This happens when you have too complex queries (A/B test results tend to take a long time), too much data in your DB, or too slow disk/RAM. Moving your DB to a server with SSD M2 storage and a good amount of fast RAM may help.
