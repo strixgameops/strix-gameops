@@ -5,12 +5,17 @@
 
 Strix GameOps is a high-load, microservices-based game operations platform that provides analytics, deployment management, geocoding, data ingestion and live services capabilities.
 
+## Architecture 
+
+Strix was created to scale horizontally using Apache Pulsar, Docker and Kubernetes. The most loaded type of server is game-backend, which is a polymorph with different roles. The approximate system design can be seen down below. Though, scaling is not supported out-of-the-box by open-source community edition, it is done in Strix team's own setup.
+
+![microservice](https://storage.googleapis.com/strix-content/pulsar-architecture-screenshot.png)
+
 ## Prerequisites
 
 ### Required Software
 - **Docker**: Version 20.10 or higher
 - **Docker Compose**: Version 2.0 or higher
-- **Git**: For cloning the repository
 
 ### System Requirements
 
@@ -166,7 +171,30 @@ For additional support:
 - **Documentation**: Check the repository wiki
 - **Logs**: Always include relevant logs when reporting issues
 
+## Development
 
+#### .env
+Before starting mentioned services, make sure to provide them all the necessary .env variables. For frontend, it's located in app/public/js/env.js (consumed from index.html).
+Backend servers look for .env files in their root folder.
+
+#### Queue interference
+When sending analytics events or other stuff, you will surely generate some events for Pulsar. Make sure to create a separate Mongo DB, Postgres DB and Pulsar development tenant with duplicated topics and namespaces, otherwise you may run into a problem where production backends process events you send locally.
+
+#### Game-backend roles
+Game-backends can have different roles. Role "messenger" is not available in community edition because it is linked with the module that does not exist there. The role called "development" that runs all modules at once and acts as all-in-one role, can be used to develop.
+
+#### Starting
+You can start strix-web using Vite, by typing "vite --host" or "npm run dev", whatever you prefer. "vite build" to build the website.
+To start web-backend or any game-backend, type "npm run start".
+
+#### SDK
+To test SDK, change StrixSDK/Runtime/Models/M_ApiEndpoints.cs server variable to your local development host.
+
+#### Testing
+Web-backend has a file called demoGenerationService.mjs at web-api/services/demo/. Is it made to simulate a load on a game backends. But since it is used by Strix demo game, which is not included in community edition, and it is extremely hard-coded, you will need to make a dummy game with test entities/offers and replace currently hardcoded IDs with those IDs from MongoDB Compass. Role "demoGenerator" is available on web-backend, it makes backend send data to a given game-backend-analytics. It simulates IAPs, offer events, economy events and many more, but not all of them will properly work in community edition.
+Game backend also offers autotests, but they are very limited. Frankly, Strix cannot really be tested by simple autotests, so the best way is to redirect a percentage of trafic to an updated containers, and gradually increase the percentage.
+
+## License
 This project is licensed under a custom license based on the Mozilla Public License 2.0.  
 Commercial usage is allowed, but resale or redistribution of the code as a product is prohibited.  
 See the [LICENSE](./LICENSE.md) file for details.
