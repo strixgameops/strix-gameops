@@ -17,6 +17,10 @@ Strix was created to scale horizontally using Apache Pulsar, Docker and Kubernet
 - **Docker**: Version 20.10 or higher
 - **Docker Compose**: Version 2.0 or higher
 
+How to install Docker Desktop: 
+   - Windows: https://docs.docker.com/desktop/setup/install/windows-install/
+   - Linux: https://docs.docker.com/desktop/setup/install/linux/
+
 ### System Requirements
 
 **Minimum Requirements:**
