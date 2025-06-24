@@ -64,20 +64,6 @@ Make sure not to delete passwords.txt (you can just leave it empty, though) if y
 
 ### 3. Environment Configuration
 
-Verify the environment variables in files in the `./env/` directory:
-
-- `.env-strix-game-backend-analytics`
-- `.env-strix-game-backend-deployment`
-- `.env-strix-game-backend-geocoder`
-- `.env-strix-game-backend-ingester`
-- `.env-strix-game-backend-liveservices`
-- `.env-strix-game-backend-cacher`
-- `.env-strix-web-backend-alerts-manager`
-- `.env-strix-web-backend`
-- `.env-strix-web`
-
-**Important:** Keep these files secure as they contain database credentials. You may want to run separate secret registry for that.
-
 Make sure to configure the following variables in `.env-strix-web-backend`:
 - FB_ASDK_TYPE
 - FB_ASDK_PROJECT_ID
@@ -91,7 +77,21 @@ Make sure to configure the following variables in `.env-strix-web-backend`:
 - FB_ASDK_CLIENT_CERT
 - FB_ASDK_UNIVERSE_DOMAIN
 
-Strix is using Firebase Admin SDK to operate on Google Cloud Storage. This is necessary to upload/download any files, such as offers icons or remote config files. Using external file service is unavoidable because players have to somehow download configurations. Amazon S3 or custom CDNs aren't supported in community edition.
+You can get them from Firebase Admin credentials JSON file. Strix is using Firebase Admin SDK to operate on Google Cloud Storage. This is necessary to upload/download any files, such as offers icons or remote config files. Using external file service is unavoidable because players have to somehow download configurations. Amazon S3 or custom CDNs aren't supported in community edition.
+
+Verify the uncommented environment variables are all set to valid values in files in the `./env/` directory:
+
+- `.env-strix-game-backend-analytics`
+- `.env-strix-game-backend-deployment`
+- `.env-strix-game-backend-geocoder`
+- `.env-strix-game-backend-ingester`
+- `.env-strix-game-backend-liveservices`
+- `.env-strix-game-backend-cacher`
+- `.env-strix-web-backend-alerts-manager`
+- `.env-strix-web-backend`
+- `.env-strix-web`
+
+**Important:** Keep these files secure as they contain database credentials. You may want to run separate secret registry for that.
 
 ## Starting the System
 
