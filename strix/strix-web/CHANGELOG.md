@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 9.0.44
+2025-06-24
+
+### Fixes
+
+- applied conditional hiding to some stuff on profile page (213c54a9d670cf78b8d03d17aff00012d4568a63)
+- env (e8b935f759f977f286edd3cf5f7de3c714362848)
+
 ## 9.0.43
 2025-06-24
 

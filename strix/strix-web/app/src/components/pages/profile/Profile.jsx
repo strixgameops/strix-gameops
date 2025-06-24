@@ -25,7 +25,7 @@ import {
   Stack,
   Paper,
   Grid,
-  Divider
+  Divider,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import imageCompression from "browser-image-compression";
@@ -40,7 +40,7 @@ import {
   Warning as WarningIcon,
   Security as SecurityIcon,
   Settings as SettingsIcon,
-  Business as BusinessIcon
+  Business as BusinessIcon,
 } from "@mui/icons-material";
 import { useAlert } from "@strix/alertsContext";
 import { getAuthInstance } from "../../firebase/firebase.jsx";
@@ -52,130 +52,137 @@ import HardConfirmModal from "shared/HardConfirmModal/HardConfirmModal";
 
 // Styled Components
 const StyledContainer = styled(Container)(({ theme }) => ({
-  background: '#fafbfc',
-  minHeight: '100vh',
-  paddingTop: '32px',
-  paddingBottom: '15rem',
-  overflowY: "scroll"
+  background: "#fafbfc",
+  minHeight: "100vh",
+  paddingTop: "32px",
+  paddingBottom: "15rem",
+  overflowY: "scroll",
 }));
 
-const GradientCard = styled(Card)(({ theme, variant = 'default' }) => {
+const GradientCard = styled(Card)(({ theme, variant = "default" }) => {
   const variants = {
     default: {
-      background: '#ffffff',
+      background: "#ffffff",
       border: `2px solid ${theme.palette.primary.main}30`,
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
     },
     elevated: {
-      background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+      background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
       border: `2px solid ${theme.palette.primary.main}40`,
-      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+      boxShadow: "0 8px 30px rgba(0, 0, 0, 0.12)",
     },
     danger: {
-      background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
-      border: '2px solid #ef444440',
-      boxShadow: '0 4px 20px rgba(239, 68, 68, 0.15)',
-    }
+      background: "linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)",
+      border: "2px solid #ef444440",
+      boxShadow: "0 4px 20px rgba(239, 68, 68, 0.15)",
+    },
   };
 
   return {
     ...variants[variant],
-    borderRadius: '16px',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    '&:hover': {
-      transform: 'translateY(-4px)',
-      boxShadow: variants[variant].boxShadow.replace('0.08)', '0.15)').replace('0.12)', '0.20)').replace('0.15)', '0.25)'),
+    borderRadius: "16px",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "&:hover": {
+      transform: "translateY(-4px)",
+      boxShadow: variants[variant].boxShadow
+        .replace("0.08)", "0.15)")
+        .replace("0.12)", "0.20)")
+        .replace("0.15)", "0.25)"),
     },
   };
 });
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
-  background: '#ffffff',
-  borderRadius: '12px',
+  background: "#ffffff",
+  borderRadius: "12px",
   border: `2px solid ${theme.palette.primary.main}20`,
-  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
-  marginBottom: '32px',
-  '& .MuiTabs-indicator': {
-    display: 'none',
+  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
+  marginBottom: "32px",
+  "& .MuiTabs-indicator": {
+    display: "none",
   },
-  '& .MuiTabs-flexContainer': {
-    padding: '6px',
+  "& .MuiTabs-flexContainer": {
+    padding: "6px",
   },
-  '& .MuiTab-root': {
-    borderRadius: '8px',
-    margin: '0 4px',
-    textTransform: 'none',
+  "& .MuiTab-root": {
+    borderRadius: "8px",
+    margin: "0 4px",
+    textTransform: "none",
     fontWeight: 600,
-    minHeight: '44px',
-    color: '#475569',
-    transition: 'all 0.2s ease',
-    '&:hover': {
+    minHeight: "44px",
+    color: "#475569",
+    transition: "all 0.2s ease",
+    "&:hover": {
       background: `${theme.palette.primary.main}10`,
       color: theme.palette.primary.main,
     },
-    '&.Mui-selected': {
+    "&.Mui-selected": {
       background: theme.palette.primary.main,
-      color: '#ffffff',
+      color: "#ffffff",
       boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
-    }
-  }
+    },
+  },
 }));
 
-const IconContainer = styled(Box)(({ theme, color = 'primary', size = 'medium' }) => {
+const IconContainer = styled(Box)(({
+  theme,
+  color = "primary",
+  size = "medium",
+}) => {
   const colors = {
     primary: theme.palette.primary.main,
-    success: '#22c55e',
-    error: '#ef4444',
-    warning: '#f59e0b',
+    success: "#22c55e",
+    error: "#ef4444",
+    warning: "#f59e0b",
   };
 
   const sizes = {
-    small: { width: '36px', height: '36px' },
-    medium: { width: '44px', height: '44px' },
-    large: { width: '52px', height: '52px' },
+    small: { width: "36px", height: "36px" },
+    medium: { width: "44px", height: "44px" },
+    large: { width: "52px", height: "52px" },
   };
 
   return {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     ...sizes[size],
-    borderRadius: '12px',
+    borderRadius: "12px",
     background: `${colors[color]}15`,
     color: colors[color],
     border: `2px solid ${colors[color]}30`,
-    transition: 'all 0.3s ease',
+    transition: "all 0.3s ease",
   };
 });
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: '180px',
-  height: '180px',
+  width: "180px",
+  height: "180px",
   border: `4px solid ${theme.palette.primary.main}30`,
   boxShadow: `0 8px 25px ${theme.palette.primary.main}20`,
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'scale(1.05)',
+  transition: "all 0.3s ease",
+  "&:hover": {
+    transform: "scale(1.05)",
     border: `4px solid ${theme.palette.primary.main}60`,
     boxShadow: `0 12px 35px ${theme.palette.primary.main}30`,
-  }
+  },
 }));
 
 const EditableField = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  '& .MuiTextField-root, & .MuiFormControl-root': {
-    '& .MuiOutlinedInput-root': {
-      borderRadius: '12px',
-      '& fieldset': {
-        borderColor: '#d1d5db',
-        borderWidth: '2px',
+  position: "relative",
+  "& .MuiTextField-root, & .MuiFormControl-root": {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "12px",
+      "& fieldset": {
+        borderColor: "#d1d5db",
+        borderWidth: "2px",
       },
-      '&:hover fieldset': {
+      "&:hover fieldset": {
         borderColor: `${theme.palette.primary.main}60`,
       },
-      '&.Mui-focused fieldset': {
+      "&.Mui-focused fieldset": {
         borderColor: theme.palette.primary.main,
-        borderWidth: '2px',
+        borderWidth: "2px",
         boxShadow: `0 0 0 3px ${theme.palette.primary.main}20`,
       },
     },
@@ -229,7 +236,8 @@ function Profile() {
   const [confirmCodeEmail, setConfirmCodeEmail] = useState("");
   const [localPassword, setLocalPassword] = useState("*********************");
   const [changingLocalPassword, setChangingLocalPassword] = useState(false);
-  const [confirmingChangePassword, setConfirmingChangePassword] = useState(false);
+  const [confirmingChangePassword, setConfirmingChangePassword] =
+    useState(false);
   const [confirmCodePassword, setConfirmCodePassword] = useState("");
   const [publishers, setPublishers] = useState([]);
   const [tabs, setTabs] = React.useState(0);
@@ -510,78 +518,93 @@ function Profile() {
         onConfirm={confirmUserDeletion}
       />
 
-      <Box sx={{ mb: 4 }}>
-        <StyledTabs
-          value={tabs}
-          onChange={handleTabChange}
-          aria-label="profile navbar tabs"
-        >
-          <Tab 
-            label="User Settings" 
-            icon={<SettingsIcon />} 
-            iconPosition="start"
-          />
-          <Tab 
-            label="Organizations" 
-            icon={<BusinessIcon />} 
-            iconPosition="start"
-          />
-        </StyledTabs>
-      </Box>
+      {window.__env.edition !== "community" && (
+        <Box sx={{ mb: 4 }}>
+          <StyledTabs
+            value={tabs}
+            onChange={handleTabChange}
+            aria-label="profile navbar tabs"
+          >
+            <Tab
+              label="User Settings"
+              icon={<SettingsIcon />}
+              iconPosition="start"
+            />
+            <Tab
+              label="Organizations"
+              icon={<BusinessIcon />}
+              iconPosition="start"
+            />
+          </StyledTabs>
+        </Box>
+      )}
 
       <CustomTabPanel value={tabs} index={0}>
         <Stack spacing={4}>
           {/* Avatar and Basic Info */}
           <GradientCard variant="elevated">
             <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+              >
                 <IconContainer color="primary">
                   <PersonIcon />
                 </IconContainer>
                 Profile Information
               </Typography>
-              
+
               <Grid container spacing={4} alignItems="center">
                 <Grid item xs={12} md={4}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ position: 'relative' }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <Box sx={{ position: "relative" }}>
                       <StyledAvatar
                         src={userProfile.avatar}
-                        sx={{ 
-                          cursor: 'pointer',
-                          '&:hover': {
-                            '&::after': {
+                        sx={{
+                          cursor: "pointer",
+                          "&:hover": {
+                            "&::after": {
                               content: '"Click to change"',
-                              position: 'absolute',
+                              position: "absolute",
                               top: 0,
                               left: 0,
                               right: 0,
                               bottom: 0,
-                              background: 'rgba(0,0,0,0.7)',
-                              color: 'white',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              borderRadius: '50%',
-                              fontSize: '14px'
-                            }
-                          }
+                              background: "rgba(0,0,0,0.7)",
+                              color: "white",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "50%",
+                              fontSize: "14px",
+                            },
+                          },
                         }}
                         onClick={handleFileUpload}
                       >
-                        {!userProfile.avatar && <CloudUploadIcon sx={{ fontSize: 40 }} />}
+                        {!userProfile.avatar && (
+                          <CloudUploadIcon sx={{ fontSize: 40 }} />
+                        )}
                       </StyledAvatar>
-                      
+
                       {userProfile.avatar && (
                         <Tooltip title="Remove avatar">
                           <IconButton
                             onClick={clearImage}
                             sx={{
-                              position: 'absolute',
+                              position: "absolute",
                               top: 8,
                               right: 8,
-                              background: 'rgba(255,255,255,0.9)',
-                              '&:hover': { background: 'rgba(255,255,255,1)' }
+                              background: "rgba(255,255,255,0.9)",
+                              "&:hover": { background: "rgba(255,255,255,1)" },
                             }}
                             size="small"
                           >
@@ -590,17 +613,17 @@ function Profile() {
                         </Tooltip>
                       )}
                     </Box>
-                    
+
                     <input
                       type="file"
                       ref={fileInputRef}
                       onChange={handleFileChange}
                       accept=".png,.jpg,.svg,.jpeg"
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                   </Box>
                 </Grid>
-                
+
                 <Grid item xs={12} md={8}>
                   <Stack spacing={3}>
                     {/* Username Field */}
@@ -616,26 +639,37 @@ function Profile() {
                             <Stack direction="row" spacing={1}>
                               {!changingLocalUserName ? (
                                 <Tooltip title="Edit name">
-                                  <IconButton onClick={() => setChangingLocalUserName(true)}>
+                                  <IconButton
+                                    onClick={() =>
+                                      setChangingLocalUserName(true)
+                                    }
+                                  >
                                     <EditIcon />
                                   </IconButton>
                                 </Tooltip>
                               ) : (
                                 <>
                                   <Tooltip title="Save">
-                                    <IconButton onClick={() => changeUserName(localUserName)} color="primary">
+                                    <IconButton
+                                      onClick={() =>
+                                        changeUserName(localUserName)
+                                      }
+                                      color="primary"
+                                    >
                                       <CheckIcon />
                                     </IconButton>
                                   </Tooltip>
                                   <Tooltip title="Cancel">
-                                    <IconButton onClick={resetChangingLocalUserName}>
+                                    <IconButton
+                                      onClick={resetChangingLocalUserName}
+                                    >
                                       <CloseIcon />
                                     </IconButton>
                                   </Tooltip>
                                 </>
                               )}
                             </Stack>
-                          )
+                          ),
                         }}
                       />
                     </EditableField>
@@ -649,27 +683,46 @@ function Profile() {
                           label="Job Title"
                           onChange={(e) => setLocalRole(e.target.value)}
                         >
-                          <MenuItem value="Data Scientist">Data Scientist</MenuItem>
-                          <MenuItem value="Live-Ops Manager">Live-Ops Manager</MenuItem>
-                          <MenuItem value="Game Designer">Game Designer</MenuItem>
-                          <MenuItem value="Software / Game Developer">Software / Game Developer</MenuItem>
-                          <MenuItem value="Sales & Marketing">Sales & Marketing</MenuItem>
-                          <MenuItem value="Producer">Game Producer / Senior Executive</MenuItem>
-                          <MenuItem value="CEO / Founder / Investor">CEO / Founder</MenuItem>
+                          <MenuItem value="Data Scientist">
+                            Data Scientist
+                          </MenuItem>
+                          <MenuItem value="Live-Ops Manager">
+                            Live-Ops Manager
+                          </MenuItem>
+                          <MenuItem value="Game Designer">
+                            Game Designer
+                          </MenuItem>
+                          <MenuItem value="Software / Game Developer">
+                            Software / Game Developer
+                          </MenuItem>
+                          <MenuItem value="Sales & Marketing">
+                            Sales & Marketing
+                          </MenuItem>
+                          <MenuItem value="Producer">
+                            Game Producer / Senior Executive
+                          </MenuItem>
+                          <MenuItem value="CEO / Founder / Investor">
+                            CEO / Founder
+                          </MenuItem>
                           <MenuItem value="Other">Other</MenuItem>
                         </Select>
                       </FormControl>
-                      <Box sx={{ position: 'absolute', right: 12, top: 12 }}>
+                      <Box sx={{ position: "absolute", right: 12, top: 12 }}>
                         {!changingLocalRole ? (
                           <Tooltip title="Edit role">
-                            <IconButton onClick={() => setChangingLocalRole(true)}>
+                            <IconButton
+                              onClick={() => setChangingLocalRole(true)}
+                            >
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
                         ) : (
                           <Stack direction="row" spacing={1}>
                             <Tooltip title="Save">
-                              <IconButton onClick={() => changeUserRole(localRole)} color="primary">
+                              <IconButton
+                                onClick={() => changeUserRole(localRole)}
+                                color="primary"
+                              >
                                 <CheckIcon />
                               </IconButton>
                             </Tooltip>
@@ -691,13 +744,17 @@ function Profile() {
           {/* Security Settings */}
           <GradientCard>
             <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+              >
                 <IconContainer color="warning">
                   <SecurityIcon />
                 </IconContainer>
                 Security Settings
               </Typography>
-              
+
               <Stack spacing={3}>
                 {/* Email Field */}
                 <Box>
@@ -709,19 +766,26 @@ function Profile() {
                       fullWidth
                       disabled={!changingLocalEmail || confirmingChangeEmail}
                       InputProps={{
-                        startAdornment: <EmailIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+                        startAdornment: (
+                          <EmailIcon sx={{ mr: 1, color: "text.secondary" }} />
+                        ),
                         endAdornment: (
                           <Stack direction="row" spacing={1}>
                             {!changingLocalEmail ? (
                               <Tooltip title="Change email">
-                                <IconButton onClick={() => setChangingLocalEmail(true)}>
+                                <IconButton
+                                  onClick={() => setChangingLocalEmail(true)}
+                                >
                                   <EditIcon />
                                 </IconButton>
                               </Tooltip>
                             ) : !confirmingChangeEmail ? (
                               <>
                                 <Tooltip title="Send verification">
-                                  <IconButton onClick={startConfirmingEmail} color="primary">
+                                  <IconButton
+                                    onClick={startConfirmingEmail}
+                                    color="primary"
+                                  >
                                     <CheckIcon />
                                   </IconButton>
                                 </Tooltip>
@@ -733,7 +797,7 @@ function Profile() {
                               </>
                             ) : null}
                           </Stack>
-                        )
+                        ),
                       }}
                     />
                   </EditableField>
@@ -749,7 +813,10 @@ function Profile() {
                           endAdornment: (
                             <Stack direction="row" spacing={1}>
                               <Tooltip title="Confirm">
-                                <IconButton onClick={confirmChangeEmail} color="primary">
+                                <IconButton
+                                  onClick={confirmChangeEmail}
+                                  color="primary"
+                                >
                                   <CheckIcon />
                                 </IconButton>
                               </Tooltip>
@@ -759,7 +826,7 @@ function Profile() {
                                 </IconButton>
                               </Tooltip>
                             </Stack>
-                          )
+                          ),
                         }}
                       />
                     </EditableField>
@@ -782,26 +849,33 @@ function Profile() {
                           <Stack direction="row" spacing={1}>
                             {!changingLocalPassword ? (
                               <Tooltip title="Change password">
-                                <IconButton onClick={() => setChangingLocalPassword(true)}>
+                                <IconButton
+                                  onClick={() => setChangingLocalPassword(true)}
+                                >
                                   <EditIcon />
                                 </IconButton>
                               </Tooltip>
                             ) : (
                               <>
                                 <Tooltip title="Send verification">
-                                  <IconButton onClick={startConfirmingPassword} color="primary">
+                                  <IconButton
+                                    onClick={startConfirmingPassword}
+                                    color="primary"
+                                  >
                                     <CheckIcon />
                                   </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Cancel">
-                                  <IconButton onClick={resetChangingLocalPassword}>
+                                  <IconButton
+                                    onClick={resetChangingLocalPassword}
+                                  >
                                     <CloseIcon />
                                   </IconButton>
                                 </Tooltip>
                               </>
                             )}
                           </Stack>
-                        )
+                        ),
                       }}
                     />
                   </EditableField>
@@ -817,17 +891,22 @@ function Profile() {
                           endAdornment: (
                             <Stack direction="row" spacing={1}>
                               <Tooltip title="Confirm">
-                                <IconButton onClick={confirmChangePassword} color="primary">
+                                <IconButton
+                                  onClick={confirmChangePassword}
+                                  color="primary"
+                                >
                                   <CheckIcon />
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="Cancel">
-                                <IconButton onClick={resetChangingLocalPassword}>
+                                <IconButton
+                                  onClick={resetChangingLocalPassword}
+                                >
                                   <CloseIcon />
                                 </IconButton>
                               </Tooltip>
                             </Stack>
-                          )
+                          ),
                         }}
                       />
                     </EditableField>
@@ -838,62 +917,71 @@ function Profile() {
           </GradientCard>
 
           {/* Danger Zone */}
-          <GradientCard variant="danger">
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-                <IconContainer color="error">
-                  <WarningIcon />
-                </IconContainer>
-                Danger Zone
-              </Typography>
-              
-              <Alert severity="warning" sx={{ mb: 3 }}>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  1. You can remove all your account data, including all organizations you are owner of. Organizations will be deleted as well, even if there are other people in it.
+          {window.__env.edition !== "community" && (
+            <GradientCard variant="danger">
+              <CardContent sx={{ p: 4 }}>
+                <Typography
+                  variant="h5"
+                  gutterBottom
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
+                  <IconContainer color="error">
+                    <WarningIcon />
+                  </IconContainer>
+                  Danger Zone
                 </Typography>
-                <Typography variant="body2">
-                  2. This action will be performed after 72 hours. You can cancel it at any time before that.
-                </Typography>
-              </Alert>
 
-              <LoadingButton
-                loading={showLoading}
-                loadingPosition="start"
-                onClick={() => {
-                  if (userProfile.scheduledDeletionDate) {
-                    confirmUserDeletion();
-                  } else {
-                    openRemoveConfirmModal({
-                      title: "Confirm user deletion",
-                      bodyText:
-                        "Are you sure you want to delete user " +
-                        userProfile.username +
-                        " (" +
-                        userProfile.email +
-                        ")" +
-                        "? Enter " +
-                        userProfile.email +
-                        " to confirm.",
-                      confirmString: userProfile.email,
-                      alertMessage: "User deletion is scheduled successfully",
-                    });
-                  }
-                }}
-                variant="outlined"
-                color="error"
-                sx={{
-                  borderWidth: '2px',
-                  '&:hover': {
-                    borderWidth: '2px',
-                  },
-                }}
-              >
-                {userProfile.scheduledDeletionDate
-                  ? "Cancel deletion"
-                  : "Delete my account"}
-              </LoadingButton>
-            </CardContent>
-          </GradientCard>
+                <Alert severity="warning" sx={{ mb: 3 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    1. You can remove all your account data, including all
+                    organizations you are owner of. Organizations will be
+                    deleted as well, even if there are other people in it.
+                  </Typography>
+                  <Typography variant="body2">
+                    2. This action will be performed after 72 hours. You can
+                    cancel it at any time before that.
+                  </Typography>
+                </Alert>
+
+                <LoadingButton
+                  loading={showLoading}
+                  loadingPosition="start"
+                  onClick={() => {
+                    if (userProfile.scheduledDeletionDate) {
+                      confirmUserDeletion();
+                    } else {
+                      openRemoveConfirmModal({
+                        title: "Confirm user deletion",
+                        bodyText:
+                          "Are you sure you want to delete user " +
+                          userProfile.username +
+                          " (" +
+                          userProfile.email +
+                          ")" +
+                          "? Enter " +
+                          userProfile.email +
+                          " to confirm.",
+                        confirmString: userProfile.email,
+                        alertMessage: "User deletion is scheduled successfully",
+                      });
+                    }
+                  }}
+                  variant="outlined"
+                  color="error"
+                  sx={{
+                    borderWidth: "2px",
+                    "&:hover": {
+                      borderWidth: "2px",
+                    },
+                  }}
+                >
+                  {userProfile.scheduledDeletionDate
+                    ? "Cancel deletion"
+                    : "Delete my account"}
+                </LoadingButton>
+              </CardContent>
+            </GradientCard>
+          )}
         </Stack>
       </CustomTabPanel>
 

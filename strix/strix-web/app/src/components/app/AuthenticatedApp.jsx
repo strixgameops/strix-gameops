@@ -157,7 +157,7 @@ const publicRoutes = [
   "/unauthorized",
   "/demo",
   "/signout",
-  "/overview",
+  "/profile",
   "/",
 ];
 
