@@ -67,6 +67,8 @@ Make sure not to delete passwords.txt (you can just leave it empty, though) if y
 
 ### 3. Environment Configuration
 
+Change `INITIAL_USER_PASSWORD` to your liking in /env/.env-strix-web, as well as initial user name. This user will be your only user.
+
 Make sure to configure the following variables in `.env-strix-web-backend`:
 - FB_ASDK_TYPE
 - FB_ASDK_PROJECT_ID
