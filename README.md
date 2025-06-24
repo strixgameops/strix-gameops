@@ -6,7 +6,7 @@ Strix GameOps is a high-load, microservices-based game operations platform that 
 
 ## Architecture 
 
-Strix was created to scale horizontally using Apache Pulsar, Docker and Kubernetes. The most loaded type of server is game-backend, which is a polymorph with different roles. The approximate system design can be seen down below. Though, scaling is not supported out-of-the-box by open-source community edition, it is done in Strix team's own setup.
+Strix was created to scale horizontally using Apache Pulsar, Docker and Kubernetes. The most loaded type of server is game-backend, which is a polymorph with different roles. The approximate and simplified system design can be seen down below. Though, scaling is not supported out-of-the-box by open-source community edition, it is done in Strix team's own setup.
 
 ![microservice](https://storage.googleapis.com/strix-content/pulsar-architecture-screenshot.png)
 
