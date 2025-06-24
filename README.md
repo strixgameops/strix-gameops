@@ -81,7 +81,10 @@ Make sure to configure the following variables in `.env-strix-web-backend`:
 - FB_ASDK_CLIENT_CERT
 - FB_ASDK_UNIVERSE_DOMAIN
 
-You can get them from Firebase Admin credentials JSON file. Strix is using Firebase Admin SDK to operate on Google Cloud Storage. This is necessary to upload/download any files, such as offers icons or remote config files. Using external file service is unavoidable because players have to somehow download configurations. Amazon S3 or custom CDNs aren't supported in community edition.
+You can get them from Firebase Admin credentials JSON file. 
+Here you can follow the instructions on how to make a Firebase project and get service account credentials that you need for Strix: https://firebase.google.com/docs/admin/setup#set-up-project-and-service-account
+
+Strix is using Firebase Admin SDK to operate on Google Cloud Storage. This is necessary to upload/download any files, such as offers icons or remote config files. Using external file service is unavoidable because players have to somehow download configurations. Amazon S3 or custom CDNs aren't supported in community edition.
 
 Verify the uncommented environment variables are all set to valid values in files in the `./env/` directory:
 
