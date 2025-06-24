@@ -172,13 +172,6 @@ It is not a simple task to make community edition available for a decent load wi
 3. **Place frontend behind firewall** so its only accessible through VPN
 3. **Use Docker secrets** for production deployments
 
-## Support
-
-For additional support:
-- **GitHub Issues**: https://github.com/strixgameops/strix-gameops/issues
-- **Documentation**: Check the repository wiki
-- **Logs**: Always include relevant logs when reporting issues
-
 ## Development
 
 #### .env
