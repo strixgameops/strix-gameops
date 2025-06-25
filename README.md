@@ -63,6 +63,8 @@ These scripts will:
 - Create the passwords.txt file with all created passwords
 - Set up initial configuration
 
+Make sure to launch Docker daemon (or Docker Desktop.exe if you're on Windows), otherwise you won't be able to build containers and start them.
+
 Make sure not to delete passwords.txt (you can just leave it empty, though) if you plan on using `start.sh` from now on, otherwise it will make the generation script think that passwords weren't generated yet. But nothing stops from using this script just once, and then just calling a simple `docker-compose up -d`.
 
 ### 3. Environment Configuration
