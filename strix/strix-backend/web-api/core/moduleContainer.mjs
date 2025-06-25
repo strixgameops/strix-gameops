@@ -203,6 +203,9 @@ export class ModuleContainer {
       businessUtility: {
         import: () => import("../services/enterprise/businessUtilities.mjs"),
       },
+      contentCookingFull: {
+        import: () => import("../services/other/enterprise/contentCookingService_full.mjs"),
+      },
     };
 
     await this.loadOptionalServices(optionalServiceConfigs);
@@ -361,6 +364,7 @@ export class ModuleContainer {
           import("../controllers/features/enterprise/offerController_full.mjs"),
         dependencies: ["offerFull"],
       },
+      
     };
 
     await this.loadControllers(
