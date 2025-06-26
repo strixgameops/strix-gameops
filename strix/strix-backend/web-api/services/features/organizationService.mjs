@@ -11,6 +11,7 @@ import { CookedContent } from "../../../models/cookedContent.js";
 import { Collab } from "../../../models/collab.js";
 import { BalanceModelSegments } from "../../../models/balanceModelSegments.js";
 import { BalanceModelTabs } from "../../../models/balanceModelTabs.js";
+import {Charts as CustomCharts} from "../../../models/charts.js";
 import { DeploymentHistory } from "../../../models/deploymentHistory.js";
 import { v4 as uuid } from "uuid";
 import crypto from "crypto";
@@ -483,6 +484,14 @@ export class OrganizationService {
           deployRealtime: false,
         },
       ]);
+
+      await CustomCharts.insertMany([
+        {
+          gameID: newGameID,
+          dashboards: [],
+          profileCompositionPresets: ""
+        }
+      ])
 
       const newCookedChecksums1 = new CookChecksums({
         key: `${newGameID}:${baseVersion}`,

@@ -813,6 +813,7 @@ const Overview = () => {
       // Force set the new game in GameContext
       // This will trigger the navbar to update
       setGame?.(newGameData);
+      window.location.reload()
       console.log('Game created and selected:', newGameData.gameName);
     }, 200); // Increased timeout to ensure data propagation
   },

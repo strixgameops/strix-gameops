@@ -561,9 +561,11 @@ const PlayerWarehouse = () => {
                   minHeight: "45px",
                 }}
                 variant="contained"
-                onClick={addNewLeaderboard}
+                onClick={() => {
+                  addNewLeaderboard();
+                }}
               >
-                Add new segment
+                Add new leaderboard
               </Button>
             </Box>
           </div>

@@ -158,6 +158,7 @@ const publicRoutes = [
   "/demo",
   "/signout",
   "/profile",
+  "/overview",
   "/",
 ];
 

@@ -10,7 +10,6 @@ import { Helmet } from "react-helmet";
 import titles from "titles";
 import s from "./localization.module.css";
 
-
 // MUI
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -342,26 +341,12 @@ const Localization = () => {
     if (modifiedRows.length > 0) {
       // Update the pending updates state
       setPendingUpdates((prev) => {
-        // Create a new merged array with latest changes taking precedence
-        const merged = [...prev];
-
-        modifiedRows.forEach((newRow) => {
-          const existingIndex = merged.findIndex(
-            (row) => row.key === newRow.key
-          );
-          if (existingIndex >= 0) {
-            merged[existingIndex] = newRow;
-          } else {
-            merged.push(newRow);
-          }
-        });
-
         // Call the debounced update function with the merged updates
         if (debouncedUpdateRef.current) {
-          debouncedUpdateRef.current(merged);
+          debouncedUpdateRef.current([...modifiedRows]);
         }
 
-        return merged;
+        return [...modifiedRows];
       });
     }
   }
@@ -433,6 +418,7 @@ const Localization = () => {
             {
               index: state.data.length + 1,
               sid: shortid.generate(),
+              key: "",
             },
           ],
         };
@@ -731,8 +717,8 @@ const Localization = () => {
       branch: branch,
     });
     if (resp.success) {
-      setGroups(resp.result.prefixGroups);
-      setTags(resp.result.tags);
+      setGroups(resp.result?.prefixGroups || []);
+      setTags(resp.result?.tags || []);
     }
   }
 

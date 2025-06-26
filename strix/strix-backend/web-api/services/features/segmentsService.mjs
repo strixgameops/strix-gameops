@@ -40,31 +40,33 @@ export class SegmentService {
       }
     }
 
-    const flows = await flowsService.getFlowsShort(gameID, branch);
-    if (flows && flows.length > 0) {
-      for (let segment of segments) {
-        if (
-          segment.segmentID.startsWith("flow_") &&
-          !segment.segmentID.includes("_splitTest_")
-        ) {
-          const flowSid = segment.segmentID.split("_")[1];
-
-          let flowName = "";
-          flows.map((f) => {
-            if (f.sid === flowSid) {
-              const name = flows.find((f) => f.sid === flowSid)?.name;
-              if (name) {
-                flowName = `Flow | ${name}`;
+    if (flowsService) {
+      const flows = await flowsService.getFlowsShort(gameID, branch);
+      if (flows && flows.length > 0) {
+        for (let segment of segments) {
+          if (
+            segment.segmentID.startsWith("flow_") &&
+            !segment.segmentID.includes("_splitTest_")
+          ) {
+            const flowSid = segment.segmentID.split("_")[1];
+  
+            let flowName = "";
+            flows.map((f) => {
+              if (f.sid === flowSid) {
+                const name = flows.find((f) => f.sid === flowSid)?.name;
+                if (name) {
+                  flowName = `Flow | ${name}`;
+                }
+                return;
               }
-              return;
+            });
+  
+            if (!flowName) {
+              flowName = "Flow | Unknown segment name";
             }
-          });
-
-          if (!flowName) {
-            flowName = "Flow | Unknown segment name";
+  
+            segment.segmentName = flowName;
           }
-
-          segment.segmentName = flowName;
         }
       }
     }

@@ -277,7 +277,7 @@ export class NodeController {
       );
 
       if (!entities || entities.length === 0) {
-        return res.status(404).json({ message: "Entities not found" });
+        return res.status(200).json({ success: true, entities: [] });
       }
       res.status(200).json({ success: true, entities });
     } catch (error) {
@@ -298,7 +298,7 @@ export class NodeController {
       if (!entities || entities.length === 0) {
         return res
           .status(200)
-          .json({ success: false, message: "Entities not found" });
+          .json({ success: true, entities: [] });
       }
       res.status(200).json({ success: true, entities });
     } catch (error) {
@@ -317,7 +317,7 @@ export class NodeController {
       );
 
       if (!entities || entities.length === 0) {
-        return res.status(404).json({ message: "Entities not found" });
+        return res.status(200).json({ success: true, entities: [] });
       }
       res.status(200).json({ success: true, entities });
     } catch (error) {

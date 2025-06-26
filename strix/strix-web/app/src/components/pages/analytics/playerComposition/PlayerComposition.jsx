@@ -339,12 +339,16 @@ function PlayerComposition() {
     getAllABTests();
 
     async function getAllFlows() {
-      const res = await getFlowsShort({
-        gameID: game.gameID,
-        branch: branch,
-      });
-      if (res.success) {
-        setFlows(res.result);
+      if (window.__env.edition !== "community") {
+        const res = await getFlowsShort({
+          gameID: game.gameID,
+          branch: branch,
+        });
+        if (res.success) {
+          setFlows(res.result);
+        }
+      } else {
+        setFlows([]);
       }
     }
     getAllFlows();

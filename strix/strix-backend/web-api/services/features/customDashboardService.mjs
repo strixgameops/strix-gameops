@@ -274,8 +274,8 @@ export class CustomDashboardService {
         branch: branch,
       }).lean();
 
-      if (!charts) {
-        console.log("Game not found or branch does not exist");
+      if (!charts || !charts.dashboards) {
+        return { success: false, message: "Dashboard not found" }
       }
       const dashboards = charts.dashboards;
       let targetDashboard = dashboards.find((d) => d.linkName === linkName);
