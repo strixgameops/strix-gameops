@@ -45,16 +45,21 @@ cd strix-gameops
 
 ### 2. Initial Setup and Password Generation
 
-The system includes automated password generation scripts for database security.
+The system includes automated password generation scripts. You can run `_generate_passwords` and it will automatically generate passwords for all connections.
+Generally, the way to go is:
 
 **For Linux/macOS:**
 ```bash
+chmod +x _generate_passwords.sh
+./_generate_passwords.sh
+
 chmod +x start.sh
 ./start.sh
 ```
 
 **For Windows:**
 ```powershell
+.\_generate_passwords.bat
 .\start.bat
 ```
 
