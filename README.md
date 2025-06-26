@@ -108,6 +108,8 @@ Verify the uncommented environment variables are all set to valid values in file
 
 **Important:** Keep these files secure as they contain database credentials. You may want to run separate secret registry for that.
 
+After a successful start you should be able to navigate to main Strix website on http://localhost:3000
+
 ## Starting the System
 
 ```bash

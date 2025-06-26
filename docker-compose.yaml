@@ -360,6 +360,8 @@ services:
     networks:
       - internal
     restart: unless-stopped
+    ports:
+      - "3000:3000"
     deploy:
       resources:
         limits:
