@@ -19,6 +19,7 @@ DEFAULT_EDITION=""
 DEFAULT_USE_FIREBASE=""
 DEFAULT_ALLOW_REGISTRATION=""
 DEFAULT_GTAG=""
+DEFAULT_ENVIRONMENT=""
 
 # 2. read from environment variables and overwrite the default values, if env variable is set
 [ -n "$API_URL" ] && DEFAULT_API_URL=$API_URL
@@ -38,10 +39,11 @@ DEFAULT_GTAG=""
 [ -n "$USE_FIREBASE" ] && DEFAULT_USE_FIREBASE=$USE_FIREBASE
 [ -n "$ALLOW_REGISTRATION" ] && DEFAULT_ALLOW_REGISTRATION=$ALLOW_REGISTRATION
 [ -n "$GTAG" ] && DEFAULT_GTAG=$GTAG
+[ -n "$ENVIRONMENT" ] && DEFAULT_ENVIRONMENT=$ENVIRONMENT
 
 # 3. replace the variables in the template
 #configure env.js global settings
-PATH_TO_SETTINGS_FILE=/usr/share/nginx/html/js/env.community.js
+PATH_TO_SETTINGS_FILE=/usr/share/nginx/html/js/env.js
 cp /usr/share/nginx/html/js/env-docker.js ${PATH_TO_SETTINGS_FILE}
 sed -i -e "s#\${SITE_BASE_URL}#$DEFAULT_SITE_BASE_URL#" ${PATH_TO_SETTINGS_FILE}
 sed -i -e "s#\${VERSION}#$DEFAULT_VERSION#" ${PATH_TO_SETTINGS_FILE}
@@ -57,6 +59,7 @@ sed -i -e "s#\${EDITION}#$DEFAULT_EDITION#" ${PATH_TO_SETTINGS_FILE}
 sed -i -e "s#\${USE_FIREBASE}#$DEFAULT_USE_FIREBASE#" ${PATH_TO_SETTINGS_FILE}
 sed -i -e "s#\${ALLOW_REGISTRATION}#$DEFAULT_ALLOW_REGISTRATION#" ${PATH_TO_SETTINGS_FILE}
 sed -i -e "s#\${GTAG}#$DEFAULT_GTAG#" ${PATH_TO_SETTINGS_FILE}
+sed -i -e "s#\${ENVIRONMENT}#$DEFAULT_ENVIRONMENT#" ${PATH_TO_SETTINGS_FILE}
 
 
 #nginx basic auth

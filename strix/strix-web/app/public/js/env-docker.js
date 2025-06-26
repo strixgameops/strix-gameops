@@ -9,7 +9,7 @@
   window.__env.fbMessagingSenderId = "${FB_MESSAGING_SENDER_ID}";
   window.__env.fbAppId = "${FB_APP_ID}";
   window.__env.fbMeasurementId = "${FB_MEASUREMENT_ID}";
-  window.__env.gtag = "${gtag}";
+  window.__env.gtag = "${GTAG}";
   window.__env.environment = "${ENVIRONMENT}";
   window.__env.edition = "${EDITION}"; // enterprise / community
   window.__env.useFirebase = "${USE_FIREBASE}";
