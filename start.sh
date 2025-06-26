@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo "Checking passwords..."
-bash _generate_passwords.sh
-
 echo "Starting Docker deployment..."
 docker-compose up --build -d
 if [ $? -ne 0 ]; then

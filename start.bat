@@ -2,9 +2,6 @@
 echo Generating passwords and deploying with Docker...
 echo.
 
-:: Run password generation
-call _generate_passwords.bat
-
 echo.
 echo Starting Docker deployment...
 docker-compose up --build -d
